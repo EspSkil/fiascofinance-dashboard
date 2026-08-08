@@ -3,86 +3,408 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Fiasco Finance 2026</title>
 
+  <!-- Leser CSV-data fra Google Sheets -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.3/papaparse.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: #222;
+    }
+
+    h1 {
+      margin-bottom: 5px;
+    }
+
+    h2 {
+      margin-top: 35px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+      padding: 8px;
+      text-align: right;
+    }
+
+    th:first-child,
+    td:first-child {
+      text-align: left;
+    }
+
+    .status {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .ok {
+      color: green;
+      font-weight: bold;
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
-  <h1>Fiasco Finance 2026</h1>
-  <h2>Test av Google Sheets-data</h2>
 
-  <div id="status">Laster data...</div>
+  <h1>Fiasco Finance 2026</h1>
+  <p>Test av Google Sheets-datakilder</p>
+
+  <div id="loading" class="status">
+    Laster data fra Google Sheets...
+  </div>
+
+  <div id="historySection"></div>
+
+  <div id="dashboardSection"></div>
+
 
   <script>
+
+    // ----------------------------------------------------
+    // GOOGLE SHEETS
+    // ----------------------------------------------------
+
     const historyUrl =
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=48037430&single=true&output=csv";
-const dashboardDataUrl =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=1311778898&single=true&output=csv";
+
+    const dashboardDataUrl =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=1311778898&single=true&output=csv";
+
+
+    // ----------------------------------------------------
+    // DELTAKERE OG TEMAER
+    // ----------------------------------------------------
+
+    const participants = [
+      "Bjørn",
+      "Erik B",
+      "Erik N",
+      "Espen",
+      "Håkon",
+      "Magnus F",
+      "Magnus G",
+      "Morten"
+    ];
+
+    const historyColumns = [
+      "Oslo Børs",
+      "Olje",
+      "Bolig Oslo",
+      "S&P500",
+      "Storebrand",
+      "Frontline",
+      "Nvidia"
+    ];
+
+
+    // ----------------------------------------------------
+    // HENT CSV
+    // ----------------------------------------------------
+
     async function loadCsv(url) {
-  const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error("Kunne ikke hente CSV-data");
-  }
+      const response = await fetch(url);
 
-  const csvText = await response.text();
+      if (!response.ok) {
+        throw new Error("Kunne ikke hente CSV-data.");
+      }
 
-  return Papa.parse(csvText, {
-    header: true,
-    skipEmptyLines: true
-  }).data;
-}
-    async function loadHistory() {
+      const csvText = await response.text();
+
+      const parsed = Papa.parse(csvText, {
+        header: true,
+        skipEmptyLines: true
+      });
+
+      return parsed.data;
+    }
+
+
+    // ----------------------------------------------------
+    // FINN GYLDIGE HISTORIKKRADER
+    // ----------------------------------------------------
+
+    function getValidHistoryRows(rows) {
+
+      return rows.filter(row =>
+        row["Dato"] &&
+        row["Oslo Børs"] &&
+        row["Olje"] &&
+        row["Bolig Oslo"] &&
+        row["S&P500"] &&
+        row["Storebrand"] &&
+        row["Frontline"] &&
+        row["Nvidia"]
+      );
+    }
+
+
+    // ----------------------------------------------------
+    // FINN DE 7 KONKURRANSERADENE
+    // ----------------------------------------------------
+
+    function getCompetitionRows(rows) {
+
+      const validRows = rows.filter(row =>
+        row["TEMA"] &&
+        row["Vekt"] &&
+        row["Bjørn"] &&
+        row["Erik B"] &&
+        row["Erik N"] &&
+        row["Espen"] &&
+        row["Håkon"] &&
+        row["Magnus F"] &&
+        row["Magnus G"] &&
+        row["Morten"]
+      );
+
+      return validRows.slice(0, 7);
+    }
+
+
+    // ----------------------------------------------------
+    // VIS HISTORIKKSTATUS
+    // ----------------------------------------------------
+
+    function showLatestStatus(latest) {
+
+      document.getElementById("historySection").innerHTML = `
+
+        <h2>Siste markedsstatus</h2>
+
+        <p>
+          <strong>Siste komplette fredag:</strong>
+          ${latest["Dato"]}
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Tema</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td>Oslo Børs</td>
+              <td>${latest["Oslo Børs"]}</td>
+            </tr>
+
+            <tr>
+              <td>Olje</td>
+              <td>${latest["Olje"]}</td>
+            </tr>
+
+            <tr>
+              <td>Bolig Oslo</td>
+              <td>${latest["Bolig Oslo"]}</td>
+            </tr>
+
+            <tr>
+              <td>S&P500</td>
+              <td>${latest["S&P500"]}</td>
+            </tr>
+
+            <tr>
+              <td>Storebrand</td>
+              <td>${latest["Storebrand"]}</td>
+            </tr>
+
+            <tr>
+              <td>Frontline</td>
+              <td>${latest["Frontline"]}</td>
+            </tr>
+
+            <tr>
+              <td>Nvidia</td>
+              <td>${latest["Nvidia"]}</td>
+            </tr>
+
+          </tbody>
+        </table>
+      `;
+    }
+
+
+    // ----------------------------------------------------
+    // VIS DASHBOARDDATA
+    // ----------------------------------------------------
+
+    function showCompetitionData(rows) {
+
+      let html = `
+
+        <h2>DashboardData</h2>
+
+        <p>
+          Test av de faste konkurransedataene:
+          tema, vekting og estimatene til alle åtte deltakere.
+        </p>
+
+        <table>
+
+          <thead>
+            <tr>
+
+              <th>Tema</th>
+              <th>Vekt</th>
+
+              ${participants.map(person =>
+                `<th>${person}</th>`
+              ).join("")}
+
+            </tr>
+          </thead>
+
+          <tbody>
+      `;
+
+
+      rows.forEach(row => {
+
+        html += `
+          <tr>
+
+            <td>${row["TEMA"]}</td>
+
+            <td>${row["Vekt"]}</td>
+
+            ${participants.map(person =>
+              `<td>${row[person]}</td>`
+            ).join("")}
+
+          </tr>
+        `;
+      });
+
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+
+      document.getElementById("dashboardSection").innerHTML = html;
+    }
+
+
+    // ----------------------------------------------------
+    // HOVEDFUNKSJON
+    // ----------------------------------------------------
+
+    async function loadData() {
+
       try {
-        const dashboardRows = await loadCsv(dashboardDataUrl);
-        console.log("DashboardData:", dashboardRows);
-        const response = await fetch(historyUrl);
 
-        if (!response.ok) {
-          throw new Error("Kunne ikke hente Google Sheet");
+        // Hent begge Google Sheet-kildene samtidig
+
+        const [
+          historyRaw,
+          dashboardRaw
+        ] = await Promise.all([
+          loadCsv(historyUrl),
+          loadCsv(dashboardDataUrl)
+        ]);
+
+
+        // ------------------------------------------------
+        // HISTORIKK
+        // ------------------------------------------------
+
+        const historyRows =
+          getValidHistoryRows(historyRaw);
+
+        if (historyRows.length === 0) {
+          throw new Error(
+            "Fant ingen komplette historikkrader."
+          );
         }
 
-        const csvText = await response.text();
+        const latest =
+          historyRows[historyRows.length - 1];
 
-        const parsed = Papa.parse(csvText, {
-          header: true,
-          skipEmptyLines: true
-        });
 
-      const rows = parsed.data.filter(row =>
-  row["Dato"] &&
-  row["Oslo Børs"] &&
-  row["Olje"] &&
-  row["Bolig Oslo"] &&
-  row["S&P500"] &&
-  row["Storebrand"] &&
-  row["Frontline"] &&
-  row["Nvidia"]
-);
+        // ------------------------------------------------
+        // DASHBOARDDATA
+        // ------------------------------------------------
 
-const latest = rows[rows.length - 1];
+        const dashboardRows =
+          getCompetitionRows(dashboardRaw);
 
-console.log(parsed.meta.fields);
-console.log(latest);
+        if (dashboardRows.length !== 7) {
+          throw new Error(
+            "Fant ikke 7 gyldige konkurransetemaer i DashboardData."
+          );
+        }
 
-        document.getElementById("status").innerHTML = `
-          <p><strong>Siste dato:</strong> ${latest["Dato"]}</p>
-          <p><strong>Oslo Børs:</strong> ${latest["Oslo Børs"]}</p>
-          <p><strong>Olje:</strong> ${latest["Olje"]}</p>
-          <p><strong>Bolig Oslo:</strong> ${latest["Bolig Oslo"]}</p>
-          <p><strong>S&P500:</strong> ${latest["S&P500"]}</p>
-          <p><strong>Storebrand:</strong> ${latest["Storebrand"]}</p>
-          <p><strong>Frontline:</strong> ${latest["Frontline"]}</p>
-          <p><strong>Nvidia:</strong> ${latest["Nvidia"]}</p>
-        `;
-      } catch (error) {
-        document.getElementById("status").innerHTML =
-          "<p>Feil ved lasting av data: " + error.message + "</p>";
+
+        // ------------------------------------------------
+        // VIS DATA
+        // ------------------------------------------------
+
+        showLatestStatus(latest);
+
+        showCompetitionData(dashboardRows);
+
+
+        document.getElementById("loading").innerHTML =
+          `<span class="ok">
+            ✓ Begge Google Sheets-datakildene er lastet korrekt.
+          </span>`;
+
+
+        // Nyttig under utvikling
+
+        console.log(
+          "Siste historikkrad:",
+          latest
+        );
+
+        console.log(
+          "DashboardData:",
+          dashboardRows
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(error);
+
+        document.getElementById("loading").innerHTML =
+          `<span class="error">
+            Feil: ${error.message}
+          </span>`;
       }
     }
 
-    loadHistory();
+
+    // Start når nettsiden åpnes
+
+    loadData();
+
   </script>
+
 </body>
 </html>
