@@ -236,19 +236,19 @@
 
   function parseNumber(value) {
 
-    if (value === null || value === undefined) {
-      return NaN;
-    }
-
-    let text = String(value)
-      .trim()
-      .replace(/\s/g, "")
-      .replace("%", "")
-      .replace(",", ".");
-
-    return Number(text);
+  if (value === null || value === undefined) {
+    return NaN;
   }
 
+  let text = String(value)
+    .trim()
+    .replace(/\s/g, "")
+    .replace(/[−–—]/g, "-")
+    .replace("%", "")
+    .replace(",", ".");
+
+  return Number(text);
+}
 
   function parsePercent(value) {
 
