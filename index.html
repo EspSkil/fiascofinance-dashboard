@@ -4,12 +4,55 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fiasco Finance 2026</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.3/papaparse.min.js"></script>
 </head>
 
 <body>
   <h1>Fiasco Finance 2026</h1>
-  <h2>Dashboard</h2>
+  <h2>Test av Google Sheets-data</h2>
 
-  <p>Hvis du ser dette, fungerer GitHub Pages!</p>
+  <div id="status">Laster data...</div>
+
+  <script>
+    const historyUrl =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=48037430&single=true&output=csv";
+
+    async function loadHistory() {
+      try {
+        const response = await fetch(historyUrl);
+
+        if (!response.ok) {
+          throw new Error("Kunne ikke hente Google Sheet");
+        }
+
+        const csvText = await response.text();
+
+        const parsed = Papa.parse(csvText, {
+          header: true,
+          skipEmptyLines: true
+        });
+
+        const rows = parsed.data;
+        const latest = rows[rows.length - 1];
+
+        document.getElementById("status").innerHTML = `
+          <p><strong>Siste dato:</strong> ${latest["Dato"]}</p>
+          <p><strong>Oslo Børs:</strong> ${latest["Oslo Børs"]}</p>
+          <p><strong>Olje:</strong> ${latest["Olje"]}</p>
+          <p><strong>Bolig Oslo:</strong> ${latest["Bolig Oslo"]}</p>
+          <p><strong>S&P500:</strong> ${latest["S&P500"]}</p>
+          <p><strong>Storebrand:</strong> ${latest["Storebrand"]}</p>
+          <p><strong>Frontline:</strong> ${latest["Frontline"]}</p>
+          <p><strong>Nvidia:</strong> ${latest["Nvidia"]}</p>
+        `;
+      } catch (error) {
+        document.getElementById("status").innerHTML =
+          "<p>Feil ved lasting av data: " + error.message + "</p>";
+      }
+    }
+
+    loadHistory();
+  </script>
 </body>
 </html>
