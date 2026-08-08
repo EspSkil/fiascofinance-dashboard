@@ -33,8 +33,14 @@
           skipEmptyLines: true
         });
 
-       const rows = parsed.data;
-      const latest = rows[rows.length - 1];
+      const rows = parsed.data.filter(row =>
+  row["Dato"] &&
+  row["Oslo Børs"] &&
+  row["Olje"] &&
+  row["S&P500"]
+);
+
+const latest = rows[rows.length - 1];
 
 console.log(parsed.meta.fields);
 console.log(latest);
