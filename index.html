@@ -33,8 +33,11 @@
           skipEmptyLines: true
         });
 
-        const rows = parsed.data;
-        const latest = rows[rows.length - 1];
+       const rows = parsed.data;
+      const latest = rows[rows.length - 1];
+
+console.log(parsed.meta.fields);
+console.log(latest);
 
         document.getElementById("status").innerHTML = `
           <p><strong>Siste dato:</strong> ${latest["Dato"]}</p>
