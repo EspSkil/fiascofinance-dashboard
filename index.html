@@ -17,9 +17,26 @@
   <script>
     const historyUrl =
       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=48037430&single=true&output=csv";
+const dashboardDataUrl =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=1311778898&single=true&output=csv";
+    async function loadCsv(url) {
+  const response = await fetch(url);
 
+  if (!response.ok) {
+    throw new Error("Kunne ikke hente CSV-data");
+  }
+
+  const csvText = await response.text();
+
+  return Papa.parse(csvText, {
+    header: true,
+    skipEmptyLines: true
+  }).data;
+}
     async function loadHistory() {
       try {
+        const dashboardRows = await loadCsv(dashboardDataUrl);
+        console.log("DashboardData:", dashboardRows);
         const response = await fetch(historyUrl);
 
         if (!response.ok) {
