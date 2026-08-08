@@ -6,37 +6,101 @@
 
   <title>Fiasco Finance 2026</title>
 
-  <!-- Leser CSV-data fra Google Sheets -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.3/papaparse.min.js"></script>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 20px;
+      max-width: 1100px;
+      margin: 35px auto;
+      padding: 0 20px 50px;
       color: #222;
+      background: #fafafa;
     }
 
     h1 {
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
     h2 {
-      margin-top: 35px;
+      margin-top: 38px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-top: 0;
+    }
+
+    .status-box {
+      background: #f1f1f1;
+      padding: 14px 16px;
+      border-radius: 8px;
+      margin: 22px 0;
+    }
+
+    .ok {
+      color: #16820d;
+      font-weight: bold;
+    }
+
+    .error {
+      color: #b00020;
+      font-weight: bold;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 20px 0 30px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .card-label {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .card-value {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .card-small {
+      font-size: 14px;
+      color: #666;
+      margin-top: 4px;
     }
 
     table {
       border-collapse: collapse;
       width: 100%;
       margin-top: 15px;
+      background: white;
     }
 
     th,
     td {
       border-bottom: 1px solid #ddd;
-      padding: 8px;
+      padding: 9px 8px;
       text-align: right;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f3f3f3;
     }
 
     th:first-child,
@@ -44,21 +108,43 @@
       text-align: left;
     }
 
-    .status {
-      background: #f5f5f5;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 20px;
+    .rank-1 td {
+      font-weight: bold;
+      background: #f3f8ee;
     }
 
-    .ok {
-      color: green;
-      font-weight: bold;
+    .medal {
+      width: 55px;
+      text-align: center !important;
     }
 
-    .error {
-      color: red;
-      font-weight: bold;
+    .debug {
+      margin-top: 45px;
+      padding-top: 20px;
+      border-top: 1px solid #ccc;
+    }
+
+    .debug h2 {
+      font-size: 20px;
+    }
+
+    .small {
+      font-size: 13px;
+      color: #666;
+    }
+
+    @media (max-width: 700px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      body {
+        margin-top: 20px;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
     }
   </style>
 </head>
@@ -66,345 +152,736 @@
 <body>
 
   <h1>Fiasco Finance 2026</h1>
-  <p>Test av Google Sheets-datakilder</p>
+  <p class="subtitle">Live Championship Dashboard</p>
 
-  <div id="loading" class="status">
+  <div id="loading" class="status-box">
     Laster data fra Google Sheets...
   </div>
 
-  <div id="historySection"></div>
+  <div id="summaryCards"></div>
 
-  <div id="dashboardSection"></div>
+  <div id="leaderboardSection"></div>
 
+  <div id="themeSection"></div>
 
-  <script>
-
-    // ----------------------------------------------------
-    // GOOGLE SHEETS
-    // ----------------------------------------------------
-
-    const historyUrl =
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=48037430&single=true&output=csv";
-
-    const dashboardDataUrl =
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=1311778898&single=true&output=csv";
+  <div id="debugSection"></div>
 
 
-    // ----------------------------------------------------
-    // DELTAKERE OG TEMAER
-    // ----------------------------------------------------
+<script>
 
-    const participants = [
-      "Bjørn",
-      "Erik B",
-      "Erik N",
-      "Espen",
-      "Håkon",
-      "Magnus F",
-      "Magnus G",
-      "Morten"
-    ];
+  // ============================================================
+  // GOOGLE SHEETS
+  // ============================================================
 
-    const historyColumns = [
-      "Oslo Børs",
-      "Olje",
-      "Bolig Oslo",
-      "S&P500",
-      "Storebrand",
-      "Frontline",
-      "Nvidia"
-    ];
+  const historyUrl =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=48037430&single=true&output=csv";
+
+  const dashboardDataUrl =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=1311778898&single=true&output=csv";
 
 
-    // ----------------------------------------------------
-    // HENT CSV
-    // ----------------------------------------------------
+  // ============================================================
+  // DELTAKERE
+  // ============================================================
 
-    async function loadCsv(url) {
+  const participants = [
+    "Bjørn",
+    "Erik B",
+    "Erik N",
+    "Espen",
+    "Håkon",
+    "Magnus F",
+    "Magnus G",
+    "Morten"
+  ];
 
-      const response = await fetch(url);
 
-      if (!response.ok) {
-        throw new Error("Kunne ikke hente CSV-data.");
-      }
+  // ============================================================
+  // KOBLING MELLOM NAVN I DE TO GOOGLE SHEET-FANENE
+  // ============================================================
 
-      const csvText = await response.text();
+  const themeMap = {
+    "Oslo børs": "Oslo Børs",
+    "Oljepris": "Olje",
+    "Boligmarked Oslo": "Bolig Oslo",
+    "S&P500": "S&P500",
+    "Storebrand": "Storebrand",
+    "Frontline": "Frontline",
+    "Nvidia": "Nvidia"
+  };
 
-      const parsed = Papa.parse(csvText, {
-        header: true,
-        skipEmptyLines: true
+
+  // ============================================================
+  // HJELPEFUNKSJONER
+  // ============================================================
+
+  async function loadCsv(url) {
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("Kunne ikke hente CSV-data.");
+    }
+
+    const csvText = await response.text();
+
+    const parsed = Papa.parse(csvText, {
+      header: true,
+      skipEmptyLines: true
+    });
+
+    return parsed.data;
+  }
+
+
+  function parseNumber(value) {
+
+    if (value === null || value === undefined) {
+      return NaN;
+    }
+
+    let text = String(value)
+      .trim()
+      .replace(/\s/g, "")
+      .replace("%", "")
+      .replace(",", ".");
+
+    return Number(text);
+  }
+
+
+  function parsePercent(value) {
+
+    return parseNumber(value) / 100;
+  }
+
+
+  function formatPercent(value, decimals = 2) {
+
+    return (value * 100)
+      .toFixed(decimals)
+      .replace(".", ",") + "%";
+  }
+
+
+  function formatNumber(value, decimals = 2) {
+
+    return Number(value)
+      .toFixed(decimals)
+      .replace(".", ",");
+  }
+
+
+  // ============================================================
+  // HISTORIKK
+  // ============================================================
+
+  function getValidHistoryRows(rows) {
+
+    return rows.filter(row =>
+      row["Dato"] &&
+      row["Oslo Børs"] &&
+      row["Olje"] &&
+      row["Bolig Oslo"] &&
+      row["S&P500"] &&
+      row["Storebrand"] &&
+      row["Frontline"] &&
+      row["Nvidia"]
+    );
+  }
+
+
+  // ============================================================
+  // DASHBOARDDATA
+  // ============================================================
+
+  function getCompetitionRows(rows) {
+
+    const validRows = rows.filter(row =>
+      row["TEMA"] &&
+      row["Vekt"] &&
+      row["Bjørn"] &&
+      row["Erik B"] &&
+      row["Erik N"] &&
+      row["Espen"] &&
+      row["Håkon"] &&
+      row["Magnus F"] &&
+      row["Magnus G"] &&
+      row["Morten"]
+    );
+
+    return validRows.slice(0, 7);
+  }
+
+
+  // ============================================================
+  // BEREGN FAKTISK %-ENDRING
+  // ============================================================
+
+  function calculateActualChange(theme, startRow, latestRow) {
+
+    const historyColumn = themeMap[theme];
+
+    const startValue = parseNumber(startRow[historyColumn]);
+    const latestValue = parseNumber(latestRow[historyColumn]);
+
+
+    // Boligmarkedet ligger allerede som %-endring i Historikk
+    if (theme === "Boligmarked Oslo") {
+
+      return latestValue / 100;
+    }
+
+
+    // Alle andre temaer beregnes mot startverdien
+    return (latestValue / startValue) - 1;
+  }
+
+
+  // ============================================================
+  // BEREGN HELE KONKURRANSEN
+  // ============================================================
+
+  function calculateCompetition(
+    competitionRows,
+    startRow,
+    latestRow
+  ) {
+
+    const participantScores = {};
+
+    participants.forEach(person => {
+      participantScores[person] = 0;
+    });
+
+
+    const themeResults = [];
+
+
+    competitionRows.forEach(row => {
+
+      const theme = row["TEMA"];
+      const weight = parseNumber(row["Vekt"]);
+
+      const actualChange =
+        calculateActualChange(
+          theme,
+          startRow,
+          latestRow
+        );
+
+
+      let closestPerson = null;
+      let closestDistance = Infinity;
+
+
+      const personResults = {};
+
+
+      participants.forEach(person => {
+
+        const prediction =
+          parsePercent(row[person]);
+
+        const absoluteDistance =
+          Math.abs(actualChange - prediction);
+
+        const weightedDistance =
+          absoluteDistance * weight;
+
+
+        participantScores[person] +=
+          weightedDistance;
+
+
+        personResults[person] = {
+          prediction,
+          absoluteDistance,
+          weightedDistance
+        };
+
+
+        if (absoluteDistance < closestDistance) {
+
+          closestDistance =
+            absoluteDistance;
+
+          closestPerson =
+            person;
+        }
       });
 
-      return parsed.data;
-    }
+
+      themeResults.push({
+
+        theme,
+        weight,
+        actualChange,
+        closestPerson,
+        closestDistance,
+        personResults
+      });
+    });
 
 
-    // ----------------------------------------------------
-    // FINN GYLDIGE HISTORIKKRADER
-    // ----------------------------------------------------
-
-    function getValidHistoryRows(rows) {
-
-      return rows.filter(row =>
-        row["Dato"] &&
-        row["Oslo Børs"] &&
-        row["Olje"] &&
-        row["Bolig Oslo"] &&
-        row["S&P500"] &&
-        row["Storebrand"] &&
-        row["Frontline"] &&
-        row["Nvidia"]
-      );
-    }
+    const leaderboard =
+      participants
+        .map(person => ({
+          person,
+          score: participantScores[person]
+        }))
+        .sort((a, b) =>
+          a.score - b.score
+        );
 
 
-    // ----------------------------------------------------
-    // FINN DE 7 KONKURRANSERADENE
-    // ----------------------------------------------------
-
-    function getCompetitionRows(rows) {
-
-      const validRows = rows.filter(row =>
-        row["TEMA"] &&
-        row["Vekt"] &&
-        row["Bjørn"] &&
-        row["Erik B"] &&
-        row["Erik N"] &&
-        row["Espen"] &&
-        row["Håkon"] &&
-        row["Magnus F"] &&
-        row["Magnus G"] &&
-        row["Morten"]
-      );
-
-      return validRows.slice(0, 7);
-    }
+    return {
+      leaderboard,
+      themeResults
+    };
+  }
 
 
-    // ----------------------------------------------------
-    // VIS HISTORIKKSTATUS
-    // ----------------------------------------------------
+  // ============================================================
+  // VIS TOPPKORT
+  // ============================================================
 
-    function showLatestStatus(latest) {
+  function showSummaryCards(
+    leaderboard,
+    latestRow
+  ) {
 
-      document.getElementById("historySection").innerHTML = `
+    const leader = leaderboard[0];
+    const second = leaderboard[1];
 
-        <h2>Siste markedsstatus</h2>
+    const gap =
+      second.score - leader.score;
 
-        <p>
-          <strong>Siste komplette fredag:</strong>
-          ${latest["Dato"]}
-        </p>
+
+    document.getElementById("summaryCards").innerHTML = `
+
+      <div class="cards">
+
+        <div class="card">
+          <div class="card-label">
+            🏆 Leder
+          </div>
+
+          <div class="card-value">
+            ${leader.person}
+          </div>
+
+          <div class="card-small">
+            Score ${formatPercent(leader.score)}
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="card-label">
+            ⚔️ Avstand #1–#2
+          </div>
+
+          <div class="card-value">
+            ${formatPercent(gap)}
+          </div>
+
+          <div class="card-small">
+            ${second.person} på andreplass
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="card-label">
+            📅 Siste status
+          </div>
+
+          <div class="card-value">
+            ${latestRow["Dato"]}
+          </div>
+
+          <div class="card-small">
+            siste komplette fredag
+          </div>
+        </div>
+
+      </div>
+    `;
+  }
+
+
+  // ============================================================
+  // VIS LEADERBOARD
+  // ============================================================
+
+  function showLeaderboard(leaderboard) {
+
+    const medals = [
+      "🥇",
+      "🥈",
+      "🥉"
+    ];
+
+
+    let html = `
+
+      <h2>🏆 Live leaderboard</h2>
+
+      <p>
+        Lavest samlet vektet %-avstand leder konkurransen.
+      </p>
+
+      <div class="table-wrap">
 
         <table>
+
           <thead>
             <tr>
-              <th>Tema</th>
-              <th>Status</th>
+              <th class="medal">Plass</th>
+              <th>Deltaker</th>
+              <th>Score</th>
             </tr>
           </thead>
 
           <tbody>
-
-            <tr>
-              <td>Oslo Børs</td>
-              <td>${latest["Oslo Børs"]}</td>
-            </tr>
-
-            <tr>
-              <td>Olje</td>
-              <td>${latest["Olje"]}</td>
-            </tr>
-
-            <tr>
-              <td>Bolig Oslo</td>
-              <td>${latest["Bolig Oslo"]}</td>
-            </tr>
-
-            <tr>
-              <td>S&P500</td>
-              <td>${latest["S&P500"]}</td>
-            </tr>
-
-            <tr>
-              <td>Storebrand</td>
-              <td>${latest["Storebrand"]}</td>
-            </tr>
-
-            <tr>
-              <td>Frontline</td>
-              <td>${latest["Frontline"]}</td>
-            </tr>
-
-            <tr>
-              <td>Nvidia</td>
-              <td>${latest["Nvidia"]}</td>
-            </tr>
-
-          </tbody>
-        </table>
-      `;
-    }
+    `;
 
 
-    // ----------------------------------------------------
-    // VIS DASHBOARDDATA
-    // ----------------------------------------------------
-
-    function showCompetitionData(rows) {
-
-      let html = `
-
-        <h2>DashboardData</h2>
-
-        <p>
-          Test av de faste konkurransedataene:
-          tema, vekting og estimatene til alle åtte deltakere.
-        </p>
-
-        <table>
-
-          <thead>
-            <tr>
-
-              <th>Tema</th>
-              <th>Vekt</th>
-
-              ${participants.map(person =>
-                `<th>${person}</th>`
-              ).join("")}
-
-            </tr>
-          </thead>
-
-          <tbody>
-      `;
-
-
-      rows.forEach(row => {
-
-        html += `
-          <tr>
-
-            <td>${row["TEMA"]}</td>
-
-            <td>${row["Vekt"]}</td>
-
-            ${participants.map(person =>
-              `<td>${row[person]}</td>`
-            ).join("")}
-
-          </tr>
-        `;
-      });
-
+    leaderboard.forEach((row, index) => {
 
       html += `
+
+        <tr class="${index === 0 ? "rank-1" : ""}">
+
+          <td class="medal">
+            ${medals[index] || (index + 1)}
+          </td>
+
+          <td>
+            ${row.person}
+          </td>
+
+          <td>
+            ${formatPercent(row.score)}
+          </td>
+
+        </tr>
+      `;
+    });
+
+
+    html += `
           </tbody>
         </table>
+
+      </div>
+    `;
+
+
+    document.getElementById(
+      "leaderboardSection"
+    ).innerHTML = html;
+  }
+
+
+  // ============================================================
+  // VIS STATUS PER TEMA
+  // ============================================================
+
+  function showThemeResults(themeResults) {
+
+    let html = `
+
+      <h2>📊 Status per tema</h2>
+
+      <p>
+        Faktisk utvikling siden start,
+        vektingsfaktor og hvem som ligger nærmest fasit.
+      </p>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Tema</th>
+              <th>Vekt</th>
+              <th>Faktisk utvikling</th>
+              <th>Nærmest</th>
+              <th>Avstand</th>
+            </tr>
+          </thead>
+
+          <tbody>
+    `;
+
+
+    themeResults.forEach(row => {
+
+      html += `
+
+        <tr>
+
+          <td>
+            ${row.theme}
+          </td>
+
+          <td>
+            ${formatNumber(row.weight, 1)}×
+          </td>
+
+          <td>
+            ${formatPercent(row.actualChange)}
+          </td>
+
+          <td>
+            ${row.closestPerson}
+          </td>
+
+          <td>
+            ${formatPercent(row.closestDistance)}
+          </td>
+
+        </tr>
+      `;
+    });
+
+
+    html += `
+          </tbody>
+        </table>
+
+      </div>
+    `;
+
+
+    document.getElementById(
+      "themeSection"
+    ).innerHTML = html;
+  }
+
+
+  // ============================================================
+  // VIS KONTROLLDATA
+  // ============================================================
+
+  function showDebugData(
+    startRow,
+    latestRow,
+    competitionRows
+  ) {
+
+    let html = `
+
+      <div class="debug">
+
+        <h2>Kontrolldata</h2>
+
+        <p class="small">
+          Denne delen beholdes midlertidig mens vi kontrollerer
+          at beregningene stemmer med Google Sheet.
+        </p>
+
+        <p>
+          <strong>Startdato:</strong>
+          ${startRow["Dato"]}
+        </p>
+
+        <p>
+          <strong>Siste status:</strong>
+          ${latestRow["Dato"]}
+        </p>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Tema</th>
+                <th>Vekt</th>
+
+                ${participants
+                  .map(person =>
+                    `<th>${person}</th>`
+                  )
+                  .join("")}
+              </tr>
+            </thead>
+
+            <tbody>
+    `;
+
+
+    competitionRows.forEach(row => {
+
+      html += `
+
+        <tr>
+
+          <td>
+            ${row["TEMA"]}
+          </td>
+
+          <td>
+            ${row["Vekt"]}
+          </td>
+
+          ${participants
+            .map(person =>
+              `<td>${row[person]}</td>`
+            )
+            .join("")}
+
+        </tr>
+      `;
+    });
+
+
+    html += `
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+    `;
+
+
+    document.getElementById(
+      "debugSection"
+    ).innerHTML = html;
+  }
+
+
+  // ============================================================
+  // START DASHBOARDET
+  // ============================================================
+
+  async function loadData() {
+
+    try {
+
+      const [
+        historyRaw,
+        dashboardRaw
+      ] = await Promise.all([
+        loadCsv(historyUrl),
+        loadCsv(dashboardDataUrl)
+      ]);
+
+
+      const historyRows =
+        getValidHistoryRows(historyRaw);
+
+
+      if (historyRows.length < 2) {
+
+        throw new Error(
+          "Fant ikke nok historikkdata."
+        );
+      }
+
+
+      const startRow =
+        historyRows[0];
+
+      const latestRow =
+        historyRows[
+          historyRows.length - 1
+        ];
+
+
+      const competitionRows =
+        getCompetitionRows(
+          dashboardRaw
+        );
+
+
+      if (competitionRows.length !== 7) {
+
+        throw new Error(
+          "Fant ikke 7 gyldige temaer i DashboardData."
+        );
+      }
+
+
+      const result =
+        calculateCompetition(
+          competitionRows,
+          startRow,
+          latestRow
+        );
+
+
+      showSummaryCards(
+        result.leaderboard,
+        latestRow
+      );
+
+
+      showLeaderboard(
+        result.leaderboard
+      );
+
+
+      showThemeResults(
+        result.themeResults
+      );
+
+
+      showDebugData(
+        startRow,
+        latestRow,
+        competitionRows
+      );
+
+
+      document.getElementById(
+        "loading"
+      ).innerHTML = `
+
+        <span class="ok">
+          ✓ Google Sheets oppdatert.
+          Beregning utført med status
+          ${latestRow["Dato"]}.
+        </span>
       `;
 
 
-      document.getElementById("dashboardSection").innerHTML = html;
+      console.log(
+        "Leaderboard:",
+        result.leaderboard
+      );
+
+      console.log(
+        "Temaresultater:",
+        result.themeResults
+      );
+
     }
 
+    catch (error) {
 
-    // ----------------------------------------------------
-    // HOVEDFUNKSJON
-    // ----------------------------------------------------
+      console.error(error);
 
-    async function loadData() {
+      document.getElementById(
+        "loading"
+      ).innerHTML = `
 
-      try {
-
-        // Hent begge Google Sheet-kildene samtidig
-
-        const [
-          historyRaw,
-          dashboardRaw
-        ] = await Promise.all([
-          loadCsv(historyUrl),
-          loadCsv(dashboardDataUrl)
-        ]);
-
-
-        // ------------------------------------------------
-        // HISTORIKK
-        // ------------------------------------------------
-
-        const historyRows =
-          getValidHistoryRows(historyRaw);
-
-        if (historyRows.length === 0) {
-          throw new Error(
-            "Fant ingen komplette historikkrader."
-          );
-        }
-
-        const latest =
-          historyRows[historyRows.length - 1];
-
-
-        // ------------------------------------------------
-        // DASHBOARDDATA
-        // ------------------------------------------------
-
-        const dashboardRows =
-          getCompetitionRows(dashboardRaw);
-
-        if (dashboardRows.length !== 7) {
-          throw new Error(
-            "Fant ikke 7 gyldige konkurransetemaer i DashboardData."
-          );
-        }
-
-
-        // ------------------------------------------------
-        // VIS DATA
-        // ------------------------------------------------
-
-        showLatestStatus(latest);
-
-        showCompetitionData(dashboardRows);
-
-
-        document.getElementById("loading").innerHTML =
-          `<span class="ok">
-            ✓ Begge Google Sheets-datakildene er lastet korrekt.
-          </span>`;
-
-
-        // Nyttig under utvikling
-
-        console.log(
-          "Siste historikkrad:",
-          latest
-        );
-
-        console.log(
-          "DashboardData:",
-          dashboardRows
-        );
-
-      }
-
-      catch (error) {
-
-        console.error(error);
-
-        document.getElementById("loading").innerHTML =
-          `<span class="error">
-            Feil: ${error.message}
-          </span>`;
-      }
+        <span class="error">
+          Feil: ${error.message}
+        </span>
+      `;
     }
+  }
 
 
-    // Start når nettsiden åpnes
+  loadData();
 
-    loadData();
-
-  </script>
+</script>
 
 </body>
 </html>
