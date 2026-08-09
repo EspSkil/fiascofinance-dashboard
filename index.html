@@ -16,9 +16,9 @@
 
     body {
       font-family: Arial, sans-serif;
-      max-width: 1150px;
+      max-width: 1180px;
       margin: 30px auto;
-      padding: 0 20px 60px;
+      padding: 0 20px 70px;
       color: #222;
       background: #fafafa;
     }
@@ -32,9 +32,26 @@
       margin-bottom: 8px;
     }
 
-    .subtitle {
+    h3 {
+      margin: 0 0 10px;
+    }
+
+    .subtitle,
+    .small,
+    .muted {
       color: #666;
+    }
+
+    .subtitle {
       margin-top: 0;
+    }
+
+    .small {
+      font-size: 13px;
+    }
+
+    .muted {
+      font-size: 14px;
     }
 
     .status-box {
@@ -123,12 +140,8 @@
       overflow-x: auto;
     }
 
-    .small {
-      font-size: 13px;
-      color: #666;
-    }
-
-    .chart-panel {
+    .chart-panel,
+    .sim-panel {
       background: white;
       border: 1px solid #ddd;
       border-radius: 12px;
@@ -145,13 +158,22 @@
       margin-bottom: 8px;
     }
 
-    .filter-row {
+    .filter-row,
+    .mode-row {
       display: flex;
       flex-wrap: wrap;
       gap: 7px;
     }
 
-    button.filter-button {
+    .mode-row {
+      margin: 15px 0;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .filter-button {
       border: 1px solid #bbb;
       background: #fff;
       color: #222;
@@ -161,28 +183,24 @@
       font-size: 14px;
     }
 
-    button.filter-button:hover {
+    .filter-button:hover,
+    .mode-button:hover,
+    .reset-button:hover {
       background: #f1f1f1;
     }
 
-    button.filter-button.active {
+    .filter-button.active,
+    .mode-button.active {
       background: #222;
       color: white;
       border-color: #222;
     }
 
-    button.filter-button.utility {
+    .filter-button.utility {
       font-weight: bold;
     }
 
-    .mode-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 15px 0;
-    }
-
-    button.mode-button {
+    .mode-button {
       border: 1px solid #aaa;
       background: white;
       color: #222;
@@ -192,10 +210,13 @@
       cursor: pointer;
     }
 
-    button.mode-button.active {
-      background: #222;
-      color: white;
-      border-color: #222;
+    .reset-button {
+      border: 1px solid #999;
+      background: white;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     .chart-note {
@@ -211,18 +232,170 @@
     }
 
     #scoreChart,
-    #historyChart {
+    #historyChart,
+    #simChart {
       width: 100% !important;
       height: 480px !important;
     }
 
-    @media (max-width: 700px) {
-      .cards {
+    .sim-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .sim-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px;
+    }
+
+    .sim-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .sim-theme {
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .sim-weight {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .sim-values {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .sim-value-box {
+      background: #f7f7f7;
+      border-radius: 7px;
+      padding: 8px;
+    }
+
+    .sim-value-label {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .sim-value-main {
+      font-weight: bold;
+      margin-top: 2px;
+    }
+
+    .slider-shell {
+      position: relative;
+      padding: 18px 0 24px;
+    }
+
+    .sim-slider {
+      width: 100%;
+    }
+
+    .slider-marker {
+      position: absolute;
+      top: 2px;
+      transform: translateX(-50%);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .slider-marker::after {
+      content: "";
+      display: block;
+      width: 1px;
+      height: 12px;
+      background: #777;
+      margin: 2px auto 0;
+    }
+
+    .slider-marker.current {
+      color: #555;
+    }
+
+    .slider-marker.start {
+      color: #111;
+      font-weight: bold;
+    }
+
+    .sim-range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #777;
+      margin-top: -10px;
+    }
+
+    .sim-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .sim-number {
+      width: 100px;
+      padding: 6px 8px;
+      border: 1px solid #bbb;
+      border-radius: 6px;
+      text-align: right;
+    }
+
+    .sim-unit {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .sim-summary {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 15px 0;
+    }
+
+    .movement-up {
+      color: #16820d;
+      font-weight: bold;
+    }
+
+    .movement-down {
+      color: #b00020;
+      font-weight: bold;
+    }
+
+    .movement-same {
+      color: #666;
+    }
+
+    .scenario-changed {
+      background: #fff7df;
+    }
+
+    .section-divider {
+      border: 0;
+      border-top: 1px solid #ddd;
+      margin: 28px 0;
+    }
+
+    @media (max-width: 800px) {
+      .cards,
+      .sim-grid {
         grid-template-columns: 1fr;
       }
 
-      body {
-        margin-top: 20px;
+      .sim-values {
+        grid-template-columns: 1fr;
       }
 
       .chart-wrap {
@@ -230,7 +403,8 @@
       }
 
       #scoreChart,
-      #historyChart {
+      #historyChart,
+      #simChart {
         height: 400px !important;
       }
     }
@@ -247,538 +421,2691 @@
   </div>
 
   <div id="summaryCards"></div>
-
   <div id="leaderboardSection"></div>
-
   <div id="chartSection"></div>
-
   <div id="historySection"></div>
-
+  <div id="simulatorSection"></div>
   <div id="themeSection"></div>
-
   <div id="controlSection"></div>
 
 
 <script>
 
-  // ============================================================
-  // GOOGLE SHEETS
-  // ============================================================
+const historyUrl =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=48037430&single=true&output=csv";
 
-  const historyUrl =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=48037430&single=true&output=csv";
-
-  const dashboardDataUrl =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=1311778898&single=true&output=csv";
+const dashboardDataUrl =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=1311778898&single=true&output=csv";
 
 
-  // ============================================================
-  // GLOBAL STATE
-  // ============================================================
+let scoreChart = null;
+let historyChart = null;
+let simChart = null;
 
-  let scoreChart = null;
-  let historyChart = null;
+let currentParticipants = [];
+let currentThemeResults = [];
+let currentCompetitionRows = [];
+let currentHistoryRows = [];
 
-  let currentParticipants = [];
-  let currentThemeResults = [];
-  let currentCompetitionRows = [];
-  let currentHistoryRows = [];
-  let currentStartRow = null;
+let currentStartRow = null;
+let currentLatestRow = null;
+let currentOfficialResult = null;
 
-  let selectedParticipants = new Set();
-  let selectedThemes = new Set();
+let selectedParticipants = new Set();
+let selectedThemes = new Set();
 
-  let selectedHistoryParticipants = new Set();
-  let historyMode = "rank";
+let selectedHistoryParticipants = new Set();
 
+let historyMode = "rank";
+let simChartMode = "sim";
 
-  // ============================================================
-  // COLORS
-  // ============================================================
-
-  const chartColors = [
-    "#4472C4",
-    "#ED7D31",
-    "#A5A5A5",
-    "#FFC000",
-    "#5B9BD5",
-    "#70AD47",
-    "#264478",
-    "#9E480E",
-    "#636363",
-    "#997300",
-    "#255E91",
-    "#43682B"
-  ];
+let simulationChanges = {};
 
 
-  // ============================================================
-  // CSV
-  // ============================================================
+const chartColors = [
+  "#4472C4",
+  "#ED7D31",
+  "#A5A5A5",
+  "#FFC000",
+  "#5B9BD5",
+  "#70AD47",
+  "#264478",
+  "#9E480E",
+  "#636363",
+  "#997300",
+  "#255E91",
+  "#43682B"
+];
 
-  async function loadCsv(url) {
 
-    const response = await fetch(url);
+async function loadCsv(url) {
 
-    if (!response.ok) {
-      throw new Error("Kunne ikke hente CSV-data.");
-    }
+  const response = await fetch(url);
 
-    const csvText = await response.text();
-
-    const parsed = Papa.parse(csvText, {
-      header: true,
-      skipEmptyLines: true
-    });
-
-    return parsed.data;
+  if (!response.ok) {
+    throw new Error("Kunne ikke hente CSV-data.");
   }
 
+  const csvText = await response.text();
 
-  function parseNumber(value) {
+  return Papa.parse(csvText, {
+    header: true,
+    skipEmptyLines: true
+  }).data;
+}
 
-    if (value === null || value === undefined) {
-      return NaN;
-    }
 
-    const text = String(value)
+function parseNumber(value) {
+
+  if (value === null || value === undefined) {
+    return NaN;
+  }
+
+  return Number(
+    String(value)
       .trim()
       .replace(/\s/g, "")
       .replace(/[−–—]/g, "-")
       .replace("%", "")
-      .replace(",", ".");
+      .replace(",", ".")
+  );
+}
 
-    return Number(text);
+
+function parsePercent(value) {
+  return parseNumber(value) / 100;
+}
+
+
+function formatPercent(value, decimals = 2) {
+
+  return (value * 100)
+    .toFixed(decimals)
+    .replace(".", ",") + "%";
+}
+
+
+function formatPercentPoints(value, decimals = 2) {
+
+  return Number(value)
+    .toFixed(decimals)
+    .replace(".", ",") + "%";
+}
+
+
+function formatNumber(value, decimals = 2) {
+
+  return Number(value)
+    .toFixed(decimals)
+    .replace(".", ",");
+}
+
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+
+function detectParticipants(dashboardRaw) {
+
+  const competitionRow =
+    dashboardRaw.find(row =>
+      row["TEMA"] &&
+      row["Vekt"] &&
+      row["Type"]
+    );
+
+  if (!competitionRow) {
+    throw new Error(
+      "Fant ingen gyldig konkurranserad i DashboardData."
+    );
   }
 
-
-  function parsePercent(value) {
-    return parseNumber(value) / 100;
-  }
-
-
-  function formatPercent(value, decimals = 2) {
-
-    return (value * 100)
-      .toFixed(decimals)
-      .replace(".", ",") + "%";
-  }
-
-
-  function formatPercentPoints(value, decimals = 2) {
-
-    return Number(value)
-      .toFixed(decimals)
-      .replace(".", ",") + "%";
-  }
-
-
-  function formatNumber(value, decimals = 2) {
-
-    return Number(value)
-      .toFixed(decimals)
-      .replace(".", ",");
-  }
-
-
-  // ============================================================
-  // DYNAMIC STRUCTURE
-  // ============================================================
-
-  function detectParticipants(dashboardRaw) {
-
-    const competitionRow =
-      dashboardRaw.find(row =>
-        row["TEMA"] &&
-        row["Vekt"] &&
-        row["Type"]
-      );
-
-    if (!competitionRow) {
-      throw new Error(
-        "Fant ingen gyldig konkurranserad i DashboardData."
-      );
-    }
-
-    const fixedColumns = new Set([
+  const fixedColumns =
+    new Set([
       "TEMA",
       "Vekt",
       "Type"
     ]);
 
-    return Object.keys(competitionRow)
-      .filter(key =>
-        key &&
-        !key.startsWith("_") &&
-        !fixedColumns.has(key) &&
-        competitionRow[key] !== undefined
-      );
+  return Object.keys(competitionRow)
+    .filter(key =>
+      key &&
+      !key.startsWith("_") &&
+      !fixedColumns.has(key) &&
+      competitionRow[key] !== undefined
+    );
+}
+
+
+function getCompetitionRows(
+  rows,
+  participants
+) {
+
+  return rows.filter(row =>
+
+    row["TEMA"] &&
+    row["Vekt"] &&
+    row["Type"] &&
+
+    participants.every(person =>
+      row[person] !== undefined &&
+      row[person] !== ""
+    )
+  );
+}
+
+
+function getValidHistoryRows(
+  rows,
+  competitionRows
+) {
+
+  const themes =
+    competitionRows.map(
+      row => row["TEMA"]
+    );
+
+  return rows.filter(row => {
+
+    if (!row["Dato"]) {
+      return false;
+    }
+
+    return themes.every(theme =>
+      row[theme] !== undefined &&
+      row[theme] !== ""
+    );
+  });
+}
+
+
+function calculateActualChange(
+  themeRow,
+  startRow,
+  statusRow
+) {
+
+  const theme =
+    themeRow["TEMA"];
+
+  const type =
+    String(themeRow["Type"])
+      .trim()
+      .toLowerCase();
+
+  const start =
+    parseNumber(
+      startRow[theme]
+    );
+
+  const latest =
+    parseNumber(
+      statusRow[theme]
+    );
+
+
+  if (type === "prosent") {
+    return latest / 100;
   }
 
 
-  function getCompetitionRows(rows, participants) {
+  if (type === "pris") {
 
-    return rows.filter(row => {
+    if (
+      !Number.isFinite(start) ||
+      start === 0
+    ) {
 
-      const basicFieldsOk =
-        row["TEMA"] &&
-        row["Vekt"] &&
-        row["Type"];
+      throw new Error(
+        `Ugyldig startverdi for "${theme}".`
+      );
+    }
 
-      const participantFieldsOk =
-        participants.every(person =>
-          row[person] !== undefined &&
-          row[person] !== ""
-        );
-
-      return basicFieldsOk &&
-        participantFieldsOk;
-    });
+    return latest / start - 1;
   }
 
 
-  function getValidHistoryRows(
-    rows,
-    competitionRows
-  ) {
-
-    const themes =
-      competitionRows.map(
-        row => row["TEMA"]
-      );
-
-    return rows.filter(row => {
-
-      if (!row["Dato"]) {
-        return false;
-      }
-
-      return themes.every(theme =>
-        row[theme] !== undefined &&
-        row[theme] !== ""
-      );
-    });
-  }
+  throw new Error(
+    `Ukjent Type "${themeRow["Type"]}" for "${theme}".`
+  );
+}
 
 
-  // ============================================================
-  // SCORE CALCULATION
-  // ============================================================
+function calculateCompetition(
+  competitionRows,
+  participants,
+  startRow,
+  statusRow
+) {
 
-  function calculateActualChange(
-    themeRow,
-    startRow,
-    latestRow
-  ) {
+  const participantScores =
+    Object.fromEntries(
+      participants.map(
+        person => [person, 0]
+      )
+    );
+
+
+  const themeResults = [];
+
+
+  competitionRows.forEach(row => {
 
     const theme =
-      themeRow["TEMA"];
+      row["TEMA"];
 
-    const type =
-      String(themeRow["Type"])
-        .trim()
-        .toLowerCase();
+    const weight =
+      parseNumber(
+        row["Vekt"]
+      );
 
-    const startValue =
-      parseNumber(startRow[theme]);
-
-    const latestValue =
-      parseNumber(latestRow[theme]);
-
-
-    if (type === "prosent") {
-      return latestValue / 100;
-    }
+    const actualChange =
+      calculateActualChange(
+        row,
+        startRow,
+        statusRow
+      );
 
 
-    if (type === "pris") {
+    let closestPerson = null;
+    let closestDistance = Infinity;
+
+    const personResults = {};
+
+
+    participants.forEach(person => {
+
+      const prediction =
+        parsePercent(
+          row[person]
+        );
+
+      const absoluteDistance =
+        Math.abs(
+          actualChange -
+          prediction
+        );
+
+      const weightedDistance =
+        absoluteDistance *
+        weight;
+
+
+      participantScores[person] +=
+        weightedDistance;
+
+
+      personResults[person] = {
+        prediction,
+        absoluteDistance,
+        weightedDistance
+      };
+
 
       if (
-        !Number.isFinite(startValue) ||
-        startValue === 0
+        absoluteDistance <
+        closestDistance
       ) {
-        throw new Error(
-          `Ugyldig startverdi for "${theme}".`
-        );
+
+        closestDistance =
+          absoluteDistance;
+
+        closestPerson =
+          person;
       }
+    });
 
-      return (
-        latestValue / startValue
-      ) - 1;
+
+    themeResults.push({
+
+      theme,
+      type: row["Type"],
+      weight,
+      actualChange,
+      closestPerson,
+      closestDistance,
+      personResults
+    });
+  });
+
+
+  const leaderboard =
+    participants
+      .map(person => ({
+        person,
+        score:
+          participantScores[person]
+      }))
+      .sort(
+        (a, b) =>
+          a.score -
+          b.score
+      );
+
+
+  return {
+    leaderboard,
+    themeResults
+  };
+}
+
+
+function showSummaryCards(
+  leaderboard,
+  latestRow,
+  competitionRows,
+  participants
+) {
+
+  const leader =
+    leaderboard[0];
+
+  const second =
+    leaderboard[1];
+
+  const gap =
+    second
+      ? second.score -
+        leader.score
+      : 0;
+
+
+  document.getElementById(
+    "summaryCards"
+  ).innerHTML = `
+
+    <div class="cards">
+
+      <div class="card">
+
+        <div class="card-label">
+          🏆 Leder
+        </div>
+
+        <div class="card-value">
+          ${leader.person}
+        </div>
+
+        <div class="card-small">
+          Score
+          ${formatPercent(
+            leader.score
+          )}
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-label">
+          ⚔️ Avstand #1–#2
+        </div>
+
+        <div class="card-value">
+          ${
+            second
+              ? formatPercent(gap)
+              : "-"
+          }
+        </div>
+
+        <div class="card-small">
+          ${
+            second
+              ? second.person +
+                " på andreplass"
+              : "Kun én deltaker"
+          }
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-label">
+          📅 Siste status
+        </div>
+
+        <div class="card-value">
+          ${latestRow["Dato"]}
+        </div>
+
+        <div class="card-small">
+          ${competitionRows.length}
+          temaer ·
+          ${participants.length}
+          deltakere
+        </div>
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+function showLeaderboard(
+  leaderboard
+) {
+
+  const medals = [
+    "🥇",
+    "🥈",
+    "🥉"
+  ];
+
+
+  let html = `
+
+    <h2>
+      🏆 Live leaderboard
+    </h2>
+
+    <p>
+      Lavest samlet vektet
+      %-avstand leder konkurransen.
+    </p>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th class="medal">
+              Plass
+            </th>
+
+            <th>
+              Deltaker
+            </th>
+
+            <th>
+              Score
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+  `;
+
+
+  leaderboard.forEach(
+    (row, index) => {
+
+      html += `
+
+        <tr class="${
+          index === 0
+            ? "rank-1"
+            : ""
+        }">
+
+          <td class="medal">
+
+            ${
+              medals[index] ||
+              (index + 1)
+            }
+
+          </td>
+
+          <td>
+            ${row.person}
+          </td>
+
+          <td>
+            ${formatPercent(
+              row.score
+            )}
+          </td>
+
+        </tr>
+      `;
     }
+  );
 
 
-    throw new Error(
-      `Ukjent Type "${themeRow["Type"]}" for "${theme}".`
+  html += `
+        </tbody>
+      </table>
+    </div>
+  `;
+
+
+  document.getElementById(
+    "leaderboardSection"
+  ).innerHTML = html;
+}
+
+
+function createFilterButton(
+  label,
+  isActive,
+  callback,
+  utility = false
+) {
+
+  const button =
+    document.createElement(
+      "button"
+    );
+
+  button.type =
+    "button";
+
+  button.textContent =
+    label;
+
+  button.className =
+    "filter-button" +
+    (
+      isActive
+        ? " active"
+        : ""
+    ) +
+    (
+      utility
+        ? " utility"
+        : ""
+    );
+
+  button.addEventListener(
+    "click",
+    callback
+  );
+
+  return button;
+}
+
+
+function themeColor(theme) {
+
+  const index =
+    currentThemeResults
+      .findIndex(
+        row =>
+          row.theme === theme
+      );
+
+  return chartColors[
+    (
+      index < 0
+        ? 0
+        : index
+    ) %
+    chartColors.length
+  ];
+}
+
+
+function participantColor(person) {
+
+  const index =
+    currentParticipants
+      .indexOf(person);
+
+  return chartColors[
+    (
+      index < 0
+        ? 0
+        : index
+    ) %
+    chartColors.length
+  ];
+}
+
+
+function createChartSection(
+  participants,
+  themeResults
+) {
+
+  document.getElementById(
+    "chartSection"
+  ).innerHTML = `
+
+    <h2>
+      📚 Hva avgjør stillingen?
+    </h2>
+
+    <p>
+      Hvert felt viser hvor mye
+      temaet bidrar til deltakerens
+      samlede score.
+    </p>
+
+    <div class="chart-panel">
+
+      <div class="filter-block">
+
+        <div class="filter-title">
+          Deltakere
+        </div>
+
+        <div
+          class="filter-row"
+          id="participantFilters">
+        </div>
+
+      </div>
+
+
+      <div class="filter-block">
+
+        <div class="filter-title">
+          Temaer
+        </div>
+
+        <div
+          class="filter-row"
+          id="themeFilters">
+        </div>
+
+      </div>
+
+
+      <p
+        class="chart-note"
+        id="chartSelectionInfo">
+      </p>
+
+
+      <div class="chart-wrap">
+
+        <canvas
+          id="scoreChart">
+        </canvas>
+
+      </div>
+
+    </div>
+  `;
+
+
+  selectedParticipants =
+    new Set(
+      participants
+    );
+
+  selectedThemes =
+    new Set(
+      themeResults.map(
+        row => row.theme
+      )
+    );
+
+
+  renderFilterButtons();
+  renderStackedChart();
+}
+
+
+function renderFilterButtons() {
+
+  const participantContainer =
+    document.getElementById(
+      "participantFilters"
+    );
+
+  const themeContainer =
+    document.getElementById(
+      "themeFilters"
+    );
+
+
+  participantContainer.innerHTML =
+    "";
+
+  themeContainer.innerHTML =
+    "";
+
+
+  participantContainer.appendChild(
+
+    createFilterButton(
+
+      "Alle",
+
+      false,
+
+      () => {
+
+        selectedParticipants =
+          new Set(
+            currentParticipants
+          );
+
+        renderFilterButtons();
+        renderStackedChart();
+      },
+
+      true
+    )
+  );
+
+
+  participantContainer.appendChild(
+
+    createFilterButton(
+
+      "Ingen",
+
+      false,
+
+      () => {
+
+        selectedParticipants =
+          new Set();
+
+        renderFilterButtons();
+        renderStackedChart();
+      },
+
+      true
+    )
+  );
+
+
+  currentParticipants.forEach(
+    person => {
+
+      participantContainer
+        .appendChild(
+
+          createFilterButton(
+
+            person,
+
+            selectedParticipants
+              .has(person),
+
+            () => {
+
+              if (
+                selectedParticipants
+                  .has(person)
+              ) {
+
+                selectedParticipants
+                  .delete(person);
+
+              } else {
+
+                selectedParticipants
+                  .add(person);
+              }
+
+              renderFilterButtons();
+              renderStackedChart();
+            }
+          )
+        );
+    }
+  );
+
+
+  themeContainer.appendChild(
+
+    createFilterButton(
+
+      "Alle",
+
+      false,
+
+      () => {
+
+        selectedThemes =
+          new Set(
+            currentThemeResults
+              .map(
+                row =>
+                  row.theme
+              )
+          );
+
+        renderFilterButtons();
+        renderStackedChart();
+      },
+
+      true
+    )
+  );
+
+
+  themeContainer.appendChild(
+
+    createFilterButton(
+
+      "Ingen",
+
+      false,
+
+      () => {
+
+        selectedThemes =
+          new Set();
+
+        renderFilterButtons();
+        renderStackedChart();
+      },
+
+      true
+    )
+  );
+
+
+  currentThemeResults.forEach(
+    row => {
+
+      themeContainer
+        .appendChild(
+
+          createFilterButton(
+
+            row.theme,
+
+            selectedThemes
+              .has(row.theme),
+
+            () => {
+
+              if (
+                selectedThemes
+                  .has(row.theme)
+              ) {
+
+                selectedThemes
+                  .delete(
+                    row.theme
+                  );
+
+              } else {
+
+                selectedThemes
+                  .add(
+                    row.theme
+                  );
+              }
+
+              renderFilterButtons();
+              renderStackedChart();
+            }
+          )
+        );
+    }
+  );
+}
+
+
+function stackedDatasets(
+  themeResults,
+  participants
+) {
+
+  return themeResults.map(
+    themeRow => ({
+
+      label:
+        themeRow.theme,
+
+      backgroundColor:
+        themeColor(
+          themeRow.theme
+        ),
+
+      borderColor:
+        themeColor(
+          themeRow.theme
+        ),
+
+      borderWidth: 1,
+
+      data:
+        participants.map(
+          person =>
+            themeRow
+              .personResults[
+                person
+              ]
+              .weightedDistance *
+            100
+        ),
+
+      themeRow
+    })
+  );
+}
+
+
+const stackTotalPlugin = {
+
+  id:
+    "stackTotalLabels",
+
+  afterDatasetsDraw(chart) {
+
+    const {
+      ctx,
+      scales: {
+        x,
+        y
+      }
+    } = chart;
+
+
+    ctx.save();
+
+    ctx.font =
+      "bold 12px Arial";
+
+    ctx.textAlign =
+      "center";
+
+    ctx.fillStyle =
+      "#222";
+
+
+    chart.data.labels
+      .forEach(
+        (label, index) => {
+
+          const total =
+            chart.data.datasets
+              .reduce(
+                (
+                  sum,
+                  dataset
+                ) =>
+                  sum +
+                  (
+                    dataset.data[
+                      index
+                    ] || 0
+                  ),
+                0
+              );
+
+
+          if (total > 0) {
+
+            ctx.fillText(
+
+              formatPercentPoints(
+                total
+              ),
+
+              x.getPixelForValue(
+                index
+              ),
+
+              y.getPixelForValue(
+                total
+              ) - 8
+            );
+          }
+        }
+      );
+
+
+    ctx.restore();
+  }
+};
+
+
+function renderStackedChart() {
+
+  const participants =
+    currentParticipants
+      .filter(
+        person =>
+          selectedParticipants
+            .has(person)
+      );
+
+
+  const themes =
+    currentThemeResults
+      .filter(
+        row =>
+          selectedThemes
+            .has(row.theme)
+      );
+
+
+  document.getElementById(
+    "chartSelectionInfo"
+  ).textContent =
+
+    `Visning: ${
+      participants.length
+    } av ${
+      currentParticipants.length
+    } deltakere · ${
+      themes.length
+    } av ${
+      currentThemeResults.length
+    } temaer.`;
+
+
+  if (scoreChart) {
+    scoreChart.destroy();
+  }
+
+
+  scoreChart =
+    new Chart(
+
+      document.getElementById(
+        "scoreChart"
+      ),
+
+      {
+
+        type: "bar",
+
+        data: {
+
+          labels:
+            participants,
+
+          datasets:
+            stackedDatasets(
+              themes,
+              participants
+            )
+        },
+
+
+        options: {
+
+          responsive: true,
+
+          maintainAspectRatio:
+            false,
+
+
+          scales: {
+
+            x: {
+              stacked: true
+            },
+
+            y: {
+
+              stacked: true,
+
+              beginAtZero: true,
+
+              title: {
+                display: true,
+                text:
+                  "Vektet %-avstand"
+              },
+
+              ticks: {
+                callback:
+                  value =>
+                    value + "%"
+              }
+            }
+          },
+
+
+          plugins: {
+
+            legend: {
+              position:
+                "bottom"
+            },
+
+
+            tooltip: {
+
+              callbacks: {
+
+                label:
+                  context => {
+
+                    const themeRow =
+                      context.dataset
+                        .themeRow;
+
+                    const result =
+                      themeRow
+                        .personResults[
+                          context.label
+                        ];
+
+                    return (
+                      themeRow.theme +
+                      ": " +
+                      formatPercent(
+                        result
+                          .weightedDistance
+                      )
+                    );
+                  },
+
+
+                afterLabel:
+                  context => {
+
+                    const themeRow =
+                      context.dataset
+                        .themeRow;
+
+                    const result =
+                      themeRow
+                        .personResults[
+                          context.label
+                        ];
+
+                    return [
+
+                      "Tips: " +
+                        formatPercent(
+                          result.prediction
+                        ),
+
+                      "Faktisk: " +
+                        formatPercent(
+                          themeRow
+                            .actualChange
+                        ),
+
+                      "Avstand: " +
+                        formatPercent(
+                          result
+                            .absoluteDistance
+                        ),
+
+                      "Vekt: " +
+                        formatNumber(
+                          themeRow.weight,
+                          1
+                        ) +
+                        "×",
+
+                      "Scorebidrag: " +
+                        formatPercent(
+                          result
+                            .weightedDistance
+                        )
+                    ];
+                  }
+              }
+            }
+          }
+        },
+
+
+        plugins: [
+          stackTotalPlugin
+        ]
+      }
+    );
+}
+
+
+function buildHistoricalResults() {
+
+  return currentHistoryRows
+    .map(row => {
+
+      const result =
+        calculateCompetition(
+
+          currentCompetitionRows,
+          currentParticipants,
+          currentStartRow,
+          row
+        );
+
+
+      const ranks = {};
+      const scores = {};
+
+
+      result.leaderboard.forEach(
+        (entry, index) => {
+
+          ranks[
+            entry.person
+          ] =
+            index + 1;
+
+          scores[
+            entry.person
+          ] =
+            entry.score;
+        }
+      );
+
+
+      return {
+
+        date:
+          row["Dato"],
+
+        ranks,
+        scores
+      };
+    }
+  );
+}
+
+
+function createHistorySection() {
+
+  document.getElementById(
+    "historySection"
+  ).innerHTML = `
+
+    <h2>
+      📈 Championship Race
+    </h2>
+
+    <p>
+      Se hvordan plassering og score
+      har utviklet seg gjennom året.
+    </p>
+
+    <div class="chart-panel">
+
+      <div class="mode-row">
+
+        <button
+          type="button"
+          id="rankModeButton"
+          class="mode-button active">
+
+          Plassering
+
+        </button>
+
+
+        <button
+          type="button"
+          id="scoreModeButton"
+          class="mode-button">
+
+          Score
+
+        </button>
+
+      </div>
+
+
+      <div class="filter-block">
+
+        <div class="filter-title">
+          Deltakere
+        </div>
+
+        <div
+          class="filter-row"
+          id="historyParticipantFilters">
+        </div>
+
+      </div>
+
+
+      <p
+        class="chart-note"
+        id="historySelectionInfo">
+      </p>
+
+
+      <div class="chart-wrap">
+
+        <canvas
+          id="historyChart">
+        </canvas>
+
+      </div>
+
+    </div>
+  `;
+
+
+  selectedHistoryParticipants =
+    new Set(
+      currentParticipants
+    );
+
+
+  document.getElementById(
+    "rankModeButton"
+  ).onclick = () => {
+
+    historyMode =
+      "rank";
+
+    updateHistoryModeButtons();
+    renderHistoryChart();
+  };
+
+
+  document.getElementById(
+    "scoreModeButton"
+  ).onclick = () => {
+
+    historyMode =
+      "score";
+
+    updateHistoryModeButtons();
+    renderHistoryChart();
+  };
+
+
+  renderHistoryFilterButtons();
+  renderHistoryChart();
+}
+
+
+function updateHistoryModeButtons() {
+
+  document.getElementById(
+    "rankModeButton"
+  ).classList.toggle(
+
+    "active",
+
+    historyMode ===
+      "rank"
+  );
+
+
+  document.getElementById(
+    "scoreModeButton"
+  ).classList.toggle(
+
+    "active",
+
+    historyMode ===
+      "score"
+  );
+}
+
+
+function renderHistoryFilterButtons() {
+
+  const container =
+    document.getElementById(
+      "historyParticipantFilters"
+    );
+
+
+  container.innerHTML =
+    "";
+
+
+  container.appendChild(
+
+    createFilterButton(
+
+      "Alle",
+
+      false,
+
+      () => {
+
+        selectedHistoryParticipants =
+          new Set(
+            currentParticipants
+          );
+
+        renderHistoryFilterButtons();
+        renderHistoryChart();
+      },
+
+      true
+    )
+  );
+
+
+  container.appendChild(
+
+    createFilterButton(
+
+      "Ingen",
+
+      false,
+
+      () => {
+
+        selectedHistoryParticipants =
+          new Set();
+
+        renderHistoryFilterButtons();
+        renderHistoryChart();
+      },
+
+      true
+    )
+  );
+
+
+  currentParticipants.forEach(
+    person => {
+
+      container.appendChild(
+
+        createFilterButton(
+
+          person,
+
+          selectedHistoryParticipants
+            .has(person),
+
+          () => {
+
+            if (
+              selectedHistoryParticipants
+                .has(person)
+            ) {
+
+              selectedHistoryParticipants
+                .delete(person);
+
+            } else {
+
+              selectedHistoryParticipants
+                .add(person);
+            }
+
+            renderHistoryFilterButtons();
+            renderHistoryChart();
+          }
+        )
+      );
+    }
+  );
+}
+
+
+function renderHistoryChart() {
+
+  const historical =
+    buildHistoricalResults();
+
+
+  const participants =
+    currentParticipants.filter(
+      person =>
+        selectedHistoryParticipants
+          .has(person)
+    );
+
+
+  document.getElementById(
+    "historySelectionInfo"
+  ).textContent =
+
+    `Visning: ${
+      participants.length
+    } av ${
+      currentParticipants.length
+    } deltakere · ${
+      historical.length
+    } datapunkter.`;
+
+
+  const isRank =
+    historyMode ===
+    "rank";
+
+
+  const datasets =
+    participants.map(
+      person => ({
+
+        label:
+          person,
+
+        data:
+          historical.map(
+            row =>
+              isRank
+                ? row.ranks[
+                    person
+                  ]
+                : row.scores[
+                    person
+                  ] * 100
+          ),
+
+        borderColor:
+          participantColor(
+            person
+          ),
+
+        backgroundColor:
+          participantColor(
+            person
+          ),
+
+        borderWidth: 2,
+
+        pointRadius: 2,
+
+        pointHoverRadius: 5,
+
+        tension: 0.15,
+
+        fill: false
+      })
+    );
+
+
+  if (historyChart) {
+    historyChart.destroy();
+  }
+
+
+  historyChart =
+    new Chart(
+
+      document.getElementById(
+        "historyChart"
+      ),
+
+      {
+
+        type: "line",
+
+        data: {
+
+          labels:
+            historical.map(
+              row =>
+                row.date
+            ),
+
+          datasets
+        },
+
+
+        options: {
+
+          responsive: true,
+
+          maintainAspectRatio:
+            false,
+
+
+          interaction: {
+            mode: "index",
+            intersect: false
+          },
+
+
+          scales: {
+
+            x: {
+
+              title: {
+                display: true,
+                text: "Dato"
+              },
+
+              ticks: {
+                maxTicksLimit: 12
+              }
+            },
+
+
+            y: {
+
+              reverse:
+                isRank,
+
+              min:
+                isRank
+                  ? 1
+                  : undefined,
+
+              max:
+                isRank
+                  ? currentParticipants
+                      .length
+                  : undefined,
+
+              beginAtZero:
+                !isRank,
+
+              title: {
+
+                display: true,
+
+                text:
+                  isRank
+                    ? "Plassering"
+                    : "Vektet score"
+              },
+
+              ticks: {
+
+                stepSize:
+                  isRank
+                    ? 1
+                    : undefined,
+
+                callback:
+                  value =>
+                    isRank
+                      ? value
+                      : value + "%"
+              }
+            }
+          },
+
+
+          plugins: {
+
+            legend: {
+              position:
+                "bottom"
+            },
+
+
+            tooltip: {
+
+              callbacks: {
+
+                label:
+                  context =>
+
+                    isRank
+
+                      ? `${
+                          context.dataset
+                            .label
+                        }: #${
+                          context.parsed.y
+                        }`
+
+                      : `${
+                          context.dataset
+                            .label
+                        }: ${
+                          formatPercentPoints(
+                            context.parsed.y
+                          )
+                        }`
+              }
+            }
+          }
+        }
+      }
+    );
+}
+
+
+function getSliderRange(
+  themeRow,
+  currentChange
+) {
+
+  const predictions =
+    currentParticipants
+      .map(
+        person =>
+          themeRow
+            .personResults[
+              person
+            ]
+            .prediction
+      )
+      .filter(
+        Number.isFinite
+      );
+
+
+  const values = [
+    0,
+    currentChange,
+    ...predictions
+  ];
+
+
+  const minValue =
+    Math.min(
+      ...values
+    );
+
+  const maxValue =
+    Math.max(
+      ...values
+    );
+
+  const span =
+    Math.max(
+      0.10,
+      maxValue -
+      minValue
+    );
+
+  const padding =
+    Math.max(
+      0.10,
+      span * 0.35
+    );
+
+
+  let min =
+    minValue -
+    padding;
+
+  let max =
+    maxValue +
+    padding;
+
+
+  const type =
+    String(
+      themeRow.type
+    )
+    .trim()
+    .toLowerCase();
+
+
+  if (type === "pris") {
+
+    min =
+      Math.max(
+        -0.95,
+        Math.min(
+          -0.80,
+          min
+        )
+      );
+
+    max =
+      Math.max(
+        2.00,
+        max
+      );
+
+  } else {
+
+    min =
+      Math.min(
+        -0.20,
+        min
+      );
+
+    max =
+      Math.max(
+        0.20,
+        max
+      );
+  }
+
+
+  min =
+    Math.floor(
+      min * 20
+    ) / 20;
+
+  max =
+    Math.ceil(
+      max * 20
+    ) / 20;
+
+
+  return {
+
+    min,
+    max,
+    step: 0.005
+  };
+}
+
+
+function rawValueFromChange(
+  themeRow,
+  change
+) {
+
+  const theme =
+    themeRow.theme;
+
+  const type =
+    String(
+      themeRow.type
+    )
+    .trim()
+    .toLowerCase();
+
+
+  if (type === "pris") {
+
+    return (
+      parseNumber(
+        currentStartRow[
+          theme
+        ]
+      ) *
+      (
+        1 + change
+      )
     );
   }
 
 
-  function calculateCompetition(
-    competitionRows,
-    participants,
-    startRow,
-    latestRow
-  ) {
-
-    const participantScores = {};
-
-    participants.forEach(person => {
-      participantScores[person] = 0;
-    });
+  return change * 100;
+}
 
 
-    const themeResults = [];
+function currentRawValue(
+  themeRow
+) {
+
+  return parseNumber(
+    currentLatestRow[
+      themeRow.theme
+    ]
+  );
+}
 
 
-    competitionRows.forEach(row => {
+function buildSimulatedStatusRow() {
 
-      const theme =
-        row["TEMA"];
+  const row = {
+    ...currentLatestRow
+  };
 
-      const weight =
-        parseNumber(row["Vekt"]);
 
-      const actualChange =
-        calculateActualChange(
-          row,
-          startRow,
-          latestRow
+  currentThemeResults.forEach(
+    themeRow => {
+
+      row[
+        themeRow.theme
+      ] =
+
+        rawValueFromChange(
+
+          themeRow,
+
+          simulationChanges[
+            themeRow.theme
+          ]
+        );
+    }
+  );
+
+
+  return row;
+}
+
+
+function getSimulatedResult() {
+
+  return calculateCompetition(
+
+    currentCompetitionRows,
+    currentParticipants,
+    currentStartRow,
+    buildSimulatedStatusRow()
+  );
+}
+
+
+function initializeSimulation() {
+
+  simulationChanges = {};
+
+
+  currentThemeResults.forEach(
+    row => {
+
+      simulationChanges[
+        row.theme
+      ] =
+        row.actualChange;
+    }
+  );
+}
+
+
+function createSimulatorSection() {
+
+  initializeSimulation();
+
+
+  document.getElementById(
+    "simulatorSection"
+  ).innerHTML = `
+
+    <h2>
+      🔮 Hva hvis?
+    </h2>
+
+    <p>
+      Flytt temaene og se hvordan
+      et mulig sluttresultat påvirker
+      konkurransen.
+      Den offisielle stillingen over
+      endres ikke.
+    </p>
+
+    <div class="sim-panel">
+
+      <div class="sim-summary">
+
+        <div>
+
+          <strong>
+            Scenario:
+          </strong>
+
+          <span
+            id="simChangedCount">
+
+            0 endrede temaer
+
+          </span>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="reset-button"
+          id="resetSimulation">
+
+          ↺ Nullstill til dagens status
+
+        </button>
+
+      </div>
+
+
+      <div
+        class="sim-grid"
+        id="simControls">
+      </div>
+
+
+      <hr class="section-divider">
+
+
+      <h3>
+        Simulert leaderboard
+      </h3>
+
+      <p class="muted">
+        Pilene viser endring fra
+        den offisielle
+        live-plasseringen.
+      </p>
+
+
+      <div id="simLeaderboard"></div>
+
+
+      <hr class="section-divider">
+
+
+      <div class="mode-row">
+
+        <button
+          type="button"
+          id="simChartModeButton"
+          class="mode-button active">
+
+          Simulert
+
+        </button>
+
+
+        <button
+          type="button"
+          id="liveChartModeButton"
+          class="mode-button">
+
+          Live
+
+        </button>
+
+      </div>
+
+
+      <div class="chart-wrap">
+
+        <canvas
+          id="simChart">
+        </canvas>
+
+      </div>
+
+    </div>
+  `;
+
+
+  document.getElementById(
+    "resetSimulation"
+  ).onclick = () => {
+
+    initializeSimulation();
+    renderSimulatorControls();
+    updateSimulationOutputs();
+  };
+
+
+  document.getElementById(
+    "simChartModeButton"
+  ).onclick = () => {
+
+    simChartMode =
+      "sim";
+
+    updateSimChartModeButtons();
+    renderSimulatorChart();
+  };
+
+
+  document.getElementById(
+    "liveChartModeButton"
+  ).onclick = () => {
+
+    simChartMode =
+      "live";
+
+    updateSimChartModeButtons();
+    renderSimulatorChart();
+  };
+
+
+  renderSimulatorControls();
+  updateSimulationOutputs();
+}
+
+
+function renderSimulatorControls() {
+
+  const container =
+    document.getElementById(
+      "simControls"
+    );
+
+
+  container.innerHTML =
+    "";
+
+
+  currentThemeResults.forEach(
+    themeRow => {
+
+      const current =
+        themeRow.actualChange;
+
+      const simulated =
+        simulationChanges[
+          themeRow.theme
+        ];
+
+      const range =
+        getSliderRange(
+          themeRow,
+          current
         );
 
 
-      let closestPerson = null;
-      let closestDistance = Infinity;
+      const startPosition =
+        clamp(
 
-      const personResults = {};
+          (
+            0 -
+            range.min
+          ) /
+          (
+            range.max -
+            range.min
+          ) *
+          100,
+
+          0,
+          100
+        );
 
 
-      participants.forEach(person => {
+      const currentPosition =
+        clamp(
 
-        const prediction =
-          parsePercent(row[person]);
+          (
+            current -
+            range.min
+          ) /
+          (
+            range.max -
+            range.min
+          ) *
+          100,
 
-        const absoluteDistance =
-          Math.abs(
-            actualChange -
-            prediction
+          0,
+          100
+        );
+
+
+      const changed =
+        Math.abs(
+          simulated -
+          current
+        ) >
+        0.00001;
+
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "sim-card" +
+        (
+          changed
+            ? " scenario-changed"
+            : ""
+        );
+
+
+      const isPrice =
+        String(
+          themeRow.type
+        )
+        .trim()
+        .toLowerCase() ===
+        "pris";
+
+
+      const startRaw =
+        parseNumber(
+          currentStartRow[
+            themeRow.theme
+          ]
+        );
+
+
+      const nowRaw =
+        currentRawValue(
+          themeRow
+        );
+
+
+      const simulatedRaw =
+        rawValueFromChange(
+          themeRow,
+          simulated
+        );
+
+
+      card.innerHTML = `
+
+        <div class="sim-head">
+
+          <div>
+
+            <div class="sim-theme">
+              ${themeRow.theme}
+            </div>
+
+            <div class="sim-weight">
+              Vekt
+              ${formatNumber(
+                themeRow.weight,
+                1
+              )}×
+              ·
+              ${themeRow.type}
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="sim-values">
+
+          <div class="sim-value-box">
+
+            <div class="sim-value-label">
+              Start
+            </div>
+
+            <div class="sim-value-main">
+
+              ${
+                isPrice
+                  ? formatNumber(
+                      startRaw,
+                      2
+                    )
+                  : "0,00%"
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="sim-value-box">
+
+            <div class="sim-value-label">
+              Dagens status
+            </div>
+
+            <div class="sim-value-main">
+
+              ${
+                isPrice
+                  ? formatNumber(
+                      nowRaw,
+                      2
+                    ) +
+                    " · "
+                  : ""
+              }
+
+              ${
+                formatPercent(
+                  current
+                )
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="sim-value-box">
+
+            <div class="sim-value-label">
+              Simulert
+            </div>
+
+            <div
+              class="sim-value-main"
+              id="sim-display-${safeId(
+                themeRow.theme
+              )}">
+
+              ${
+                isPrice
+                  ? formatNumber(
+                      simulatedRaw,
+                      2
+                    ) +
+                    " · "
+                  : ""
+              }
+
+              ${
+                formatPercent(
+                  simulated
+                )
+              }
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="slider-shell">
+
+          <div
+            class="slider-marker start"
+            style="left:${startPosition}%">
+
+            START 0%
+
+          </div>
+
+
+          <div
+            class="slider-marker current"
+            style="left:${currentPosition}%">
+
+            NÅ
+            ${
+              formatPercent(
+                current,
+                1
+              )
+            }
+
+          </div>
+
+
+          <input
+            class="sim-slider"
+            id="slider-${safeId(
+              themeRow.theme
+            )}"
+            type="range"
+            min="${range.min}"
+            max="${range.max}"
+            step="${range.step}"
+            value="${simulated}">
+
+
+          <div class="sim-range-labels">
+
+            <span>
+              ${
+                formatPercent(
+                  range.min,
+                  0
+                )
+              }
+            </span>
+
+            <span>
+              ${
+                formatPercent(
+                  range.max,
+                  0
+                )
+              }
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="sim-input-row">
+
+          <label
+            for="input-${safeId(
+              themeRow.theme
+            )}">
+
+            Simulert utvikling:
+
+          </label>
+
+
+          <input
+            class="sim-number"
+            id="input-${safeId(
+              themeRow.theme
+            )}"
+            type="number"
+            step="0.5"
+            value="${
+              (
+                simulated *
+                100
+              ).toFixed(1)
+            }">
+
+
+          <span class="sim-unit">
+            %
+          </span>
+
+        </div>
+      `;
+
+
+      container.appendChild(
+        card
+      );
+
+
+      const slider =
+        card.querySelector(
+          `#slider-${safeId(
+            themeRow.theme
+          )}`
+        );
+
+
+      const input =
+        card.querySelector(
+          `#input-${safeId(
+            themeRow.theme
+          )}`
+        );
+
+
+      const applyChange =
+        value => {
+
+          simulationChanges[
+            themeRow.theme
+          ] =
+            value;
+
+
+          input.value =
+            (
+              value *
+              100
+            )
+            .toFixed(1);
+
+
+          const raw =
+            rawValueFromChange(
+              themeRow,
+              value
+            );
+
+
+          card.querySelector(
+            `#sim-display-${safeId(
+              themeRow.theme
+            )}`
+          ).textContent =
+
+            (
+              isPrice
+                ? formatNumber(
+                    raw,
+                    2
+                  ) +
+                  " · "
+                : ""
+            ) +
+
+            formatPercent(
+              value
+            );
+
+
+          card.classList.toggle(
+
+            "scenario-changed",
+
+            Math.abs(
+              value -
+              current
+            ) >
+            0.00001
           );
 
-        const weightedDistance =
-          absoluteDistance *
-          weight;
 
-
-        participantScores[person] +=
-          weightedDistance;
-
-
-        personResults[person] = {
-          prediction,
-          absoluteDistance,
-          weightedDistance
+          updateSimulationOutputs();
         };
 
 
-        if (
-          absoluteDistance <
-          closestDistance
-        ) {
+      slider.oninput =
+        () => {
 
-          closestDistance =
-            absoluteDistance;
-
-          closestPerson =
-            person;
-        }
-      });
+          applyChange(
+            parseFloat(
+              slider.value
+            )
+          );
+        };
 
 
-      themeResults.push({
-        theme,
-        type: row["Type"],
-        weight,
-        actualChange,
-        closestPerson,
-        closestDistance,
-        personResults
-      });
-    });
+      input.onchange =
+        () => {
+
+          let value =
+            parseFloat(
+              input.value
+            ) /
+            100;
 
 
-    const leaderboard =
-      participants
-        .map(person => ({
-          person,
-          score:
-            participantScores[person]
-        }))
-        .sort(
-          (a, b) =>
-            a.score -
-            b.score
-        );
+          if (
+            !Number.isFinite(
+              value
+            )
+          ) {
+
+            value =
+              current;
+          }
 
 
-    return {
-      leaderboard,
-      themeResults
-    };
-  }
+          value =
+            clamp(
+
+              value,
+
+              range.min,
+              range.max
+            );
 
 
-  // ============================================================
-  // SUMMARY CARDS
-  // ============================================================
-
-  function showSummaryCards(
-    leaderboard,
-    latestRow,
-    competitionRows,
-    participants
-  ) {
-
-    const leader =
-      leaderboard[0];
-
-    const second =
-      leaderboard[1];
-
-    const gap =
-      second
-        ? second.score -
-          leader.score
-        : 0;
+          slider.value =
+            value;
 
 
-    document.getElementById(
-      "summaryCards"
-    ).innerHTML = `
-
-      <div class="cards">
-
-        <div class="card">
-
-          <div class="card-label">
-            🏆 Leder
-          </div>
-
-          <div class="card-value">
-            ${leader.person}
-          </div>
-
-          <div class="card-small">
-            Score
-            ${formatPercent(
-              leader.score
-            )}
-          </div>
-
-        </div>
+          applyChange(
+            value
+          );
+        };
+    }
+  );
+}
 
 
-        <div class="card">
+function safeId(text) {
 
-          <div class="card-label">
-            ⚔️ Avstand #1–#2
-          </div>
-
-          <div class="card-value">
-            ${
-              second
-                ? formatPercent(gap)
-                : "-"
-            }
-          </div>
-
-          <div class="card-small">
-            ${
-              second
-                ? second.person +
-                  " på andreplass"
-                : "Kun én deltaker"
-            }
-          </div>
-
-        </div>
+  return String(text)
+    .replace(
+      /[^a-zA-Z0-9_-]/g,
+      "_"
+    );
+}
 
 
-        <div class="card">
+function officialRankMap() {
 
-          <div class="card-label">
-            📅 Siste status
-          </div>
-
-          <div class="card-value">
-            ${latestRow["Dato"]}
-          </div>
-
-          <div class="card-small">
-            ${competitionRows.length}
-            temaer ·
-            ${participants.length}
-            deltakere
-          </div>
-
-        </div>
-
-      </div>
-    `;
-  }
+  const map = {};
 
 
-  // ============================================================
-  // LEADERBOARD
-  // ============================================================
+  currentOfficialResult
+    .leaderboard
+    .forEach(
+      (entry, index) => {
 
-  function showLeaderboard(
-    leaderboard
-  ) {
+        map[
+          entry.person
+        ] =
+          index + 1;
+      }
+    );
 
-    const medals = [
-      "🥇",
-      "🥈",
-      "🥉"
+
+  return map;
+}
+
+
+function movementHtml(
+  person,
+  newRank
+) {
+
+  const oldRank =
+    officialRankMap()[
+      person
     ];
 
 
-    let html = `
+  const delta =
+    oldRank -
+    newRank;
 
-      <h2>
-        🏆 Live leaderboard
-      </h2>
 
-      <p>
-        Lavest samlet vektet
-        %-avstand leder konkurransen.
-      </p>
+  if (delta > 0) {
 
-      <div class="table-wrap">
+    return `
 
-        <table>
-
-          <thead>
-            <tr>
-              <th class="medal">
-                Plass
-              </th>
-
-              <th>
-                Deltaker
-              </th>
-
-              <th>
-                Score
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
+      <span class="movement-up">
+        ↑${delta}
+      </span>
     `;
+  }
 
 
-    leaderboard.forEach(
-      (row, index) => {
+  if (delta < 0) {
+
+    return `
+
+      <span class="movement-down">
+        ↓${Math.abs(delta)}
+      </span>
+    `;
+  }
+
+
+  return `
+
+    <span class="movement-same">
+      —
+    </span>
+  `;
+}
+
+
+function renderSimLeaderboard(
+  result
+) {
+
+  let html = `
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Plass</th>
+            <th>Deltaker</th>
+            <th>Simulert score</th>
+            <th>Fra live</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+  `;
+
+
+  result.leaderboard
+    .forEach(
+      (entry, index) => {
+
+        const rank =
+          index + 1;
+
 
         html += `
 
@@ -788,20 +3115,24 @@
               : ""
           }">
 
-            <td class="medal">
-              ${
-                medals[index] ||
-                (index + 1)
-              }
+            <td>
+              ${rank}
             </td>
 
             <td>
-              ${row.person}
+              ${entry.person}
             </td>
 
             <td>
               ${formatPercent(
-                row.score
+                entry.score
+              )}
+            </td>
+
+            <td>
+              ${movementHtml(
+                entry.person,
+                rank
               )}
             </td>
 
@@ -811,1416 +3142,562 @@
     );
 
 
-    html += `
-          </tbody>
-        </table>
-      </div>
-    `;
+  html += `
+
+        </tbody>
+      </table>
+    </div>
+  `;
 
 
-    document.getElementById(
-      "leaderboardSection"
-    ).innerHTML = html;
+  document.getElementById(
+    "simLeaderboard"
+  ).innerHTML = html;
+}
+
+
+function updateSimChartModeButtons() {
+
+  document.getElementById(
+    "simChartModeButton"
+  ).classList.toggle(
+
+    "active",
+
+    simChartMode ===
+      "sim"
+  );
+
+
+  document.getElementById(
+    "liveChartModeButton"
+  ).classList.toggle(
+
+    "active",
+
+    simChartMode ===
+      "live"
+  );
+}
+
+
+function renderSimulatorChart() {
+
+  const result =
+    simChartMode ===
+      "sim"
+
+      ? getSimulatedResult()
+
+      : currentOfficialResult;
+
+
+  if (simChart) {
+    simChart.destroy();
   }
 
 
-  // ============================================================
-  // STACKED CHART
-  // ============================================================
+  simChart =
+    new Chart(
 
-  function createChartSection(
-    participants,
-    themeResults
-  ) {
-
-    document.getElementById(
-      "chartSection"
-    ).innerHTML = `
-
-      <h2>
-        📚 Hva avgjør stillingen?
-      </h2>
-
-      <p>
-        Hvert felt viser hvor mye
-        temaet bidrar til deltakerens
-        samlede score.
-      </p>
-
-      <div class="chart-panel">
-
-        <div class="filter-block">
-
-          <div class="filter-title">
-            Deltakere
-          </div>
-
-          <div
-            class="filter-row"
-            id="participantFilters">
-          </div>
-
-        </div>
-
-
-        <div class="filter-block">
-
-          <div class="filter-title">
-            Temaer
-          </div>
-
-          <div
-            class="filter-row"
-            id="themeFilters">
-          </div>
-
-        </div>
-
-
-        <p
-          class="chart-note"
-          id="chartSelectionInfo">
-        </p>
-
-
-        <div class="chart-wrap">
-
-          <canvas
-            id="scoreChart">
-          </canvas>
-
-        </div>
-
-      </div>
-    `;
-
-
-    selectedParticipants =
-      new Set(participants);
-
-    selectedThemes =
-      new Set(
-        themeResults.map(
-          row => row.theme
-        )
-      );
-
-
-    renderFilterButtons();
-
-    renderStackedChart();
-  }
-
-
-  function createFilterButton(
-    label,
-    isActive,
-    callback,
-    utility = false
-  ) {
-
-    const button =
-      document.createElement(
-        "button"
-      );
-
-    button.type =
-      "button";
-
-    button.textContent =
-      label;
-
-    button.className =
-      "filter-button" +
-      (isActive
-        ? " active"
-        : "") +
-      (utility
-        ? " utility"
-        : "");
-
-    button.addEventListener(
-      "click",
-      callback
-    );
-
-    return button;
-  }
-
-
-  function renderFilterButtons() {
-
-    const participantContainer =
       document.getElementById(
-        "participantFilters"
-      );
+        "simChart"
+      ),
 
-    const themeContainer =
-      document.getElementById(
-        "themeFilters"
-      );
+      {
 
+        type: "bar",
 
-    participantContainer.innerHTML =
-      "";
+        data: {
 
-    themeContainer.innerHTML =
-      "";
-
-
-    participantContainer.appendChild(
-      createFilterButton(
-        "Alle",
-        false,
-        () => {
-
-          selectedParticipants =
-            new Set(
-              currentParticipants
-            );
-
-          renderFilterButtons();
-          renderStackedChart();
-        },
-        true
-      )
-    );
-
-
-    participantContainer.appendChild(
-      createFilterButton(
-        "Ingen",
-        false,
-        () => {
-
-          selectedParticipants =
-            new Set();
-
-          renderFilterButtons();
-          renderStackedChart();
-        },
-        true
-      )
-    );
-
-
-    currentParticipants.forEach(
-      person => {
-
-        participantContainer
-          .appendChild(
-            createFilterButton(
-              person,
-              selectedParticipants
-                .has(person),
-
-              () => {
-
-                if (
-                  selectedParticipants
-                    .has(person)
-                ) {
-
-                  selectedParticipants
-                    .delete(person);
-
-                } else {
-
-                  selectedParticipants
-                    .add(person);
-                }
-
-                renderFilterButtons();
-                renderStackedChart();
-              }
-            )
-          );
-      }
-    );
-
-
-    themeContainer.appendChild(
-      createFilterButton(
-        "Alle",
-        false,
-        () => {
-
-          selectedThemes =
-            new Set(
-              currentThemeResults
-                .map(
-                  row =>
-                    row.theme
-                )
-            );
-
-          renderFilterButtons();
-          renderStackedChart();
-        },
-        true
-      )
-    );
-
-
-    themeContainer.appendChild(
-      createFilterButton(
-        "Ingen",
-        false,
-        () => {
-
-          selectedThemes =
-            new Set();
-
-          renderFilterButtons();
-          renderStackedChart();
-        },
-        true
-      )
-    );
-
-
-    currentThemeResults.forEach(
-      row => {
-
-        themeContainer
-          .appendChild(
-            createFilterButton(
-              row.theme,
-              selectedThemes
-                .has(row.theme),
-
-              () => {
-
-                if (
-                  selectedThemes
-                    .has(row.theme)
-                ) {
-
-                  selectedThemes
-                    .delete(
-                      row.theme
-                    );
-
-                } else {
-
-                  selectedThemes
-                    .add(
-                      row.theme
-                    );
-                }
-
-                renderFilterButtons();
-                renderStackedChart();
-              }
-            )
-          );
-      }
-    );
-  }
-
-
-  function renderStackedChart() {
-
-    const participants =
-      currentParticipants.filter(
-        person =>
-          selectedParticipants
-            .has(person)
-      );
-
-
-    const themes =
-      currentThemeResults.filter(
-        row =>
-          selectedThemes
-            .has(row.theme)
-      );
-
-
-    const info =
-      document.getElementById(
-        "chartSelectionInfo"
-      );
-
-
-    info.textContent =
-      `Visning: ${
-        participants.length
-      } av ${
-        currentParticipants.length
-      } deltakere · ${
-        themes.length
-      } av ${
-        currentThemeResults.length
-      } temaer.`;
-
-
-    const datasets =
-      themes.map(
-        (themeRow, index) => ({
-
-          label:
-            themeRow.theme,
-
-          backgroundColor:
-            chartColors[
-              index %
-              chartColors.length
-            ],
-
-          borderColor:
-            chartColors[
-              index %
-              chartColors.length
-            ],
-
-          borderWidth: 1,
-
-          data:
-            participants.map(
-              person =>
-                themeRow
-                  .personResults[
-                    person
-                  ]
-                  .weightedDistance *
-                100
-            ),
-
-          themeRow
-        })
-      );
-
-
-    if (scoreChart) {
-      scoreChart.destroy();
-    }
-
-
-    scoreChart =
-      new Chart(
-        document.getElementById(
-          "scoreChart"
-        ),
-        {
-
-          type: "bar",
-
-          data: {
-            labels: participants,
-            datasets
-          },
-
-          options: {
-
-            responsive: true,
-            maintainAspectRatio: false,
-
-            scales: {
-
-              x: {
-                stacked: true
-              },
-
-              y: {
-
-                stacked: true,
-                beginAtZero: true,
-
-                title: {
-                  display: true,
-                  text:
-                    "Vektet %-avstand"
-                },
-
-                ticks: {
-                  callback:
-                    value =>
-                      value + "%"
-                }
-              }
-            },
-
-
-            plugins: {
-
-              legend: {
-                position: "bottom"
-              },
-
-
-              tooltip: {
-
-                callbacks: {
-
-                  label:
-                    context => {
-
-                      const themeRow =
-                        context.dataset
-                          .themeRow;
-
-                      const person =
-                        context.label;
-
-                      const result =
-                        themeRow
-                          .personResults[
-                            person
-                          ];
-
-                      return (
-                        themeRow.theme +
-                        ": " +
-                        formatPercent(
-                          result
-                            .weightedDistance
-                        )
-                      );
-                    },
-
-
-                  afterLabel:
-                    context => {
-
-                      const themeRow =
-                        context.dataset
-                          .themeRow;
-
-                      const person =
-                        context.label;
-
-                      const result =
-                        themeRow
-                          .personResults[
-                            person
-                          ];
-
-                      return [
-                        "Tips: " +
-                          formatPercent(
-                            result.prediction
-                          ),
-
-                        "Faktisk: " +
-                          formatPercent(
-                            themeRow
-                              .actualChange
-                          ),
-
-                        "Avstand: " +
-                          formatPercent(
-                            result
-                              .absoluteDistance
-                          ),
-
-                        "Vekt: " +
-                          formatNumber(
-                            themeRow.weight,
-                            1
-                          ) +
-                          "×",
-
-                        "Scorebidrag: " +
-                          formatPercent(
-                            result
-                              .weightedDistance
-                          )
-                      ];
-                    }
-                }
-              }
-            }
-          },
-
-          plugins: [
-
-            {
-
-              id:
-                "stackTotalLabels",
-
-              afterDatasetsDraw(chart) {
-
-                const {
-                  ctx,
-                  scales: {
-                    x,
-                    y
-                  }
-                } = chart;
-
-
-                ctx.save();
-
-                ctx.font =
-                  "bold 12px Arial";
-
-                ctx.textAlign =
-                  "center";
-
-                ctx.fillStyle =
-                  "#222";
-
-
-                chart.data.labels
-                  .forEach(
-                    (label, index) => {
-
-                      const total =
-                        chart.data.datasets
-                          .reduce(
-                            (
-                              sum,
-                              dataset
-                            ) =>
-                              sum +
-                              (
-                                dataset.data[
-                                  index
-                                ] || 0
-                              ),
-                            0
-                          );
-
-
-                      if (total <= 0) {
-                        return;
-                      }
-
-
-                      ctx.fillText(
-                        formatPercentPoints(
-                          total
-                        ),
-                        x.getPixelForValue(
-                          index
-                        ),
-                        y.getPixelForValue(
-                          total
-                        ) - 8
-                      );
-                    }
-                  );
-
-
-                ctx.restore();
-              }
-            }
-          ]
-        }
-      );
-  }
-
-
-  // ============================================================
-  // HISTORY / CHAMPIONSHIP RACE
-  // ============================================================
-
-  function buildHistoricalResults() {
-
-    return currentHistoryRows.map(
-      row => {
-
-        const result =
-          calculateCompetition(
-            currentCompetitionRows,
+          labels:
             currentParticipants,
-            currentStartRow,
-            row
-          );
 
-
-        const ranks = {};
-
-        result.leaderboard.forEach(
-          (entry, index) => {
-            ranks[entry.person] =
-              index + 1;
-          }
-        );
-
-
-        const scores = {};
-
-        result.leaderboard.forEach(
-          entry => {
-            scores[entry.person] =
-              entry.score;
-          }
-        );
-
-
-        return {
-          date: row["Dato"],
-          ranks,
-          scores
-        };
-      }
-    );
-  }
-
-
-  function createHistorySection() {
-
-    document.getElementById(
-      "historySection"
-    ).innerHTML = `
-
-      <h2>
-        📈 Championship Race
-      </h2>
-
-      <p>
-        Se hvordan plassering og score
-        har utviklet seg gjennom året.
-      </p>
-
-      <div class="chart-panel">
-
-        <div class="mode-row">
-
-          <button
-            type="button"
-            id="rankModeButton"
-            class="mode-button active">
-            Plassering
-          </button>
-
-          <button
-            type="button"
-            id="scoreModeButton"
-            class="mode-button">
-            Score
-          </button>
-
-        </div>
-
-
-        <div class="filter-block">
-
-          <div class="filter-title">
-            Deltakere
-          </div>
-
-          <div
-            class="filter-row"
-            id="historyParticipantFilters">
-          </div>
-
-        </div>
-
-
-        <p
-          class="chart-note"
-          id="historySelectionInfo">
-        </p>
-
-
-        <div class="chart-wrap">
-
-          <canvas
-            id="historyChart">
-          </canvas>
-
-        </div>
-
-      </div>
-    `;
-
-
-    selectedHistoryParticipants =
-      new Set(currentParticipants);
-
-
-    document.getElementById(
-      "rankModeButton"
-    ).addEventListener(
-      "click",
-      () => {
-
-        historyMode = "rank";
-
-        updateHistoryModeButtons();
-        renderHistoryChart();
-      }
-    );
-
-
-    document.getElementById(
-      "scoreModeButton"
-    ).addEventListener(
-      "click",
-      () => {
-
-        historyMode = "score";
-
-        updateHistoryModeButtons();
-        renderHistoryChart();
-      }
-    );
-
-
-    renderHistoryFilterButtons();
-    renderHistoryChart();
-  }
-
-
-  function updateHistoryModeButtons() {
-
-    document.getElementById(
-      "rankModeButton"
-    ).classList.toggle(
-      "active",
-      historyMode === "rank"
-    );
-
-    document.getElementById(
-      "scoreModeButton"
-    ).classList.toggle(
-      "active",
-      historyMode === "score"
-    );
-  }
-
-
-  function renderHistoryFilterButtons() {
-
-    const container =
-      document.getElementById(
-        "historyParticipantFilters"
-      );
-
-
-    container.innerHTML = "";
-
-
-    container.appendChild(
-      createFilterButton(
-        "Alle",
-        false,
-        () => {
-
-          selectedHistoryParticipants =
-            new Set(
+          datasets:
+            stackedDatasets(
+              result.themeResults,
               currentParticipants
-            );
-
-          renderHistoryFilterButtons();
-          renderHistoryChart();
+            )
         },
-        true
-      )
-    );
 
 
-    container.appendChild(
-      createFilterButton(
-        "Ingen",
-        false,
-        () => {
+        options: {
 
-          selectedHistoryParticipants =
-            new Set();
+          responsive: true,
 
-          renderHistoryFilterButtons();
-          renderHistoryChart();
-        },
-        true
-      )
-    );
+          maintainAspectRatio:
+            false,
 
 
-    currentParticipants.forEach(
-      person => {
+          scales: {
 
-        container.appendChild(
-          createFilterButton(
-            person,
-            selectedHistoryParticipants
-              .has(person),
+            x: {
+              stacked: true
+            },
 
-            () => {
+            y: {
 
-              if (
-                selectedHistoryParticipants
-                  .has(person)
-              ) {
+              stacked: true,
 
-                selectedHistoryParticipants
-                  .delete(person);
+              beginAtZero: true,
 
-              } else {
+              title: {
 
-                selectedHistoryParticipants
-                  .add(person);
+                display: true,
+
+                text:
+                  simChartMode ===
+                    "sim"
+
+                    ? "Simulert vektet %-avstand"
+
+                    : "Live vektet %-avstand"
+              },
+
+              ticks: {
+
+                callback:
+                  value =>
+                    value + "%"
               }
-
-              renderHistoryFilterButtons();
-              renderHistoryChart();
             }
-          )
-        );
-      }
-    );
-  }
-
-
-  function renderHistoryChart() {
-
-    const historicalResults =
-      buildHistoricalResults();
-
-
-    const participants =
-      currentParticipants.filter(
-        person =>
-          selectedHistoryParticipants
-            .has(person)
-      );
-
-
-    document.getElementById(
-      "historySelectionInfo"
-    ).textContent =
-      `Visning: ${
-        participants.length
-      } av ${
-        currentParticipants.length
-      } deltakere · ${
-        historicalResults.length
-      } datapunkter.`;
-
-
-    const labels =
-      historicalResults.map(
-        row => row.date
-      );
-
-
-    const datasets =
-      participants.map(
-        person => {
-
-          const participantIndex =
-            currentParticipants.indexOf(
-              person
-            );
-
-
-          return {
-
-            label: person,
-
-            data:
-              historicalResults.map(
-                row => {
-
-                  if (
-                    historyMode ===
-                    "rank"
-                  ) {
-                    return row.ranks[
-                      person
-                    ];
-                  }
-
-                  return (
-                    row.scores[
-                      person
-                    ] * 100
-                  );
-                }
-              ),
-
-            borderColor:
-              chartColors[
-                participantIndex %
-                chartColors.length
-              ],
-
-            backgroundColor:
-              chartColors[
-                participantIndex %
-                chartColors.length
-              ],
-
-            borderWidth: 2,
-
-            pointRadius: 2,
-
-            pointHoverRadius: 5,
-
-            tension: 0.15,
-
-            fill: false
-          };
-        }
-      );
-
-
-    if (historyChart) {
-      historyChart.destroy();
-    }
-
-
-    const isRank =
-      historyMode === "rank";
-
-
-    historyChart =
-      new Chart(
-        document.getElementById(
-          "historyChart"
-        ),
-        {
-
-          type: "line",
-
-          data: {
-            labels,
-            datasets
           },
 
-          options: {
 
-            responsive: true,
-            maintainAspectRatio: false,
+          plugins: {
 
-            interaction: {
-              mode: "index",
-              intersect: false
+            legend: {
+              position:
+                "bottom"
             },
 
 
-            scales: {
+            tooltip: {
 
-              x: {
+              callbacks: {
 
-                title: {
-                  display: true,
-                  text: "Dato"
-                },
+                label:
+                  context => {
 
-                ticks: {
-                  maxTicksLimit: 12
-                }
-              },
+                    const themeRow =
+                      context.dataset
+                        .themeRow;
 
-
-              y: {
-
-                reverse: isRank,
-
-                min:
-                  isRank
-                    ? 1
-                    : undefined,
-
-                max:
-                  isRank
-                    ? currentParticipants
-                        .length
-                    : undefined,
-
-                beginAtZero:
-                  !isRank,
-
-                title: {
-                  display: true,
-
-                  text:
-                    isRank
-                      ? "Plassering"
-                      : "Vektet score"
-                },
-
-                ticks: {
-
-                  stepSize:
-                    isRank
-                      ? 1
-                      : undefined,
-
-                  callback:
-                    value =>
-                      isRank
-                        ? value
-                        : value + "%"
-                }
-              }
-            },
-
-
-            plugins: {
-
-              legend: {
-                position: "bottom"
-              },
-
-
-              tooltip: {
-
-                callbacks: {
-
-                  label:
-                    context => {
-
-                      const person =
-                        context.dataset
-                          .label;
-
-                      const value =
-                        context.parsed.y;
-
-
-                      if (isRank) {
-
-                        return (
-                          person +
-                          ": #" +
-                          value
-                        );
-                      }
-
-
-                      return (
-                        person +
-                        ": " +
-                        formatPercentPoints(
-                          value
-                        )
-                      );
-                    }
-                }
+                    return (
+                      themeRow.theme +
+                      ": " +
+                      formatPercent(
+                        themeRow
+                          .personResults[
+                            context.label
+                          ]
+                          .weightedDistance
+                      )
+                    );
+                  }
               }
             }
           }
-        }
-      );
-  }
+        },
 
 
-  // ============================================================
-  // STATUS PER THEME
-  // ============================================================
-
-  function showThemeResults(
-    themeResults
-  ) {
-
-    let html = `
-
-      <h2>
-        📊 Status per tema
-      </h2>
-
-      <p>
-        Faktisk utvikling,
-        vekting og nærmeste deltaker.
-      </p>
-
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
-            <tr>
-              <th>Tema</th>
-              <th>Type</th>
-              <th>Vekt</th>
-              <th>Faktisk utvikling</th>
-              <th>Nærmest</th>
-              <th>Avstand</th>
-            </tr>
-          </thead>
-
-          <tbody>
-    `;
+        plugins: [
+          stackTotalPlugin
+        ]
+      }
+    );
+}
 
 
-    themeResults.forEach(
-      row => {
+function updateSimulationOutputs() {
 
-        html += `
+  const result =
+    getSimulatedResult();
+
+
+  renderSimLeaderboard(
+    result
+  );
+
+
+  const changed =
+    currentThemeResults
+      .filter(
+        row =>
+
+          Math.abs(
+
+            simulationChanges[
+              row.theme
+            ] -
+
+            row.actualChange
+
+          ) >
+          0.00001
+      )
+      .length;
+
+
+  document.getElementById(
+    "simChangedCount"
+  ).textContent =
+
+    `${changed} endrede tema${
+      changed === 1
+        ? ""
+        : "er"
+    }`;
+
+
+  renderSimulatorChart();
+}
+
+
+function showThemeResults(
+  themeResults
+) {
+
+  let html = `
+
+    <h2>
+      📊 Status per tema
+    </h2>
+
+    <p>
+      Faktisk utvikling,
+      vekting og nærmeste deltaker.
+    </p>
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
 
           <tr>
-
-            <td>
-              ${row.theme}
-            </td>
-
-            <td>
-              ${row.type}
-            </td>
-
-            <td>
-              ${formatNumber(
-                row.weight,
-                1
-              )}×
-            </td>
-
-            <td>
-              ${formatPercent(
-                row.actualChange
-              )}
-            </td>
-
-            <td>
-              ${row.closestPerson}
-            </td>
-
-            <td>
-              ${formatPercent(
-                row.closestDistance
-              )}
-            </td>
-
+            <th>Tema</th>
+            <th>Type</th>
+            <th>Vekt</th>
+            <th>Faktisk utvikling</th>
+            <th>Nærmest</th>
+            <th>Avstand</th>
           </tr>
-        `;
-      }
-    );
+
+        </thead>
+
+        <tbody>
+  `;
 
 
-    html += `
-          </tbody>
-        </table>
-      </div>
-    `;
+  themeResults.forEach(
+    row => {
+
+      html += `
+
+        <tr>
+
+          <td>
+            ${row.theme}
+          </td>
+
+          <td>
+            ${row.type}
+          </td>
+
+          <td>
+            ${formatNumber(
+              row.weight,
+              1
+            )}×
+          </td>
+
+          <td>
+            ${formatPercent(
+              row.actualChange
+            )}
+          </td>
+
+          <td>
+            ${row.closestPerson}
+          </td>
+
+          <td>
+            ${formatPercent(
+              row.closestDistance
+            )}
+          </td>
+
+        </tr>
+      `;
+    }
+  );
 
 
-    document.getElementById(
-      "themeSection"
-    ).innerHTML = html;
-  }
+  html += `
+
+        </tbody>
+      </table>
+    </div>
+  `;
 
 
-  // ============================================================
-  // CONTROL
-  // ============================================================
-
-  function showControlInfo(
-    participants,
-    competitionRows,
-    startRow,
-    latestRow
-  ) {
-
-    document.getElementById(
-      "controlSection"
-    ).innerHTML = `
-
-      <h2>
-        Datakontroll
-      </h2>
-
-      <p class="small">
-        Dashboardet har automatisk
-        funnet
-        <strong>
-          ${participants.length}
-          deltakere
-        </strong>
-        og
-        <strong>
-          ${competitionRows.length}
-          temaer
-        </strong>.
-      </p>
-
-      <p class="small">
-        Startdato:
-        <strong>
-          ${startRow["Dato"]}
-        </strong>
-        ·
-        siste status:
-        <strong>
-          ${latestRow["Dato"]}
-        </strong>
-      </p>
-    `;
-  }
+  document.getElementById(
+    "themeSection"
+  ).innerHTML = html;
+}
 
 
-  // ============================================================
-  // START
-  // ============================================================
+function showControlInfo(
+  participants,
+  competitionRows,
+  startRow,
+  latestRow
+) {
 
-  async function loadData() {
+  document.getElementById(
+    "controlSection"
+  ).innerHTML = `
 
-    try {
+    <h2>
+      Datakontroll
+    </h2>
 
-      const [
-        historyRaw,
-        dashboardRaw
-      ] = await Promise.all([
-        loadCsv(historyUrl),
+    <p class="small">
+
+      Dashboardet har automatisk
+      funnet
+
+      <strong>
+        ${participants.length}
+        deltakere
+      </strong>
+
+      og
+
+      <strong>
+        ${competitionRows.length}
+        temaer
+      </strong>.
+
+    </p>
+
+
+    <p class="small">
+
+      Startdato:
+
+      <strong>
+        ${startRow["Dato"]}
+      </strong>
+
+      · siste status:
+
+      <strong>
+        ${latestRow["Dato"]}
+      </strong>
+
+    </p>
+  `;
+}
+
+
+async function loadData() {
+
+  try {
+
+    const [
+      historyRaw,
+      dashboardRaw
+    ] =
+      await Promise.all([
+
+        loadCsv(
+          historyUrl
+        ),
+
         loadCsv(
           dashboardDataUrl
         )
       ]);
 
 
-      const participants =
-        detectParticipants(
-          dashboardRaw
-        );
+    const participants =
+      detectParticipants(
+        dashboardRaw
+      );
 
 
-      const competitionRows =
-        getCompetitionRows(
-          dashboardRaw,
-          participants
-        );
+    const competitionRows =
+      getCompetitionRows(
 
-
-      if (
-        competitionRows.length === 0
-      ) {
-        throw new Error(
-          "Fant ingen gyldige konkurransetemaer."
-        );
-      }
-
-
-      const historyRows =
-        getValidHistoryRows(
-          historyRaw,
-          competitionRows
-        );
-
-
-      if (
-        historyRows.length === 0
-      ) {
-        throw new Error(
-          "Fant ingen komplette historikkrader."
-        );
-      }
-
-
-      const startRow =
-        historyRows[0];
-
-      const latestRow =
-        historyRows[
-          historyRows.length - 1
-        ];
-
-
-      const result =
-        calculateCompetition(
-          competitionRows,
-          participants,
-          startRow,
-          latestRow
-        );
-
-
-      currentParticipants =
-        participants;
-
-      currentThemeResults =
-        result.themeResults;
-
-      currentCompetitionRows =
-        competitionRows;
-
-      currentHistoryRows =
-        historyRows;
-
-      currentStartRow =
-        startRow;
-
-
-      showSummaryCards(
-        result.leaderboard,
-        latestRow,
-        competitionRows,
+        dashboardRaw,
         participants
       );
 
 
-      showLeaderboard(
-        result.leaderboard
+    if (
+      !competitionRows.length
+    ) {
+
+      throw new Error(
+        "Fant ingen gyldige konkurransetemaer."
+      );
+    }
+
+
+    const historyRows =
+      getValidHistoryRows(
+
+        historyRaw,
+        competitionRows
       );
 
 
-      createChartSection(
-        participants,
-        result.themeResults
+    if (
+      !historyRows.length
+    ) {
+
+      throw new Error(
+        "Fant ingen komplette historikkrader."
       );
+    }
 
 
-      createHistorySection();
+    const startRow =
+      historyRows[0];
 
 
-      showThemeResults(
-        result.themeResults
-      );
+    const latestRow =
+      historyRows[
+        historyRows.length -
+        1
+      ];
 
 
-      showControlInfo(
-        participants,
+    const result =
+      calculateCompetition(
+
         competitionRows,
+        participants,
         startRow,
         latestRow
       );
 
 
-      document.getElementById(
-        "loading"
-      ).innerHTML = `
+    currentParticipants =
+      participants;
 
-        <span class="ok">
-          ✓ Data lastet.
-          Status beregnet per
-          ${latestRow["Dato"]}.
-        </span>
-      `;
+    currentThemeResults =
+      result.themeResults;
+
+    currentCompetitionRows =
+      competitionRows;
+
+    currentHistoryRows =
+      historyRows;
+
+    currentStartRow =
+      startRow;
+
+    currentLatestRow =
+      latestRow;
+
+    currentOfficialResult =
+      result;
 
 
-      console.log(
-        "Deltakere:",
-        participants
-      );
+    showSummaryCards(
 
-      console.log(
-        "Temaer:",
-        competitionRows
-      );
+      result.leaderboard,
+      latestRow,
+      competitionRows,
+      participants
+    );
 
-      console.log(
-        "Historikkpunkter:",
-        historyRows.length
-      );
 
-      console.log(
-        "Leaderboard:",
-        result.leaderboard
-      );
+    showLeaderboard(
+      result.leaderboard
+    );
 
-    }
 
-    catch (error) {
+    createChartSection(
 
-      console.error(error);
+      participants,
+      result.themeResults
+    );
 
-      document.getElementById(
-        "loading"
-      ).innerHTML = `
 
-        <span class="error">
-          Feil: ${error.message}
-        </span>
-      `;
-    }
+    createHistorySection();
+
+
+    createSimulatorSection();
+
+
+    showThemeResults(
+      result.themeResults
+    );
+
+
+    showControlInfo(
+
+      participants,
+      competitionRows,
+      startRow,
+      latestRow
+    );
+
+
+    document.getElementById(
+      "loading"
+    ).innerHTML = `
+
+      <span class="ok">
+
+        ✓ Data lastet.
+        Status beregnet per
+        ${latestRow["Dato"]}.
+
+      </span>
+    `;
+
+
+    console.log(
+      "Historikkpunkter:",
+      historyRows.length
+    );
+
+
+    console.log(
+      "Leaderboard:",
+      result.leaderboard
+    );
+
   }
 
+  catch (error) {
 
-  loadData();
+    console.error(
+      error
+    );
+
+
+    document.getElementById(
+      "loading"
+    ).innerHTML = `
+
+      <span class="error">
+
+        Feil:
+        ${error.message}
+
+      </span>
+    `;
+  }
+}
+
+
+loadData();
 
 </script>
 
