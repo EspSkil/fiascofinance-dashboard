@@ -23,6 +23,117 @@
       background: #fafafa;
     }
 
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 8px;
+    }
+
+    .brand-logo {
+      width: 92px;
+      height: 72px;
+      object-fit: contain;
+      background: white;
+      border-radius: 8px;
+    }
+
+    .brand-text h1 {
+      margin: 0 0 4px;
+    }
+
+    .brand-text .subtitle {
+      margin: 0;
+    }
+
+    .participant-cell {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .avatar {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      overflow: hidden;
+      border-radius: 50%;
+      background: #ececec;
+      border: 1px solid #ddd;
+      vertical-align: middle;
+    }
+
+    .avatar-sm {
+      width: 34px;
+      height: 34px;
+    }
+
+    .avatar-md {
+      width: 48px;
+      height: 48px;
+    }
+
+    .avatar-lg {
+      width: 72px;
+      height: 72px;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .avatar-fallback {
+      display: none;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .leader-card-content {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .analysis-box {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-top: 18px;
+      padding: 16px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #f8f8f8;
+    }
+
+    .analysis-content {
+      min-width: 0;
+    }
+
+    .analysis-title {
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    .analysis-text {
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .analysis-text + .analysis-text {
+      margin-top: 6px;
+    }
+
     h1 {
       margin-bottom: 4px;
     }
@@ -294,22 +405,28 @@
 
     .slider-shell {
       position: relative;
-      padding: 18px 0 24px;
+      padding: 26px 0 54px;
     }
 
     .sim-slider {
       width: 100%;
+      display: block;
     }
 
     .slider-marker {
       position: absolute;
-      top: 2px;
       transform: translateX(-50%);
       font-size: 11px;
       white-space: nowrap;
+      z-index: 2;
     }
 
-    .slider-marker::after {
+    .slider-marker.current {
+      top: 0;
+      color: #555;
+    }
+
+    .slider-marker.current::after {
       content: "";
       display: block;
       width: 1px;
@@ -318,21 +435,30 @@
       margin: 2px auto 0;
     }
 
-    .slider-marker.current {
-      color: #555;
-    }
-
     .slider-marker.start {
+      top: 43px;
       color: #111;
       font-weight: bold;
     }
 
+    .slider-marker.start::before {
+      content: "";
+      display: block;
+      width: 1px;
+      height: 12px;
+      background: #777;
+      margin: 0 auto 2px;
+    }
+
     .sim-range-labels {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
       display: flex;
       justify-content: space-between;
       font-size: 11px;
       color: #777;
-      margin-top: -10px;
     }
 
     .sim-input-row {
@@ -389,6 +515,15 @@
     }
 
     @media (max-width: 800px) {
+      .brand-header {
+        align-items: flex-start;
+      }
+
+      .brand-logo {
+        width: 72px;
+        height: 58px;
+      }
+
       .cards,
       .sim-grid {
         grid-template-columns: 1fr;
@@ -413,8 +548,17 @@
 
 <body>
 
-  <h1>Fiasco Finance</h1>
-  <p class="subtitle">Live Championship Dashboard</p>
+  <div class="brand-header">
+    <img
+      class="brand-logo"
+      src="assets/logo.jpg"
+      alt="Fiasco Finance">
+
+    <div class="brand-text">
+      <h1>Fiasco Finance</h1>
+      <p class="subtitle">Live Championship Dashboard</p>
+    </div>
+  </div>
 
   <div id="loading" class="status-box">
     Laster data fra Google Sheets...
@@ -792,6 +936,624 @@ function calculateCompetition(
 }
 
 
+
+function participantSlug(person) {
+
+  return String(person)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/æ/g, "ae")
+    .replace(/ø/g, "o")
+    .replace(/å/g, "a")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+
+function participantInitials(person) {
+
+  return String(person)
+    .trim()
+    .split(/\s+/)
+    .map(part => part.charAt(0))
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+
+function avatarHtml(
+  person,
+  sizeClass = "avatar-sm"
+) {
+
+  const src =
+    `assets/participants/${participantSlug(person)}.jpg`;
+
+  const initials =
+    participantInitials(person);
+
+  return `
+    <span class="avatar ${sizeClass}">
+      <img
+        src="${src}"
+        alt=""
+        loading="lazy"
+        onerror="
+          this.style.display='none';
+          this.nextElementSibling.style.display='flex';
+        ">
+      <span class="avatar-fallback">
+        ${initials}
+      </span>
+    </span>
+  `;
+}
+
+
+function scoreForSelection(
+  person,
+  themeResults
+) {
+
+  return themeResults.reduce(
+    (sum, themeRow) =>
+      sum +
+      (
+        themeRow.personResults[person]
+          ?.weightedDistance || 0
+      ),
+    0
+  );
+}
+
+
+function rankingForSelection(
+  participants,
+  themeResults
+) {
+
+  return participants
+    .map(person => ({
+      person,
+      score:
+        scoreForSelection(
+          person,
+          themeResults
+        )
+    }))
+    .sort(
+      (a, b) =>
+        a.score -
+        b.score
+    );
+}
+
+
+function mainHeadToHeadDrivers(
+  leader,
+  second,
+  themeResults,
+  maxItems = 2
+) {
+
+  return themeResults
+    .map(themeRow => {
+
+      const leaderContribution =
+        themeRow
+          .personResults[
+            leader
+          ]
+          ?.weightedDistance || 0;
+
+      const secondContribution =
+        themeRow
+          .personResults[
+            second
+          ]
+          ?.weightedDistance || 0;
+
+      return {
+        theme: themeRow.theme,
+        advantage:
+          secondContribution -
+          leaderContribution
+      };
+    })
+    .filter(
+      row =>
+        Math.abs(
+          row.advantage
+        ) >= 0.001
+    )
+    .sort(
+      (a, b) =>
+        Math.abs(b.advantage) -
+        Math.abs(a.advantage)
+    )
+    .slice(
+      0,
+      maxItems
+    );
+}
+
+
+function renderLiveAnalysis(
+  participants,
+  themes
+) {
+
+  const target =
+    document.getElementById(
+      "liveAnalysis"
+    );
+
+  if (!target) {
+    return;
+  }
+
+
+  if (
+    participants.length === 0 ||
+    themes.length === 0
+  ) {
+
+    target.innerHTML = `
+      <div class="analysis-box">
+        <div class="analysis-content">
+          <div class="analysis-title">
+            📝 Kommentar
+          </div>
+          <p class="analysis-text">
+            Velg minst én deltaker og ett tema
+            for å få en analyse.
+          </p>
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  const ranking =
+    rankingForSelection(
+      participants,
+      themes
+    );
+
+  const leader =
+    ranking[0];
+
+  const second =
+    ranking[1];
+
+
+  let paragraph1 = "";
+
+  if (second) {
+
+    const gap =
+      second.score -
+      leader.score;
+
+    const fullSelection =
+      participants.length ===
+        currentParticipants.length &&
+      themes.length ===
+        currentThemeResults.length;
+
+    paragraph1 =
+      fullSelection
+        ? `<strong>${leader.person}</strong> leder med ${formatPercent(gap)} foran ${second.person}.`
+        : `<strong>${leader.person}</strong> leder blant de valgte deltakerne og temaene med ${formatPercent(gap)} foran ${second.person}.`;
+
+
+    const drivers =
+      mainHeadToHeadDrivers(
+        leader.person,
+        second.person,
+        themes,
+        2
+      );
+
+    if (drivers.length) {
+
+      const leaderAdvantages =
+        drivers.filter(
+          row =>
+            row.advantage > 0
+        );
+
+      const secondAdvantages =
+        drivers.filter(
+          row =>
+            row.advantage < 0
+        );
+
+      if (leaderAdvantages.length) {
+
+        paragraph1 +=
+          ` ${leader.person} har størst fordel på ${leaderAdvantages.map(row => row.theme).join(" og ")}.`;
+      }
+
+      if (secondAdvantages.length) {
+
+        paragraph1 +=
+          ` ${second.person} gjør det relativt bedre på ${secondAdvantages.map(row => row.theme).join(" og ")}.`;
+      }
+    }
+
+  } else {
+
+    const biggest =
+      themes
+        .map(themeRow => ({
+          theme: themeRow.theme,
+          value:
+            themeRow
+              .personResults[
+                leader.person
+              ]
+              ?.weightedDistance || 0
+        }))
+        .sort(
+          (a, b) =>
+            b.value -
+            a.value
+        )[0];
+
+    paragraph1 =
+      `<strong>${leader.person}</strong> er eneste valgte deltaker.`;
+
+    if (biggest) {
+      paragraph1 +=
+        ` Største scorebidrag blant de valgte temaene kommer fra ${biggest.theme}.`;
+    }
+  }
+
+
+  let paragraph2 = "";
+
+  const fullSelection =
+    participants.length ===
+      currentParticipants.length &&
+    themes.length ===
+      currentThemeResults.length;
+
+  if (
+    fullSelection &&
+    ranking.length > 1
+  ) {
+
+    const last =
+      ranking[
+        ranking.length - 1
+      ];
+
+    const biggestLast =
+      themes
+        .map(themeRow => ({
+          theme: themeRow.theme,
+          value:
+            themeRow
+              .personResults[
+                last.person
+              ]
+              ?.weightedDistance || 0
+        }))
+        .sort(
+          (a, b) =>
+            b.value -
+            a.value
+        )[0];
+
+    if (biggestLast) {
+
+      paragraph2 =
+        `<strong>${last.person}</strong> ligger sist. Det største enkeltbidraget til den høye scoren kommer fra ${biggestLast.theme} (${formatPercent(biggestLast.value)}).`;
+    }
+  }
+
+
+  target.innerHTML = `
+    <div class="analysis-box">
+      ${avatarHtml(
+        leader.person,
+        "avatar-md"
+      )}
+
+      <div class="analysis-content">
+        <div class="analysis-title">
+          📝 Kommentar til stillingen
+        </div>
+
+        <p class="analysis-text">
+          ${paragraph1}
+        </p>
+
+        ${
+          paragraph2
+            ? `<p class="analysis-text">${paragraph2}</p>`
+            : ""
+        }
+      </div>
+    </div>
+  `;
+}
+
+
+function simulatedRankMap(
+  result
+) {
+
+  const map = {};
+
+  result.leaderboard
+    .forEach(
+      (entry, index) => {
+
+        map[
+          entry.person
+        ] =
+          index + 1;
+      }
+    );
+
+  return map;
+}
+
+
+function renderSimulatorAnalysis(
+  result
+) {
+
+  const target =
+    document.getElementById(
+      "simAnalysis"
+    );
+
+  if (!target) {
+    return;
+  }
+
+
+  const changedThemes =
+    currentThemeResults
+      .filter(
+        row =>
+          Math.abs(
+            simulationChanges[
+              row.theme
+            ] -
+            row.actualChange
+          ) >
+          0.00001
+      );
+
+
+  const leader =
+    result.leaderboard[0];
+
+  const second =
+    result.leaderboard[1];
+
+  const liveRanks =
+    officialRankMap();
+
+  const simRanks =
+    simulatedRankMap(
+      result
+    );
+
+
+  let paragraph1 = "";
+
+  if (second) {
+
+    const gap =
+      second.score -
+      leader.score;
+
+    const oldRank =
+      liveRanks[
+        leader.person
+      ];
+
+    const newRank =
+      simRanks[
+        leader.person
+      ];
+
+    const movement =
+      oldRank === newRank
+        ? `forblir på ${newRank}. plass`
+        : `går fra ${oldRank}. til ${newRank}. plass`;
+
+    paragraph1 =
+      `<strong>${leader.person}</strong> ${movement} og leder scenarioet med ${formatPercent(gap)} foran ${second.person}.`;
+
+  } else {
+
+    paragraph1 =
+      `<strong>${leader.person}</strong> leder det simulerte scenarioet.`;
+  }
+
+
+  let paragraph2 = "";
+
+  if (changedThemes.length === 0) {
+
+    paragraph2 =
+      "Scenarioet er identisk med dagens live-status.";
+
+  } else {
+
+    if (changedThemes.length === 1) {
+
+      const theme =
+        changedThemes[0];
+
+      paragraph2 =
+        `<strong>${theme.theme}</strong> er eneste endrede tema, fra ${formatPercent(theme.actualChange)} til ${formatPercent(simulationChanges[theme.theme])}.`;
+
+    } else {
+
+      paragraph2 =
+        `${changedThemes.length} temaer er endret i scenarioet.`;
+    }
+
+
+    if (second) {
+
+      const simulatedThemeMap =
+        Object.fromEntries(
+          result.themeResults.map(
+            row => [
+              row.theme,
+              row
+            ]
+          )
+        );
+
+      const driver =
+        changedThemes
+          .map(theme => {
+
+            const simTheme =
+              simulatedThemeMap[
+                theme.theme
+              ];
+
+            const leaderContribution =
+              simTheme
+                ?.personResults[
+                  leader.person
+                ]
+                ?.weightedDistance || 0;
+
+            const secondContribution =
+              simTheme
+                ?.personResults[
+                  second.person
+                ]
+                ?.weightedDistance || 0;
+
+            return {
+              theme: theme.theme,
+              advantage:
+                secondContribution -
+                leaderContribution
+            };
+          })
+          .sort(
+            (a, b) =>
+              Math.abs(b.advantage) -
+              Math.abs(a.advantage)
+          )[0];
+
+      if (
+        driver &&
+        Math.abs(
+          driver.advantage
+        ) >= 0.001
+      ) {
+
+        const beneficiary =
+          driver.advantage > 0
+            ? leader.person
+            : second.person;
+
+        paragraph2 +=
+          ` Blant de endrede temaene er ${driver.theme} den største driveren i favør av ${beneficiary}.`;
+      }
+    }
+
+
+    const rankMoves =
+      result.leaderboard
+        .map(entry => ({
+          person: entry.person,
+          change:
+            liveRanks[
+              entry.person
+            ] -
+            simRanks[
+              entry.person
+            ]
+        }));
+
+    const bestMove =
+      rankMoves
+        .filter(
+          row =>
+            row.change > 0
+        )
+        .sort(
+          (a, b) =>
+            b.change -
+            a.change
+        )[0];
+
+    const worstMove =
+      rankMoves
+        .filter(
+          row =>
+            row.change < 0
+        )
+        .sort(
+          (a, b) =>
+            a.change -
+            b.change
+        )[0];
+
+
+    if (bestMove) {
+
+      paragraph2 +=
+        ` ${bestMove.person} klatrer mest, med ${bestMove.change} plass${bestMove.change === 1 ? "" : "er"}.`;
+    }
+
+    if (worstMove) {
+
+      const fall =
+        Math.abs(
+          worstMove.change
+        );
+
+      paragraph2 +=
+        ` ${worstMove.person} faller mest, med ${fall} plass${fall === 1 ? "" : "er"}.`;
+    }
+  }
+
+
+  target.innerHTML = `
+    <div class="analysis-box">
+      ${avatarHtml(
+        leader.person,
+        "avatar-md"
+      )}
+
+      <div class="analysis-content">
+        <div class="analysis-title">
+          🔎 Scenarioanalyse
+        </div>
+
+        <p class="analysis-text">
+          ${paragraph1}
+        </p>
+
+        <p class="analysis-text">
+          ${paragraph2}
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+
 function showSummaryCards(
   leaderboard,
   latestRow,
@@ -824,15 +1586,28 @@ function showSummaryCards(
           🏆 Leder
         </div>
 
-        <div class="card-value">
-          ${leader.person}
-        </div>
+        <div class="leader-card-content">
 
-        <div class="card-small">
-          Score
-          ${formatPercent(
-            leader.score
+          ${avatarHtml(
+            leader.person,
+            "avatar-lg"
           )}
+
+          <div>
+
+            <div class="card-value">
+              ${leader.person}
+            </div>
+
+            <div class="card-small">
+              Score
+              ${formatPercent(
+                leader.score
+              )}
+            </div>
+
+          </div>
+
         </div>
 
       </div>
@@ -955,7 +1730,15 @@ function showLeaderboard(
           </td>
 
           <td>
-            ${row.person}
+            <span class="participant-cell">
+              ${avatarHtml(
+                row.person,
+                "avatar-sm"
+              )}
+              <span>
+                ${row.person}
+              </span>
+            </span>
           </td>
 
           <td>
@@ -1122,6 +1905,8 @@ function createChartSection(
         </canvas>
 
       </div>
+
+      <div id="liveAnalysis"></div>
 
     </div>
   `;
@@ -1649,6 +2434,12 @@ function renderStackedChart() {
         ]
       }
     );
+
+
+  renderLiveAnalysis(
+    participants,
+    themes
+  );
 }
 
 
@@ -2449,6 +3240,8 @@ function createSimulatorSection() {
 
       <div id="simLeaderboard"></div>
 
+      <div id="simAnalysis"></div>
+
 
       <hr class="section-divider">
 
@@ -3120,7 +3913,15 @@ function renderSimLeaderboard(
             </td>
 
             <td>
-              ${entry.person}
+              <span class="participant-cell">
+                ${avatarHtml(
+                  entry.person,
+                  "avatar-sm"
+                )}
+                <span>
+                  ${entry.person}
+                </span>
+              </span>
             </td>
 
             <td>
@@ -3316,6 +4117,10 @@ function updateSimulationOutputs() {
 
 
   renderSimLeaderboard(
+    result
+  );
+
+  renderSimulatorAnalysis(
     result
   );
 
