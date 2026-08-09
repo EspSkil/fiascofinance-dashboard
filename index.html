@@ -514,14 +514,117 @@
       margin: 28px 0;
     }
 
+    /* Presentasjon / polish */
+    .card.leader-highlight {
+      border: 1px solid #c8ad62;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+
+    .leader-highlight .avatar-lg {
+      width: 82px;
+      height: 82px;
+      border: 2px solid #c8ad62;
+    }
+
+    .analysis-box {
+      border-left: 4px solid #444;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.025);
+    }
+
+    .sim-panel {
+      background: #f8fafc;
+      border-top: 4px solid #5b6470;
+    }
+
+    .sim-intro {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+      padding: 12px 14px;
+      border-radius: 9px;
+      background: #eef1f4;
+    }
+
+    .sim-intro strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .sim-intro span {
+      color: #5f6670;
+      font-size: 13px;
+    }
+
+    .rank-change {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .rank-old, .rank-new {
+      font-weight: bold;
+    }
+
+    .rank-arrow {
+      color: #777;
+    }
+
+    .top-rank-1 .avatar-sm { width: 40px; height: 40px; border: 2px solid #c8ad62; }
+    .top-rank-2 .avatar-sm,
+    .top-rank-3 .avatar-sm { width: 37px; height: 37px; }
+
+    /* Nettbrett */
+    @media (max-width: 1050px) {
+      body {
+        max-width: 100%;
+        margin-top: 22px;
+      }
+
+      .cards {
+        grid-template-columns: 1.25fr 1fr 1fr;
+      }
+
+      .sim-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-wrap {
+        min-height: 440px;
+      }
+
+      #scoreChart,
+      #historyChart,
+      #simChart {
+        height: 440px !important;
+      }
+    }
+
+    /* Mobil */
     @media (max-width: 800px) {
+      body {
+        margin: 16px auto;
+        padding: 0 12px 50px;
+      }
+
+      h2 {
+        margin-top: 34px;
+      }
+
       .brand-header {
-        align-items: flex-start;
+        align-items: center;
+        gap: 12px;
       }
 
       .brand-logo {
-        width: 72px;
-        height: 58px;
+        width: 68px;
+        height: 54px;
+      }
+
+      .brand-text h1 {
+        font-size: 25px;
       }
 
       .cards,
@@ -529,18 +632,133 @@
         grid-template-columns: 1fr;
       }
 
+      .leader-highlight .avatar-lg {
+        width: 88px;
+        height: 88px;
+      }
+
+      .filter-row {
+        gap: 8px;
+      }
+
+      .filter-button,
+      .mode-button,
+      .reset-button {
+        min-height: 42px;
+      }
+
+      .chart-panel,
+      .sim-panel {
+        padding: 13px;
+        margin-left: -2px;
+        margin-right: -2px;
+      }
+
+      .sim-intro {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
       .sim-values {
         grid-template-columns: 1fr;
       }
 
+      .sim-input-row {
+        flex-wrap: wrap;
+      }
+
+      .sim-number {
+        min-height: 42px;
+        font-size: 16px;
+      }
+
+      .sim-slider {
+        min-height: 34px;
+      }
+
+      .analysis-box {
+        gap: 10px;
+        padding: 13px;
+      }
+
+      .analysis-box .avatar-md {
+        width: 42px;
+        height: 42px;
+      }
+
       .chart-wrap {
-        min-height: 400px;
+        min-height: 440px;
+        overflow-x: auto;
       }
 
       #scoreChart,
       #historyChart,
       #simChart {
-        height: 400px !important;
+        height: 440px !important;
+      }
+
+      /* Leaderboards blir kort på mobil i stedet for brede tabeller */
+      #liveLeaderboardTable table,
+      #simLeaderboard table {
+        background: transparent;
+      }
+
+      #liveLeaderboardTable thead,
+      #simLeaderboard thead {
+        display: none;
+      }
+
+      #liveLeaderboardTable tbody,
+      #simLeaderboard tbody {
+        display: grid;
+        gap: 9px;
+      }
+
+      #liveLeaderboardTable tr,
+      #simLeaderboard tr {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 8px 10px;
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: white;
+      }
+
+      #liveLeaderboardTable td,
+      #simLeaderboard td {
+        border: 0;
+        padding: 0;
+        text-align: left;
+      }
+
+      #liveLeaderboardTable td:last-child {
+        text-align: right;
+        font-weight: bold;
+      }
+
+      #simLeaderboard tr {
+        grid-template-columns: auto 1fr;
+      }
+
+      #simLeaderboard td:nth-child(3),
+      #simLeaderboard td:nth-child(4) {
+        grid-column: 2;
+      }
+
+      #simLeaderboard td:nth-child(3)::before {
+        content: "Score: ";
+        color: #666;
+        font-weight: normal;
+      }
+
+      #simLeaderboard td:nth-child(4) {
+        margin-top: 2px;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
       }
     }
   </style>
@@ -1580,7 +1798,7 @@ function showSummaryCards(
 
     <div class="cards">
 
-      <div class="card">
+      <div class="card leader-highlight">
 
         <div class="card-label">
           🏆 Leder
@@ -1685,7 +1903,7 @@ function showLeaderboard(
       %-avstand leder konkurransen.
     </p>
 
-    <div class="table-wrap">
+    <div class="table-wrap" id="liveLeaderboardTable">
 
       <table>
 
@@ -1716,8 +1934,12 @@ function showLeaderboard(
 
         <tr class="${
           index === 0
-            ? "rank-1"
-            : ""
+            ? "rank-1 top-rank-1"
+            : index === 1
+              ? "top-rank-2"
+              : index === 2
+                ? "top-rank-3"
+                : ""
         }">
 
           <td class="medal">
@@ -3188,6 +3410,13 @@ function createSimulatorSection() {
 
     <div class="sim-panel">
 
+      <div class="sim-intro">
+        <div>
+          <strong>🧪 Scenarioverksted</strong>
+          <span>Lek med sluttverdiene. Live-stillingen påvirkes ikke.</span>
+        </div>
+      </div>
+
       <div class="sim-summary">
 
         <div>
@@ -3904,8 +4133,12 @@ function renderSimLeaderboard(
 
           <tr class="${
             index === 0
-              ? "rank-1"
-              : ""
+              ? "rank-1 top-rank-1"
+              : index === 1
+                ? "top-rank-2"
+                : index === 2
+                  ? "top-rank-3"
+                  : ""
           }">
 
             <td>
@@ -3931,10 +4164,15 @@ function renderSimLeaderboard(
             </td>
 
             <td>
-              ${movementHtml(
-                entry.person,
-                rank
-              )}
+              <span class="rank-change">
+                <span class="rank-old">${officialRankMap()[entry.person]}</span>
+                <span class="rank-arrow">→</span>
+                <span class="rank-new">${rank}</span>
+                ${movementHtml(
+                  entry.person,
+                  rank
+                )}
+              </span>
             </td>
 
           </tr>
