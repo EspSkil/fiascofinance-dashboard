@@ -191,7 +191,7 @@
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1.25fr 1fr 1fr 1.25fr;
       gap: 14px;
       margin: 20px 0 30px;
     }
@@ -218,6 +218,17 @@
       font-size: 14px;
       color: #666;
       margin-top: 4px;
+    }
+
+    .card-insight {
+      font-size: 16px;
+      line-height: 1.4;
+      font-weight: bold;
+      margin-top: 6px;
+    }
+
+    .card-insight-theme {
+      color: #6a5211;
     }
 
     table {
@@ -691,7 +702,7 @@
       }
 
       .cards {
-        grid-template-columns: 1.25fr 1fr 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .sim-grid {
@@ -749,14 +760,39 @@
         font-size: 25px;
       }
 
-      .cards,
+      .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
       .sim-grid {
         grid-template-columns: 1fr;
       }
 
       .leader-highlight .avatar-lg {
-        width: 88px;
-        height: 88px;
+        width: 64px;
+        height: 64px;
+      }
+
+      .cards .card {
+        padding: 12px;
+      }
+
+      .cards .card-value {
+        font-size: 21px;
+      }
+
+      .cards .card-small {
+        font-size: 12px;
+      }
+
+      .cards .card-insight {
+        font-size: 13px;
+        line-height: 1.35;
+      }
+
+      .leader-card-content {
+        gap: 10px;
       }
 
       .filter-row {
@@ -1980,11 +2016,55 @@ function showSummaryCards(
   const second =
     leaderboard[1];
 
-  const gap =
+  const third =
+    leaderboard[2];
+
+  const gapSecond =
     second
       ? second.score -
         leader.score
       : 0;
+
+  const gapThird =
+    third
+      ? third.score -
+        leader.score
+      : 0;
+
+
+  let whyLeader =
+    "Lavest samlet vektet avstand.";
+
+  if (second) {
+
+    const drivers =
+      mainHeadToHeadDrivers(
+        leader.person,
+        second.person,
+        currentThemeResults,
+        1
+      );
+
+    if (drivers.length) {
+
+      const driver =
+        drivers[0];
+
+      if (driver.advantage > 0) {
+
+        whyLeader =
+          `${leader.person}s største fordel mot ${second.person} kommer fra ` +
+          `<span class="card-insight-theme">${driver.theme}</span>.`;
+
+      } else {
+
+        whyLeader =
+          `${second.person} gjør det best relativt på ` +
+          `<span class="card-insight-theme">${driver.theme}</span>, ` +
+          `men ${leader.person} har lavere totalscore.`;
+      }
+    }
+  }
 
 
   document.getElementById(
@@ -2035,7 +2115,7 @@ function showSummaryCards(
         <div class="card-value">
           ${
             second
-              ? formatPercent(gap)
+              ? formatPercent(gapSecond)
               : "-"
           }
         </div>
@@ -2055,18 +2135,37 @@ function showSummaryCards(
       <div class="card">
 
         <div class="card-label">
-          📅 Siste status
+          🥉 Avstand #1–#3
         </div>
 
         <div class="card-value">
-          ${latestRow["Dato"]}
+          ${
+            third
+              ? formatPercent(gapThird)
+              : "-"
+          }
         </div>
 
         <div class="card-small">
-          ${competitionRows.length}
-          temaer ·
-          ${participants.length}
-          deltakere
+          ${
+            third
+              ? third.person +
+                " på tredjeplass"
+              : "Ikke nok deltakere"
+          }
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-label">
+          💡 Hvorfor leder #1?
+        </div>
+
+        <div class="card-insight">
+          ${whyLeader}
         </div>
 
       </div>
