@@ -147,6 +147,13 @@
       margin: 0 0 10px;
     }
 
+    #leaderboardSection,
+    #chartSection,
+    #historySection,
+    #simulatorSection {
+      scroll-margin-top: 72px;
+    }
+
     .subtitle,
     .small,
     .muted {
@@ -576,11 +583,111 @@
     .top-rank-2 .avatar-sm,
     .top-rank-3 .avatar-sm { width: 37px; height: 37px; }
 
+    .quick-nav {
+      display: none;
+    }
+
+    .quick-nav-inner {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      padding: 8px 2px;
+    }
+
+    .quick-nav-inner::-webkit-scrollbar {
+      display: none;
+    }
+
+    .quick-nav a {
+      flex: 0 0 auto;
+      text-decoration: none;
+      color: #222;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid #d4d4d4;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .quick-nav a:active {
+      transform: translateY(1px);
+    }
+
+    .theme-mobile-list {
+      display: none;
+    }
+
+    .theme-mobile-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .theme-mobile-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .theme-mobile-title strong {
+      font-size: 17px;
+    }
+
+    .theme-mobile-type {
+      color: #666;
+      font-size: 12px;
+    }
+
+    .theme-mobile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .theme-mobile-stat {
+      background: #f7f7f7;
+      border-radius: 8px;
+      padding: 9px 10px;
+      min-width: 0;
+    }
+
+    .theme-mobile-label {
+      display: block;
+      color: #777;
+      font-size: 11px;
+      margin-bottom: 3px;
+    }
+
+    .theme-mobile-value {
+      font-weight: bold;
+      line-height: 1.25;
+    }
+
     /* Nettbrett */
-    @media (max-width: 1050px) {
+    @media (max-width: 1100px) {
       body {
         max-width: 100%;
         margin-top: 22px;
+      }
+
+      .quick-nav {
+        display: block;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        margin: 8px -4px 18px;
+        padding: 3px 4px;
+        background: rgba(250,250,250,0.94);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0,0,0,0.06);
       }
 
       .cards {
@@ -610,7 +717,22 @@
       }
 
       h2 {
-        margin-top: 34px;
+        margin-top: 30px;
+      }
+
+      .quick-nav {
+        margin-left: -12px;
+        margin-right: -12px;
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .quick-nav a {
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 13px;
+        font-size: 13px;
       }
 
       .brand-header {
@@ -757,9 +879,72 @@
         margin-top: 2px;
       }
 
+      #themeSection .table-wrap {
+        display: none;
+      }
+
+      #themeSection .theme-mobile-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .theme-mobile-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .chart-wrap {
+        min-height: 470px;
+      }
+
+      #scoreChart,
+      #historyChart,
+      #simChart {
+        height: 470px !important;
+      }
+
       .table-wrap {
         overflow-x: auto;
       }
+
+    @media (max-width: 480px) {
+      body {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .brand-text h1 {
+        font-size: 23px;
+      }
+
+      .brand-text .subtitle {
+        font-size: 14px;
+      }
+
+      .status-box {
+        margin: 18px 0;
+      }
+
+      .cards {
+        gap: 10px;
+      }
+
+      .card {
+        padding: 14px;
+      }
+
+      .filter-button {
+        padding: 7px 11px;
+      }
+
+      .analysis-text {
+        line-height: 1.48;
+      }
+
+      .theme-mobile-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
     }
   </style>
 </head>
@@ -781,6 +966,15 @@
   <div id="loading" class="status-box">
     Laster data fra Google Sheets...
   </div>
+
+  <nav class="quick-nav" aria-label="Hurtignavigasjon">
+    <div class="quick-nav-inner">
+      <a href="#leaderboardSection">🏆 Live</a>
+      <a href="#chartSection">🔍 Analyse</a>
+      <a href="#historySection">📈 Race</a>
+      <a href="#simulatorSection">🔮 Hva hvis?</a>
+    </div>
+  </nav>
 
   <div id="summaryCards"></div>
   <div id="leaderboardSection"></div>
@@ -4481,6 +4675,50 @@ function showThemeResults(
 
         </tbody>
       </table>
+    </div>
+
+    <div class="theme-mobile-list">
+  `;
+
+
+  themeResults.forEach(
+    row => {
+
+      html += `
+        <div class="theme-mobile-card">
+          <div class="theme-mobile-title">
+            <strong>${row.theme}</strong>
+            <span class="theme-mobile-type">
+              ${row.type} · ${formatNumber(row.weight, 1)}×
+            </span>
+          </div>
+
+          <div class="theme-mobile-grid">
+            <div class="theme-mobile-stat">
+              <span class="theme-mobile-label">Faktisk utvikling</span>
+              <span class="theme-mobile-value">${formatPercent(row.actualChange)}</span>
+            </div>
+
+            <div class="theme-mobile-stat">
+              <span class="theme-mobile-label">Avstand</span>
+              <span class="theme-mobile-value">${formatPercent(row.closestDistance)}</span>
+            </div>
+
+            <div class="theme-mobile-stat" style="grid-column: 1 / -1;">
+              <span class="theme-mobile-label">Nærmest</span>
+              <span class="participant-cell">
+                ${avatarHtml(row.closestPerson, "avatar-sm")}
+                <span class="theme-mobile-value">${row.closestPerson}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  );
+
+
+  html += `
     </div>
   `;
 
