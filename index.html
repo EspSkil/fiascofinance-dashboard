@@ -32,10 +32,6 @@
       margin-bottom: 8px;
     }
 
-    h3 {
-      margin-bottom: 8px;
-    }
-
     .subtitle {
       color: #666;
       margin-top: 0;
@@ -179,6 +175,29 @@
       font-weight: bold;
     }
 
+    .mode-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 15px 0;
+    }
+
+    button.mode-button {
+      border: 1px solid #aaa;
+      background: white;
+      color: #222;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button.mode-button.active {
+      background: #222;
+      color: white;
+      border-color: #222;
+    }
+
     .chart-note {
       color: #666;
       font-size: 14px;
@@ -191,7 +210,8 @@
       margin-top: 18px;
     }
 
-    #scoreChart {
+    #scoreChart,
+    #historyChart {
       width: 100% !important;
       height: 480px !important;
     }
@@ -209,7 +229,8 @@
         min-height: 400px;
       }
 
-      #scoreChart {
+      #scoreChart,
+      #historyChart {
         height: 400px !important;
       }
     }
@@ -230,6 +251,8 @@
   <div id="leaderboardSection"></div>
 
   <div id="chartSection"></div>
+
+  <div id="historySection"></div>
 
   <div id="themeSection"></div>
 
@@ -254,12 +277,19 @@
   // ============================================================
 
   let scoreChart = null;
+  let historyChart = null;
 
   let currentParticipants = [];
   let currentThemeResults = [];
+  let currentCompetitionRows = [];
+  let currentHistoryRows = [];
+  let currentStartRow = null;
 
   let selectedParticipants = new Set();
   let selectedThemes = new Set();
+
+  let selectedHistoryParticipants = new Set();
+  let historyMode = "rank";
 
 
   // ============================================================
@@ -1167,15 +1197,11 @@
     }
 
 
-    const canvas =
-      document.getElementById(
-        "scoreChart"
-      );
-
-
     scoreChart =
       new Chart(
-        canvas,
+        document.getElementById(
+          "scoreChart"
+        ),
         {
 
           type: "bar",
@@ -1188,14 +1214,7 @@
           options: {
 
             responsive: true,
-
-            maintainAspectRatio:
-              false,
-
-            interaction: {
-              mode: "nearest",
-              intersect: true
-            },
+            maintainAspectRatio: false,
 
             scales: {
 
@@ -1206,7 +1225,6 @@
               y: {
 
                 stacked: true,
-
                 beginAtZero: true,
 
                 title: {
@@ -1227,7 +1245,6 @@
             plugins: {
 
               legend: {
-                display: true,
                 position: "bottom"
               },
 
@@ -1235,13 +1252,6 @@
               tooltip: {
 
                 callbacks: {
-
-                  title:
-                    items =>
-                      items[0]
-                        ? items[0].label
-                        : "",
-
 
                   label:
                     context => {
@@ -1262,10 +1272,9 @@
                       return (
                         themeRow.theme +
                         ": " +
-                        formatPercentPoints(
+                        formatPercent(
                           result
-                            .weightedDistance *
-                          100
+                            .weightedDistance
                         )
                       );
                     },
@@ -1399,6 +1408,494 @@
               }
             }
           ]
+        }
+      );
+  }
+
+
+  // ============================================================
+  // HISTORY / CHAMPIONSHIP RACE
+  // ============================================================
+
+  function buildHistoricalResults() {
+
+    return currentHistoryRows.map(
+      row => {
+
+        const result =
+          calculateCompetition(
+            currentCompetitionRows,
+            currentParticipants,
+            currentStartRow,
+            row
+          );
+
+
+        const ranks = {};
+
+        result.leaderboard.forEach(
+          (entry, index) => {
+            ranks[entry.person] =
+              index + 1;
+          }
+        );
+
+
+        const scores = {};
+
+        result.leaderboard.forEach(
+          entry => {
+            scores[entry.person] =
+              entry.score;
+          }
+        );
+
+
+        return {
+          date: row["Dato"],
+          ranks,
+          scores
+        };
+      }
+    );
+  }
+
+
+  function createHistorySection() {
+
+    document.getElementById(
+      "historySection"
+    ).innerHTML = `
+
+      <h2>
+        📈 Championship Race
+      </h2>
+
+      <p>
+        Se hvordan plassering og score
+        har utviklet seg gjennom året.
+      </p>
+
+      <div class="chart-panel">
+
+        <div class="mode-row">
+
+          <button
+            type="button"
+            id="rankModeButton"
+            class="mode-button active">
+            Plassering
+          </button>
+
+          <button
+            type="button"
+            id="scoreModeButton"
+            class="mode-button">
+            Score
+          </button>
+
+        </div>
+
+
+        <div class="filter-block">
+
+          <div class="filter-title">
+            Deltakere
+          </div>
+
+          <div
+            class="filter-row"
+            id="historyParticipantFilters">
+          </div>
+
+        </div>
+
+
+        <p
+          class="chart-note"
+          id="historySelectionInfo">
+        </p>
+
+
+        <div class="chart-wrap">
+
+          <canvas
+            id="historyChart">
+          </canvas>
+
+        </div>
+
+      </div>
+    `;
+
+
+    selectedHistoryParticipants =
+      new Set(currentParticipants);
+
+
+    document.getElementById(
+      "rankModeButton"
+    ).addEventListener(
+      "click",
+      () => {
+
+        historyMode = "rank";
+
+        updateHistoryModeButtons();
+        renderHistoryChart();
+      }
+    );
+
+
+    document.getElementById(
+      "scoreModeButton"
+    ).addEventListener(
+      "click",
+      () => {
+
+        historyMode = "score";
+
+        updateHistoryModeButtons();
+        renderHistoryChart();
+      }
+    );
+
+
+    renderHistoryFilterButtons();
+    renderHistoryChart();
+  }
+
+
+  function updateHistoryModeButtons() {
+
+    document.getElementById(
+      "rankModeButton"
+    ).classList.toggle(
+      "active",
+      historyMode === "rank"
+    );
+
+    document.getElementById(
+      "scoreModeButton"
+    ).classList.toggle(
+      "active",
+      historyMode === "score"
+    );
+  }
+
+
+  function renderHistoryFilterButtons() {
+
+    const container =
+      document.getElementById(
+        "historyParticipantFilters"
+      );
+
+
+    container.innerHTML = "";
+
+
+    container.appendChild(
+      createFilterButton(
+        "Alle",
+        false,
+        () => {
+
+          selectedHistoryParticipants =
+            new Set(
+              currentParticipants
+            );
+
+          renderHistoryFilterButtons();
+          renderHistoryChart();
+        },
+        true
+      )
+    );
+
+
+    container.appendChild(
+      createFilterButton(
+        "Ingen",
+        false,
+        () => {
+
+          selectedHistoryParticipants =
+            new Set();
+
+          renderHistoryFilterButtons();
+          renderHistoryChart();
+        },
+        true
+      )
+    );
+
+
+    currentParticipants.forEach(
+      person => {
+
+        container.appendChild(
+          createFilterButton(
+            person,
+            selectedHistoryParticipants
+              .has(person),
+
+            () => {
+
+              if (
+                selectedHistoryParticipants
+                  .has(person)
+              ) {
+
+                selectedHistoryParticipants
+                  .delete(person);
+
+              } else {
+
+                selectedHistoryParticipants
+                  .add(person);
+              }
+
+              renderHistoryFilterButtons();
+              renderHistoryChart();
+            }
+          )
+        );
+      }
+    );
+  }
+
+
+  function renderHistoryChart() {
+
+    const historicalResults =
+      buildHistoricalResults();
+
+
+    const participants =
+      currentParticipants.filter(
+        person =>
+          selectedHistoryParticipants
+            .has(person)
+      );
+
+
+    document.getElementById(
+      "historySelectionInfo"
+    ).textContent =
+      `Visning: ${
+        participants.length
+      } av ${
+        currentParticipants.length
+      } deltakere · ${
+        historicalResults.length
+      } datapunkter.`;
+
+
+    const labels =
+      historicalResults.map(
+        row => row.date
+      );
+
+
+    const datasets =
+      participants.map(
+        person => {
+
+          const participantIndex =
+            currentParticipants.indexOf(
+              person
+            );
+
+
+          return {
+
+            label: person,
+
+            data:
+              historicalResults.map(
+                row => {
+
+                  if (
+                    historyMode ===
+                    "rank"
+                  ) {
+                    return row.ranks[
+                      person
+                    ];
+                  }
+
+                  return (
+                    row.scores[
+                      person
+                    ] * 100
+                  );
+                }
+              ),
+
+            borderColor:
+              chartColors[
+                participantIndex %
+                chartColors.length
+              ],
+
+            backgroundColor:
+              chartColors[
+                participantIndex %
+                chartColors.length
+              ],
+
+            borderWidth: 2,
+
+            pointRadius: 2,
+
+            pointHoverRadius: 5,
+
+            tension: 0.15,
+
+            fill: false
+          };
+        }
+      );
+
+
+    if (historyChart) {
+      historyChart.destroy();
+    }
+
+
+    const isRank =
+      historyMode === "rank";
+
+
+    historyChart =
+      new Chart(
+        document.getElementById(
+          "historyChart"
+        ),
+        {
+
+          type: "line",
+
+          data: {
+            labels,
+            datasets
+          },
+
+          options: {
+
+            responsive: true,
+            maintainAspectRatio: false,
+
+            interaction: {
+              mode: "index",
+              intersect: false
+            },
+
+
+            scales: {
+
+              x: {
+
+                title: {
+                  display: true,
+                  text: "Dato"
+                },
+
+                ticks: {
+                  maxTicksLimit: 12
+                }
+              },
+
+
+              y: {
+
+                reverse: isRank,
+
+                min:
+                  isRank
+                    ? 1
+                    : undefined,
+
+                max:
+                  isRank
+                    ? currentParticipants
+                        .length
+                    : undefined,
+
+                beginAtZero:
+                  !isRank,
+
+                title: {
+                  display: true,
+
+                  text:
+                    isRank
+                      ? "Plassering"
+                      : "Vektet score"
+                },
+
+                ticks: {
+
+                  stepSize:
+                    isRank
+                      ? 1
+                      : undefined,
+
+                  callback:
+                    value =>
+                      isRank
+                        ? value
+                        : value + "%"
+                }
+              }
+            },
+
+
+            plugins: {
+
+              legend: {
+                position: "bottom"
+              },
+
+
+              tooltip: {
+
+                callbacks: {
+
+                  label:
+                    context => {
+
+                      const person =
+                        context.dataset
+                          .label;
+
+                      const value =
+                        context.parsed.y;
+
+
+                      if (isRank) {
+
+                        return (
+                          person +
+                          ": #" +
+                          value
+                        );
+                      }
+
+
+                      return (
+                        person +
+                        ": " +
+                        formatPercentPoints(
+                          value
+                        )
+                      );
+                    }
+                }
+              }
+            }
+          }
         }
       );
   }
@@ -1543,22 +2040,6 @@
           ${latestRow["Dato"]}
         </strong>
       </p>
-
-      <p class="small">
-        Deltakere:
-        ${participants.join(", ")}
-      </p>
-
-      <p class="small">
-        Temaer:
-        ${
-          competitionRows
-            .map(
-              row => row["TEMA"]
-            )
-            .join(", ")
-        }
-      </p>
     `;
   }
 
@@ -1644,6 +2125,15 @@
       currentThemeResults =
         result.themeResults;
 
+      currentCompetitionRows =
+        competitionRows;
+
+      currentHistoryRows =
+        historyRows;
+
+      currentStartRow =
+        startRow;
+
 
       showSummaryCards(
         result.leaderboard,
@@ -1662,6 +2152,9 @@
         participants,
         result.themeResults
       );
+
+
+      createHistorySection();
 
 
       showThemeResults(
@@ -1700,13 +2193,13 @@
       );
 
       console.log(
-        "Leaderboard:",
-        result.leaderboard
+        "Historikkpunkter:",
+        historyRows.length
       );
 
       console.log(
-        "Temaresultater:",
-        result.themeResults
+        "Leaderboard:",
+        result.leaderboard
       );
 
     }
