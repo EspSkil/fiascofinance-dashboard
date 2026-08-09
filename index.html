@@ -228,25 +228,26 @@
   // OPPDAG DELTAKERE AUTOMATISK
   // ============================================================
 
-  function detectParticipants(dashboardRaw) {
-    if (!dashboardRaw.length) {
-      throw new Error("DashboardData er tom.");
-    }
-
-    const firstRow = dashboardRaw[0];
-
-    const fixedColumns = new Set([
-      "TEMA",
-      "Vekt",
-      "Type"
-    ]);
-
-    return Object.keys(firstRow)
-      .filter(key =>
-        key &&
-        !fixedColumns.has(key)
-      );
+ function detectParticipants(dashboardRaw) {
+  if (!dashboardRaw.length) {
+    throw new Error("DashboardData er tom.");
   }
+
+  const firstRow = dashboardRaw[0];
+
+  const fixedColumns = new Set([
+    "TEMA",
+    "Vekt",
+    "Type"
+  ]);
+
+  return Object.keys(firstRow)
+    .filter(key =>
+      key &&
+      !key.startsWith("_") &&
+      !fixedColumns.has(key)
+    );
+}
 
 
   // ============================================================
