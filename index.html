@@ -7,6 +7,7 @@
   <title>Fiasco Finance Dashboard</title>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.3/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
 
   <style>
     * {
@@ -15,9 +16,9 @@
 
     body {
       font-family: Arial, sans-serif;
-      max-width: 1100px;
-      margin: 35px auto;
-      padding: 0 20px 50px;
+      max-width: 1150px;
+      margin: 30px auto;
+      padding: 0 20px 60px;
       color: #222;
       background: #fafafa;
     }
@@ -27,7 +28,11 @@
     }
 
     h2 {
-      margin-top: 38px;
+      margin-top: 42px;
+      margin-bottom: 8px;
+    }
+
+    h3 {
       margin-bottom: 8px;
     }
 
@@ -127,6 +132,70 @@
       color: #666;
     }
 
+    .chart-panel {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 18px;
+    }
+
+    .filter-block {
+      margin: 18px 0;
+    }
+
+    .filter-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    button.filter-button {
+      border: 1px solid #bbb;
+      background: #fff;
+      color: #222;
+      border-radius: 18px;
+      padding: 7px 12px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button.filter-button:hover {
+      background: #f1f1f1;
+    }
+
+    button.filter-button.active {
+      background: #222;
+      color: white;
+      border-color: #222;
+    }
+
+    button.filter-button.utility {
+      font-weight: bold;
+    }
+
+    .chart-note {
+      color: #666;
+      font-size: 14px;
+      margin: 10px 0 0;
+    }
+
+    .chart-wrap {
+      position: relative;
+      min-height: 480px;
+      margin-top: 18px;
+    }
+
+    #scoreChart {
+      width: 100% !important;
+      height: 480px !important;
+    }
+
     @media (max-width: 700px) {
       .cards {
         grid-template-columns: 1fr;
@@ -134,6 +203,14 @@
 
       body {
         margin-top: 20px;
+      }
+
+      .chart-wrap {
+        min-height: 400px;
+      }
+
+      #scoreChart {
+        height: 400px !important;
       }
     }
   </style>
@@ -149,8 +226,13 @@
   </div>
 
   <div id="summaryCards"></div>
+
   <div id="leaderboardSection"></div>
+
+  <div id="chartSection"></div>
+
   <div id="themeSection"></div>
+
   <div id="controlSection"></div>
 
 
@@ -168,10 +250,44 @@
 
 
   // ============================================================
-  // HJELPEFUNKSJONER
+  // GLOBAL STATE
+  // ============================================================
+
+  let scoreChart = null;
+
+  let currentParticipants = [];
+  let currentThemeResults = [];
+
+  let selectedParticipants = new Set();
+  let selectedThemes = new Set();
+
+
+  // ============================================================
+  // COLORS
+  // ============================================================
+
+  const chartColors = [
+    "#4472C4",
+    "#ED7D31",
+    "#A5A5A5",
+    "#FFC000",
+    "#5B9BD5",
+    "#70AD47",
+    "#264478",
+    "#9E480E",
+    "#636363",
+    "#997300",
+    "#255E91",
+    "#43682B"
+  ];
+
+
+  // ============================================================
+  // CSV
   // ============================================================
 
   async function loadCsv(url) {
+
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -190,6 +306,7 @@
 
 
   function parseNumber(value) {
+
     if (value === null || value === undefined) {
       return NaN;
     }
@@ -211,13 +328,23 @@
 
 
   function formatPercent(value, decimals = 2) {
+
     return (value * 100)
       .toFixed(decimals)
       .replace(".", ",") + "%";
   }
 
 
+  function formatPercentPoints(value, decimals = 2) {
+
+    return Number(value)
+      .toFixed(decimals)
+      .replace(".", ",") + "%";
+  }
+
+
   function formatNumber(value, decimals = 2) {
+
     return Number(value)
       .toFixed(decimals)
       .replace(".", ",");
@@ -225,37 +352,44 @@
 
 
   // ============================================================
-  // OPPDAG DELTAKERE AUTOMATISK
+  // DYNAMIC STRUCTURE
   // ============================================================
 
- function detectParticipants(dashboardRaw) {
-  if (!dashboardRaw.length) {
-    throw new Error("DashboardData er tom.");
+  function detectParticipants(dashboardRaw) {
+
+    const competitionRow =
+      dashboardRaw.find(row =>
+        row["TEMA"] &&
+        row["Vekt"] &&
+        row["Type"]
+      );
+
+    if (!competitionRow) {
+      throw new Error(
+        "Fant ingen gyldig konkurranserad i DashboardData."
+      );
+    }
+
+    const fixedColumns = new Set([
+      "TEMA",
+      "Vekt",
+      "Type"
+    ]);
+
+    return Object.keys(competitionRow)
+      .filter(key =>
+        key &&
+        !key.startsWith("_") &&
+        !fixedColumns.has(key) &&
+        competitionRow[key] !== undefined
+      );
   }
 
-  const firstRow = dashboardRaw[0];
-
-  const fixedColumns = new Set([
-    "TEMA",
-    "Vekt",
-    "Type"
-  ]);
-
-  return Object.keys(firstRow)
-    .filter(key =>
-      key &&
-      !key.startsWith("_") &&
-      !fixedColumns.has(key)
-    );
-}
-
-
-  // ============================================================
-  // OPPDAG KONKURRANSETEMAER AUTOMATISK
-  // ============================================================
 
   function getCompetitionRows(rows, participants) {
+
     return rows.filter(row => {
+
       const basicFieldsOk =
         row["TEMA"] &&
         row["Vekt"] &&
@@ -267,19 +401,24 @@
           row[person] !== ""
         );
 
-      return basicFieldsOk && participantFieldsOk;
+      return basicFieldsOk &&
+        participantFieldsOk;
     });
   }
 
 
-  // ============================================================
-  // HISTORIKK
-  // ============================================================
+  function getValidHistoryRows(
+    rows,
+    competitionRows
+  ) {
 
-  function getValidHistoryRows(rows, competitionRows) {
-    const themes = competitionRows.map(row => row["TEMA"]);
+    const themes =
+      competitionRows.map(
+        row => row["TEMA"]
+      );
 
     return rows.filter(row => {
+
       if (!row["Dato"]) {
         return false;
       }
@@ -293,14 +432,22 @@
 
 
   // ============================================================
-  // FAKTISK ENDRING PER TEMA
+  // SCORE CALCULATION
   // ============================================================
 
-  function calculateActualChange(themeRow, startRow, latestRow) {
-    const theme = themeRow["TEMA"];
-    const type = String(themeRow["Type"])
-      .trim()
-      .toLowerCase();
+  function calculateActualChange(
+    themeRow,
+    startRow,
+    latestRow
+  ) {
+
+    const theme =
+      themeRow["TEMA"];
+
+    const type =
+      String(themeRow["Type"])
+        .trim()
+        .toLowerCase();
 
     const startValue =
       parseNumber(startRow[theme]);
@@ -315,25 +462,27 @@
 
 
     if (type === "pris") {
-      if (!Number.isFinite(startValue) || startValue === 0) {
+
+      if (
+        !Number.isFinite(startValue) ||
+        startValue === 0
+      ) {
         throw new Error(
-          `Ugyldig startverdi for tema "${theme}".`
+          `Ugyldig startverdi for "${theme}".`
         );
       }
 
-      return (latestValue / startValue) - 1;
+      return (
+        latestValue / startValue
+      ) - 1;
     }
 
 
     throw new Error(
-      `Ukjent Type "${themeRow["Type"]}" for tema "${theme}". Bruk Pris eller Prosent.`
+      `Ukjent Type "${themeRow["Type"]}" for "${theme}".`
     );
   }
 
-
-  // ============================================================
-  // BEREGN KONKURRANSEN
-  // ============================================================
 
   function calculateCompetition(
     competitionRows,
@@ -353,8 +502,12 @@
 
 
     competitionRows.forEach(row => {
-      const theme = row["TEMA"];
-      const weight = parseNumber(row["Vekt"]);
+
+      const theme =
+        row["TEMA"];
+
+      const weight =
+        parseNumber(row["Vekt"]);
 
       const actualChange =
         calculateActualChange(
@@ -371,14 +524,19 @@
 
 
       participants.forEach(person => {
+
         const prediction =
           parsePercent(row[person]);
 
         const absoluteDistance =
-          Math.abs(actualChange - prediction);
+          Math.abs(
+            actualChange -
+            prediction
+          );
 
         const weightedDistance =
-          absoluteDistance * weight;
+          absoluteDistance *
+          weight;
 
 
         participantScores[person] +=
@@ -392,9 +550,16 @@
         };
 
 
-        if (absoluteDistance < closestDistance) {
-          closestDistance = absoluteDistance;
-          closestPerson = person;
+        if (
+          absoluteDistance <
+          closestDistance
+        ) {
+
+          closestDistance =
+            absoluteDistance;
+
+          closestPerson =
+            person;
         }
       });
 
@@ -415,10 +580,13 @@
       participants
         .map(person => ({
           person,
-          score: participantScores[person]
+          score:
+            participantScores[person]
         }))
-        .sort((a, b) =>
-          a.score - b.score
+        .sort(
+          (a, b) =>
+            a.score -
+            b.score
         );
 
 
@@ -430,7 +598,7 @@
 
 
   // ============================================================
-  // TOPPKORT
+  // SUMMARY CARDS
   // ============================================================
 
   function showSummaryCards(
@@ -440,20 +608,27 @@
     participants
   ) {
 
-    const leader = leaderboard[0];
-    const second = leaderboard[1];
+    const leader =
+      leaderboard[0];
+
+    const second =
+      leaderboard[1];
 
     const gap =
       second
-        ? second.score - leader.score
+        ? second.score -
+          leader.score
         : 0;
 
 
-    document.getElementById("summaryCards").innerHTML = `
+    document.getElementById(
+      "summaryCards"
+    ).innerHTML = `
 
       <div class="cards">
 
         <div class="card">
+
           <div class="card-label">
             🏆 Leder
           </div>
@@ -463,27 +638,43 @@
           </div>
 
           <div class="card-small">
-            Score ${formatPercent(leader.score)}
+            Score
+            ${formatPercent(
+              leader.score
+            )}
           </div>
+
         </div>
 
 
         <div class="card">
+
           <div class="card-label">
             ⚔️ Avstand #1–#2
           </div>
 
           <div class="card-value">
-            ${second ? formatPercent(gap) : "-"}
+            ${
+              second
+                ? formatPercent(gap)
+                : "-"
+            }
           </div>
 
           <div class="card-small">
-            ${second ? second.person + " på andreplass" : "Kun én deltaker"}
+            ${
+              second
+                ? second.person +
+                  " på andreplass"
+                : "Kun én deltaker"
+            }
           </div>
+
         </div>
 
 
         <div class="card">
+
           <div class="card-label">
             📅 Siste status
           </div>
@@ -493,9 +684,12 @@
           </div>
 
           <div class="card-small">
-            ${competitionRows.length} temaer ·
-            ${participants.length} deltakere
+            ${competitionRows.length}
+            temaer ·
+            ${participants.length}
+            deltakere
           </div>
+
         </div>
 
       </div>
@@ -507,7 +701,10 @@
   // LEADERBOARD
   // ============================================================
 
-  function showLeaderboard(leaderboard) {
+  function showLeaderboard(
+    leaderboard
+  ) {
+
     const medals = [
       "🥇",
       "🥈",
@@ -517,10 +714,13 @@
 
     let html = `
 
-      <h2>🏆 Live leaderboard</h2>
+      <h2>
+        🏆 Live leaderboard
+      </h2>
 
       <p>
-        Lavest samlet vektet %-avstand leder konkurransen.
+        Lavest samlet vektet
+        %-avstand leder konkurransen.
       </p>
 
       <div class="table-wrap">
@@ -529,9 +729,17 @@
 
           <thead>
             <tr>
-              <th class="medal">Plass</th>
-              <th>Deltaker</th>
-              <th>Score</th>
+              <th class="medal">
+                Plass
+              </th>
+
+              <th>
+                Deltaker
+              </th>
+
+              <th>
+                Score
+              </th>
             </tr>
           </thead>
 
@@ -539,27 +747,38 @@
     `;
 
 
-    leaderboard.forEach((row, index) => {
+    leaderboard.forEach(
+      (row, index) => {
 
-      html += `
+        html += `
 
-        <tr class="${index === 0 ? "rank-1" : ""}">
+          <tr class="${
+            index === 0
+              ? "rank-1"
+              : ""
+          }">
 
-          <td class="medal">
-            ${medals[index] || (index + 1)}
-          </td>
+            <td class="medal">
+              ${
+                medals[index] ||
+                (index + 1)
+              }
+            </td>
 
-          <td>
-            ${row.person}
-          </td>
+            <td>
+              ${row.person}
+            </td>
 
-          <td>
-            ${formatPercent(row.score)}
-          </td>
+            <td>
+              ${formatPercent(
+                row.score
+              )}
+            </td>
 
-        </tr>
-      `;
-    });
+          </tr>
+        `;
+      }
+    );
 
 
     html += `
@@ -576,16 +795,632 @@
 
 
   // ============================================================
-  // STATUS PER TEMA
+  // STACKED CHART
   // ============================================================
 
-  function showThemeResults(themeResults) {
-    let html = `
+  function createChartSection(
+    participants,
+    themeResults
+  ) {
 
-      <h2>📊 Status per tema</h2>
+    document.getElementById(
+      "chartSection"
+    ).innerHTML = `
+
+      <h2>
+        📚 Hva avgjør stillingen?
+      </h2>
 
       <p>
-        Faktisk utvikling, vekting og nærmeste deltaker.
+        Hvert felt viser hvor mye
+        temaet bidrar til deltakerens
+        samlede score.
+      </p>
+
+      <div class="chart-panel">
+
+        <div class="filter-block">
+
+          <div class="filter-title">
+            Deltakere
+          </div>
+
+          <div
+            class="filter-row"
+            id="participantFilters">
+          </div>
+
+        </div>
+
+
+        <div class="filter-block">
+
+          <div class="filter-title">
+            Temaer
+          </div>
+
+          <div
+            class="filter-row"
+            id="themeFilters">
+          </div>
+
+        </div>
+
+
+        <p
+          class="chart-note"
+          id="chartSelectionInfo">
+        </p>
+
+
+        <div class="chart-wrap">
+
+          <canvas
+            id="scoreChart">
+          </canvas>
+
+        </div>
+
+      </div>
+    `;
+
+
+    selectedParticipants =
+      new Set(participants);
+
+    selectedThemes =
+      new Set(
+        themeResults.map(
+          row => row.theme
+        )
+      );
+
+
+    renderFilterButtons();
+
+    renderStackedChart();
+  }
+
+
+  function createFilterButton(
+    label,
+    isActive,
+    callback,
+    utility = false
+  ) {
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+    button.type =
+      "button";
+
+    button.textContent =
+      label;
+
+    button.className =
+      "filter-button" +
+      (isActive
+        ? " active"
+        : "") +
+      (utility
+        ? " utility"
+        : "");
+
+    button.addEventListener(
+      "click",
+      callback
+    );
+
+    return button;
+  }
+
+
+  function renderFilterButtons() {
+
+    const participantContainer =
+      document.getElementById(
+        "participantFilters"
+      );
+
+    const themeContainer =
+      document.getElementById(
+        "themeFilters"
+      );
+
+
+    participantContainer.innerHTML =
+      "";
+
+    themeContainer.innerHTML =
+      "";
+
+
+    participantContainer.appendChild(
+      createFilterButton(
+        "Alle",
+        false,
+        () => {
+
+          selectedParticipants =
+            new Set(
+              currentParticipants
+            );
+
+          renderFilterButtons();
+          renderStackedChart();
+        },
+        true
+      )
+    );
+
+
+    participantContainer.appendChild(
+      createFilterButton(
+        "Ingen",
+        false,
+        () => {
+
+          selectedParticipants =
+            new Set();
+
+          renderFilterButtons();
+          renderStackedChart();
+        },
+        true
+      )
+    );
+
+
+    currentParticipants.forEach(
+      person => {
+
+        participantContainer
+          .appendChild(
+            createFilterButton(
+              person,
+              selectedParticipants
+                .has(person),
+
+              () => {
+
+                if (
+                  selectedParticipants
+                    .has(person)
+                ) {
+
+                  selectedParticipants
+                    .delete(person);
+
+                } else {
+
+                  selectedParticipants
+                    .add(person);
+                }
+
+                renderFilterButtons();
+                renderStackedChart();
+              }
+            )
+          );
+      }
+    );
+
+
+    themeContainer.appendChild(
+      createFilterButton(
+        "Alle",
+        false,
+        () => {
+
+          selectedThemes =
+            new Set(
+              currentThemeResults
+                .map(
+                  row =>
+                    row.theme
+                )
+            );
+
+          renderFilterButtons();
+          renderStackedChart();
+        },
+        true
+      )
+    );
+
+
+    themeContainer.appendChild(
+      createFilterButton(
+        "Ingen",
+        false,
+        () => {
+
+          selectedThemes =
+            new Set();
+
+          renderFilterButtons();
+          renderStackedChart();
+        },
+        true
+      )
+    );
+
+
+    currentThemeResults.forEach(
+      row => {
+
+        themeContainer
+          .appendChild(
+            createFilterButton(
+              row.theme,
+              selectedThemes
+                .has(row.theme),
+
+              () => {
+
+                if (
+                  selectedThemes
+                    .has(row.theme)
+                ) {
+
+                  selectedThemes
+                    .delete(
+                      row.theme
+                    );
+
+                } else {
+
+                  selectedThemes
+                    .add(
+                      row.theme
+                    );
+                }
+
+                renderFilterButtons();
+                renderStackedChart();
+              }
+            )
+          );
+      }
+    );
+  }
+
+
+  function renderStackedChart() {
+
+    const participants =
+      currentParticipants.filter(
+        person =>
+          selectedParticipants
+            .has(person)
+      );
+
+
+    const themes =
+      currentThemeResults.filter(
+        row =>
+          selectedThemes
+            .has(row.theme)
+      );
+
+
+    const info =
+      document.getElementById(
+        "chartSelectionInfo"
+      );
+
+
+    info.textContent =
+      `Visning: ${
+        participants.length
+      } av ${
+        currentParticipants.length
+      } deltakere · ${
+        themes.length
+      } av ${
+        currentThemeResults.length
+      } temaer.`;
+
+
+    const datasets =
+      themes.map(
+        (themeRow, index) => ({
+
+          label:
+            themeRow.theme,
+
+          backgroundColor:
+            chartColors[
+              index %
+              chartColors.length
+            ],
+
+          borderColor:
+            chartColors[
+              index %
+              chartColors.length
+            ],
+
+          borderWidth: 1,
+
+          data:
+            participants.map(
+              person =>
+                themeRow
+                  .personResults[
+                    person
+                  ]
+                  .weightedDistance *
+                100
+            ),
+
+          themeRow
+        })
+      );
+
+
+    if (scoreChart) {
+      scoreChart.destroy();
+    }
+
+
+    const canvas =
+      document.getElementById(
+        "scoreChart"
+      );
+
+
+    scoreChart =
+      new Chart(
+        canvas,
+        {
+
+          type: "bar",
+
+          data: {
+            labels: participants,
+            datasets
+          },
+
+          options: {
+
+            responsive: true,
+
+            maintainAspectRatio:
+              false,
+
+            interaction: {
+              mode: "nearest",
+              intersect: true
+            },
+
+            scales: {
+
+              x: {
+                stacked: true
+              },
+
+              y: {
+
+                stacked: true,
+
+                beginAtZero: true,
+
+                title: {
+                  display: true,
+                  text:
+                    "Vektet %-avstand"
+                },
+
+                ticks: {
+                  callback:
+                    value =>
+                      value + "%"
+                }
+              }
+            },
+
+
+            plugins: {
+
+              legend: {
+                display: true,
+                position: "bottom"
+              },
+
+
+              tooltip: {
+
+                callbacks: {
+
+                  title:
+                    items =>
+                      items[0]
+                        ? items[0].label
+                        : "",
+
+
+                  label:
+                    context => {
+
+                      const themeRow =
+                        context.dataset
+                          .themeRow;
+
+                      const person =
+                        context.label;
+
+                      const result =
+                        themeRow
+                          .personResults[
+                            person
+                          ];
+
+                      return (
+                        themeRow.theme +
+                        ": " +
+                        formatPercentPoints(
+                          result
+                            .weightedDistance *
+                          100
+                        )
+                      );
+                    },
+
+
+                  afterLabel:
+                    context => {
+
+                      const themeRow =
+                        context.dataset
+                          .themeRow;
+
+                      const person =
+                        context.label;
+
+                      const result =
+                        themeRow
+                          .personResults[
+                            person
+                          ];
+
+                      return [
+                        "Tips: " +
+                          formatPercent(
+                            result.prediction
+                          ),
+
+                        "Faktisk: " +
+                          formatPercent(
+                            themeRow
+                              .actualChange
+                          ),
+
+                        "Avstand: " +
+                          formatPercent(
+                            result
+                              .absoluteDistance
+                          ),
+
+                        "Vekt: " +
+                          formatNumber(
+                            themeRow.weight,
+                            1
+                          ) +
+                          "×",
+
+                        "Scorebidrag: " +
+                          formatPercent(
+                            result
+                              .weightedDistance
+                          )
+                      ];
+                    }
+                }
+              }
+            }
+          },
+
+          plugins: [
+
+            {
+
+              id:
+                "stackTotalLabels",
+
+              afterDatasetsDraw(chart) {
+
+                const {
+                  ctx,
+                  scales: {
+                    x,
+                    y
+                  }
+                } = chart;
+
+
+                ctx.save();
+
+                ctx.font =
+                  "bold 12px Arial";
+
+                ctx.textAlign =
+                  "center";
+
+                ctx.fillStyle =
+                  "#222";
+
+
+                chart.data.labels
+                  .forEach(
+                    (label, index) => {
+
+                      const total =
+                        chart.data.datasets
+                          .reduce(
+                            (
+                              sum,
+                              dataset
+                            ) =>
+                              sum +
+                              (
+                                dataset.data[
+                                  index
+                                ] || 0
+                              ),
+                            0
+                          );
+
+
+                      if (total <= 0) {
+                        return;
+                      }
+
+
+                      ctx.fillText(
+                        formatPercentPoints(
+                          total
+                        ),
+                        x.getPixelForValue(
+                          index
+                        ),
+                        y.getPixelForValue(
+                          total
+                        ) - 8
+                      );
+                    }
+                  );
+
+
+                ctx.restore();
+              }
+            }
+          ]
+        }
+      );
+  }
+
+
+  // ============================================================
+  // STATUS PER THEME
+  // ============================================================
+
+  function showThemeResults(
+    themeResults
+  ) {
+
+    let html = `
+
+      <h2>
+        📊 Status per tema
+      </h2>
+
+      <p>
+        Faktisk utvikling,
+        vekting og nærmeste deltaker.
       </p>
 
       <div class="table-wrap">
@@ -607,39 +1442,48 @@
     `;
 
 
-    themeResults.forEach(row => {
+    themeResults.forEach(
+      row => {
 
-      html += `
+        html += `
 
-        <tr>
+          <tr>
 
-          <td>
-            ${row.theme}
-          </td>
+            <td>
+              ${row.theme}
+            </td>
 
-          <td>
-            ${row.type}
-          </td>
+            <td>
+              ${row.type}
+            </td>
 
-          <td>
-            ${formatNumber(row.weight, 1)}×
-          </td>
+            <td>
+              ${formatNumber(
+                row.weight,
+                1
+              )}×
+            </td>
 
-          <td>
-            ${formatPercent(row.actualChange)}
-          </td>
+            <td>
+              ${formatPercent(
+                row.actualChange
+              )}
+            </td>
 
-          <td>
-            ${row.closestPerson}
-          </td>
+            <td>
+              ${row.closestPerson}
+            </td>
 
-          <td>
-            ${formatPercent(row.closestDistance)}
-          </td>
+            <td>
+              ${formatPercent(
+                row.closestDistance
+              )}
+            </td>
 
-        </tr>
-      `;
-    });
+          </tr>
+        `;
+      }
+    );
 
 
     html += `
@@ -656,7 +1500,7 @@
 
 
   // ============================================================
-  // KONTROLLINFO
+  // CONTROL
   // ============================================================
 
   function showControlInfo(
@@ -666,23 +1510,38 @@
     latestRow
   ) {
 
-    document.getElementById("controlSection").innerHTML = `
+    document.getElementById(
+      "controlSection"
+    ).innerHTML = `
 
-      <h2>Datakontroll</h2>
+      <h2>
+        Datakontroll
+      </h2>
 
       <p class="small">
-        Dashboardet har automatisk funnet:
-        <strong>${participants.length} deltakere</strong>
+        Dashboardet har automatisk
+        funnet
+        <strong>
+          ${participants.length}
+          deltakere
+        </strong>
         og
-        <strong>${competitionRows.length} temaer</strong>.
+        <strong>
+          ${competitionRows.length}
+          temaer
+        </strong>.
       </p>
 
       <p class="small">
         Startdato:
-        <strong>${startRow["Dato"]}</strong>
+        <strong>
+          ${startRow["Dato"]}
+        </strong>
         ·
         siste status:
-        <strong>${latestRow["Dato"]}</strong>
+        <strong>
+          ${latestRow["Dato"]}
+        </strong>
       </p>
 
       <p class="small">
@@ -692,9 +1551,13 @@
 
       <p class="small">
         Temaer:
-        ${competitionRows
-          .map(row => row["TEMA"])
-          .join(", ")}
+        ${
+          competitionRows
+            .map(
+              row => row["TEMA"]
+            )
+            .join(", ")
+        }
       </p>
     `;
   }
@@ -705,6 +1568,7 @@
   // ============================================================
 
   async function loadData() {
+
     try {
 
       const [
@@ -712,25 +1576,17 @@
         dashboardRaw
       ] = await Promise.all([
         loadCsv(historyUrl),
-        loadCsv(dashboardDataUrl)
+        loadCsv(
+          dashboardDataUrl
+        )
       ]);
-console.log("RAW DashboardData:", dashboardRaw);
-console.log("Kolonnenavn:", Object.keys(dashboardRaw[0] || {}));
 
-      // Oppdag deltakere dynamisk
 
       const participants =
-        detectParticipants(dashboardRaw);
-
-
-      if (participants.length === 0) {
-        throw new Error(
-          "Fant ingen deltakere i DashboardData."
+        detectParticipants(
+          dashboardRaw
         );
-      }
 
-
-      // Oppdag temaer dynamisk
 
       const competitionRows =
         getCompetitionRows(
@@ -739,15 +1595,14 @@ console.log("Kolonnenavn:", Object.keys(dashboardRaw[0] || {}));
         );
 
 
-      if (competitionRows.length === 0) {
+      if (
+        competitionRows.length === 0
+      ) {
         throw new Error(
           "Fant ingen gyldige konkurransetemaer."
         );
       }
 
-
-      // Finn historikkrader som er komplette
-      // for alle aktive temaer
 
       const historyRows =
         getValidHistoryRows(
@@ -756,7 +1611,9 @@ console.log("Kolonnenavn:", Object.keys(dashboardRaw[0] || {}));
         );
 
 
-      if (historyRows.length < 1) {
+      if (
+        historyRows.length === 0
+      ) {
         throw new Error(
           "Fant ingen komplette historikkrader."
         );
@@ -772,8 +1629,6 @@ console.log("Kolonnenavn:", Object.keys(dashboardRaw[0] || {}));
         ];
 
 
-      // Beregn konkurransen
-
       const result =
         calculateCompetition(
           competitionRows,
@@ -783,7 +1638,12 @@ console.log("Kolonnenavn:", Object.keys(dashboardRaw[0] || {}));
         );
 
 
-      // Vis dashboard
+      currentParticipants =
+        participants;
+
+      currentThemeResults =
+        result.themeResults;
+
 
       showSummaryCards(
         result.leaderboard,
@@ -792,13 +1652,22 @@ console.log("Kolonnenavn:", Object.keys(dashboardRaw[0] || {}));
         participants
       );
 
+
       showLeaderboard(
         result.leaderboard
       );
 
+
+      createChartSection(
+        participants,
+        result.themeResults
+      );
+
+
       showThemeResults(
         result.themeResults
       );
+
 
       showControlInfo(
         participants,
@@ -814,7 +1683,8 @@ console.log("Kolonnenavn:", Object.keys(dashboardRaw[0] || {}));
 
         <span class="ok">
           ✓ Data lastet.
-          Status beregnet per ${latestRow["Dato"]}.
+          Status beregnet per
+          ${latestRow["Dato"]}.
         </span>
       `;
 
