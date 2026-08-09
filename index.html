@@ -713,7 +713,8 @@
         loadCsv(historyUrl),
         loadCsv(dashboardDataUrl)
       ]);
-
+console.log("RAW DashboardData:", dashboardRaw);
+console.log("Kolonnenavn:", Object.keys(dashboardRaw[0] || {}));
 
       // Oppdag deltakere dynamisk
 
