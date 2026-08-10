@@ -1653,6 +1653,78 @@
       }
     }
 
+    /* v7.2 polish: compact mobile header + participant profile */
+    @media (max-width: 700px) {
+      .brand-header {
+        display: grid;
+        grid-template-columns: 68px minmax(0, 1fr);
+        grid-template-areas:
+          "logo title"
+          "logo subtitle"
+          "actions actions";
+        column-gap: 12px;
+        row-gap: 2px;
+        align-items: center;
+      }
+      .brand-logo { grid-area: logo; align-self: start; }
+      .brand-text { display: contents; }
+      .brand-text h1 { grid-area: title; margin: 0; line-height: 1.08; }
+      .brand-text .subtitle {
+        grid-area: subtitle;
+        white-space: normal;
+        line-height: 1.25;
+        max-width: none;
+      }
+      .header-actions {
+        grid-area: actions;
+        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .season-select-wrap {
+        min-width: 0;
+        width: 100%;
+        flex: none;
+      }
+      .season-select { min-width: 0; max-width: 100%; }
+
+      .profile-panel { padding: 14px; }
+      .profile-main {
+        grid-template-columns: 82px minmax(0, 1fr);
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .profile-portrait { width: 78px; height: 78px; }
+      .profile-name { font-size: 25px; }
+      .profile-season-line { font-size: 13px; margin-bottom: 10px; }
+      .profile-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .profile-stat { padding: 10px; }
+      .profile-stat-label { font-size: 11px; }
+      .profile-stat-value { font-size: 16px; }
+      .profile-highlight { grid-column: 1 / -1; grid-template-columns: 1fr; gap: 8px; }
+      .profile-main > div:nth-child(2) { min-width: 0; }
+      .profile-main > div:nth-child(2) > h3 { margin-top: 14px !important; }
+      #participantProfileButtons {
+        position: sticky;
+        top: 62px;
+        z-index: 45;
+        background: rgba(250,250,250,0.96);
+        padding: 7px 0;
+        margin: -4px 0 8px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+      #participantProfileButtons::-webkit-scrollbar { display:none; }
+      body.dark-mode #participantProfileButtons { background: rgba(17,21,26,0.96); }
+    }
+
   </style>
 </head>
 
@@ -1696,6 +1768,8 @@
       <a href="#themeSection">📊 Tema</a>
       <a href="#historySection">📈 Race</a>
       <a href="#simulatorSection">🔮 Hva hvis?</a>
+      <a href="#participantSection">👤 Deltaker</a>
+      <a href="#estimatesSection">📋 Estimat</a>
     </div>
   </nav>
 
@@ -7856,6 +7930,13 @@ function themePodiumRowsForSeason(
 }
 
 
+const excludedFromHistoricalEstimateStats = ["styringsrente"];
+
+function includeInHistoricalEstimateStats(themeName) {
+  const normalized = String(themeName || "").trim().toLowerCase();
+  return !excludedFromHistoricalEstimateStats.some(term => normalized.includes(term));
+}
+
 function participantCareerStats(
   person
 ) {
@@ -7918,6 +7999,12 @@ function participantCareerStats(
               );
 
             if (!entry) {
+              return;
+            }
+
+            // Styringsrente beholdes i pall/statistikk, men tas ikke med
+            // i historiske beste/dårligste estimater fordi skalaen ikke er sammenlignbar.
+            if (!includeInHistoricalEstimateStats(theme.theme)) {
               return;
             }
 
@@ -8287,6 +8374,10 @@ function historicalRecords() {
               ) {
                 smallestThemeMargin = item;
               }
+            }
+
+            if (!includeInHistoricalEstimateStats(theme.theme)) {
+              return;
             }
 
             theme.ranking
