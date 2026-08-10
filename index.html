@@ -1861,6 +1861,66 @@
       .profile-person-button img { width: 22px; height: 22px; }
     }
 
+
+    /* v7.5: participant desktop/tablet layout fix */
+    .profile-main {
+      display: block;
+      margin-top: 18px;
+    }
+
+    .profile-top {
+      display: grid;
+      grid-template-columns: minmax(260px, 1.05fr) minmax(0, 3fr);
+      gap: 22px;
+      align-items: center;
+    }
+
+    .profile-top .profile-identity {
+      margin-top: 0;
+      min-width: 0;
+    }
+
+    .profile-top .profile-current-grid {
+      margin-top: 0;
+    }
+
+    .profile-history-grid,
+    .profile-highlight {
+      width: 100%;
+    }
+
+    @media (max-width: 900px) and (min-width: 701px) {
+      .profile-top {
+        grid-template-columns: minmax(220px, 0.9fr) minmax(0, 2.1fr);
+        gap: 16px;
+      }
+
+      .profile-portrait {
+        width: 108px;
+        height: 108px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .profile-main {
+        display: block;
+        margin-top: 8px;
+      }
+
+      .profile-top {
+        display: block;
+      }
+
+      .profile-top .profile-identity {
+        margin-top: 10px;
+      }
+
+      .profile-top .profile-current-grid {
+        margin-top: 12px;
+      }
+    }
+
+
   </style>
 </head>
 
@@ -8381,22 +8441,24 @@ function renderParticipantProfile() {
       </div>
 
       <div class="profile-main">
-        <div class="profile-identity">
-          <img
-            class="profile-portrait"
-            src="${participantImagePath(person)}"
-            alt="Avatar for ${person}"
-            onerror="this.style.display='none';">
+        <div class="profile-top">
+          <div class="profile-identity">
+            <img
+              class="profile-portrait"
+              src="${participantImagePath(person)}"
+              alt="Avatar for ${person}"
+              onerror="this.style.display='none';">
 
-          <div class="profile-identity-copy">
-            <div class="profile-name">${person}</div>
-            <div class="profile-season-line">
-              FF${activeSeasonYear} · ${allSeasonData[activeSeasonYear].status}
+            <div class="profile-identity-copy">
+              <div class="profile-name">${person}</div>
+              <div class="profile-season-line">
+                FF${activeSeasonYear} · ${allSeasonData[activeSeasonYear].status}
+              </div>
             </div>
           </div>
-        </div>
 
-        ${currentHtml}
+          ${currentHtml}
+        </div>
 
         <h3 class="profile-section-title">Historikk</h3>
 
