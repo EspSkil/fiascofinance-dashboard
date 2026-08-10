@@ -1725,6 +1725,142 @@
       body.dark-mode #participantProfileButtons { background: rgba(17,21,26,0.96); }
     }
 
+    /* v7.3 participant profile polish */
+    .profile-identity {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .profile-identity-copy {
+      min-width: 0;
+    }
+
+    .profile-current-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .profile-history-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .profile-current-grid .profile-stat,
+    .profile-history-grid .profile-stat {
+      min-height: 78px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .profile-section-title {
+      margin: 20px 0 2px;
+      font-size: 20px;
+    }
+
+    .profile-highlight-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .profile-highlight-theme {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .profile-highlight-meta {
+      margin-top: 2px;
+      color: #666;
+      font-size: 13px;
+    }
+
+    body.dark-mode .profile-highlight-meta { color: #aaa; }
+
+    .profile-person-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      flex: 0 0 auto;
+    }
+
+    .profile-person-button img {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 1100px) {
+      .profile-history-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .profile-panel { padding: 12px; }
+      .profile-main { display: block; margin-top: 8px; }
+      .profile-identity {
+        gap: 12px;
+        margin-top: 10px;
+      }
+      .profile-portrait {
+        width: 76px;
+        height: 76px;
+        flex: 0 0 76px;
+      }
+      .profile-name { font-size: 24px; }
+      .profile-season-line { margin-bottom: 0; }
+      .profile-current-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+        margin-top: 12px;
+      }
+      .profile-current-grid .profile-stat {
+        min-height: 70px;
+        padding: 9px 8px;
+      }
+      .profile-current-grid .profile-stat-label {
+        font-size: 10px;
+        line-height: 1.2;
+      }
+      .profile-current-grid .profile-stat-value {
+        font-size: 16px;
+      }
+      .profile-current-grid .small {
+        font-size: 10px;
+        line-height: 1.15;
+      }
+      .profile-history-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+      }
+      .profile-history-grid .profile-stat {
+        min-height: 68px;
+        padding: 9px;
+      }
+      .profile-section-title {
+        margin-top: 16px;
+        font-size: 18px;
+      }
+      .profile-highlight {
+        grid-template-columns: 1fr;
+        gap: 7px;
+        margin-top: 10px;
+      }
+      .profile-highlight-card { padding: 10px 12px; }
+      .profile-highlight-theme { font-size: 16px; }
+      .profile-highlight-meta { font-size: 12px; }
+      .profile-person-button { gap: 5px; padding-left: 8px; padding-right: 9px; }
+      .profile-person-button img { width: 22px; height: 22px; }
+    }
+
   </style>
 </head>
 
@@ -8115,13 +8251,23 @@ function selectedSeasonParticipantInfo(
 }
 
 
-function estimateSummaryText(item) {
+function estimateDistancePp(value, decimals = 2) {
+  return (Number(value) * 100)
+    .toFixed(decimals)
+    .replace(".", ",") + " pp";
+}
+
+
+function estimateSummaryParts(item) {
 
   if (!item) {
-    return "–";
+    return { theme: "–", meta: "" };
   }
 
-  return `${item.theme}, FF${item.year} · ${formatPercent(item.distance)} unna`;
+  return {
+    theme: item.theme,
+    meta: `FF${item.year} · ${estimateDistancePp(item.distance)} unna`
+  };
 }
 
 
@@ -8169,6 +8315,16 @@ function renderParticipantProfile() {
       person
     );
 
+  const bestEver =
+    estimateSummaryParts(
+      career.bestEstimate
+    );
+
+  const worstEver =
+    estimateSummaryParts(
+      career.worstEstimate
+    );
+
   let buttons = "";
 
   people.forEach(
@@ -8176,9 +8332,13 @@ function renderParticipantProfile() {
       buttons += `
         <button
           type="button"
-          class="filter-button ${name === person ? "active" : ""}"
+          class="filter-button profile-person-button ${name === person ? "active" : ""}"
           data-profile-person="${name}">
-          ${name}
+          <img
+            src="${participantImagePath(name)}"
+            alt=""
+            onerror="this.style.display='none';">
+          <span>${name}</span>
         </button>
       `;
     }
@@ -8187,19 +8347,19 @@ function renderParticipantProfile() {
   const currentHtml =
     current
       ? `
-        <div class="profile-stats-grid">
+        <div class="profile-current-grid">
           <div class="profile-stat">
-            <div class="profile-stat-label">Plassering FF${activeSeasonYear}</div>
+            <div class="profile-stat-label">Plassering</div>
             <div class="profile-stat-value">#${current.rank}</div>
           </div>
           <div class="profile-stat">
-            <div class="profile-stat-label">Score FF${activeSeasonYear}</div>
+            <div class="profile-stat-label">Score</div>
             <div class="profile-stat-value">${formatPercent(current.score)}</div>
           </div>
           <div class="profile-stat">
-            <div class="profile-stat-label">Beste estimat i FF${activeSeasonYear}</div>
+            <div class="profile-stat-label">Beste estimat</div>
             <div class="profile-stat-value">${current.bestEstimate.theme}</div>
-            <div class="small">${formatPercent(current.bestEstimate.distance)} unna</div>
+            <div class="small">${estimateDistancePp(current.bestEstimate.distance)} unna</div>
           </div>
         </div>
       `
@@ -8221,56 +8381,54 @@ function renderParticipantProfile() {
       </div>
 
       <div class="profile-main">
-        <div>
+        <div class="profile-identity">
           <img
             class="profile-portrait"
             src="${participantImagePath(person)}"
             alt="Avatar for ${person}"
             onerror="this.style.display='none';">
+
+          <div class="profile-identity-copy">
+            <div class="profile-name">${person}</div>
+            <div class="profile-season-line">
+              FF${activeSeasonYear} · ${allSeasonData[activeSeasonYear].status}
+            </div>
+          </div>
         </div>
 
-        <div>
-          <div class="profile-name">${person}</div>
-          <div class="profile-season-line">
-            Valgt sesong: FF${activeSeasonYear} · ${allSeasonData[activeSeasonYear].status}
+        ${currentHtml}
+
+        <h3 class="profile-section-title">Historikk</h3>
+
+        <div class="profile-history-grid">
+          <div class="profile-stat">
+            <div class="profile-stat-label">🏆 Totalseire</div>
+            <div class="profile-stat-value">${career.championshipWins}</div>
           </div>
-
-          ${currentHtml}
-
-          <h3 style="margin-top:22px;">Historikk</h3>
-
-          <div class="profile-stats-grid">
-            <div class="profile-stat">
-              <div class="profile-stat-label">🏆 Totalseire</div>
-              <div class="profile-stat-value">${career.championshipWins}</div>
-            </div>
-            <div class="profile-stat">
-              <div class="profile-stat-label">🥇🥈🥉 Pallplasser totalt</div>
-              <div class="profile-stat-value">${career.championshipPodiums}</div>
-            </div>
-            <div class="profile-stat">
-              <div class="profile-stat-label">🎯 Temaseire</div>
-              <div class="profile-stat-value">${career.themeWins}</div>
-            </div>
-            <div class="profile-stat">
-              <div class="profile-stat-label">🏅 Tema-pallplasser</div>
-              <div class="profile-stat-value">${career.themePodiums}</div>
-            </div>
+          <div class="profile-stat">
+            <div class="profile-stat-label">🥇🥈🥉 Pallplasser</div>
+            <div class="profile-stat-value">${career.championshipPodiums}</div>
           </div>
+          <div class="profile-stat">
+            <div class="profile-stat-label">🎯 Temaseire</div>
+            <div class="profile-stat-value">${career.themeWins}</div>
+          </div>
+          <div class="profile-stat">
+            <div class="profile-stat-label">🏅 Tema-pallplasser</div>
+            <div class="profile-stat-value">${career.themePodiums}</div>
+          </div>
+        </div>
 
-          <div class="profile-highlight">
-            <div class="profile-highlight-card">
-              <strong>🎯 Beste estimat noensinne</strong>
-              <div style="margin-top:5px;">
-                ${estimateSummaryText(career.bestEstimate)}
-              </div>
-            </div>
-            <div class="profile-highlight-card">
-              <strong>💥 Største bom</strong>
-              <div style="margin-top:5px;">
-                ${estimateSummaryText(career.worstEstimate)}
-              </div>
-            </div>
+        <div class="profile-highlight">
+          <div class="profile-highlight-card">
+            <strong>🎯 Beste treff noensinne</strong>
+            <div class="profile-highlight-theme">${bestEver.theme}</div>
+            <div class="profile-highlight-meta">${bestEver.meta}</div>
+          </div>
+          <div class="profile-highlight-card">
+            <strong>💥 Største bom</strong>
+            <div class="profile-highlight-theme">${worstEver.theme}</div>
+            <div class="profile-highlight-meta">${worstEver.meta}</div>
           </div>
         </div>
       </div>
