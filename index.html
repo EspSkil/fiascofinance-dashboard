@@ -4023,6 +4023,13 @@ function renderHistoryChart() {
 
         options: {
 
+          /* Hele presentasjonsrammen skal være statisk under avspilling.
+             Chart.js sin standardanimasjon gjorde at de stiplede estimatlinjene
+             startet på 0 % og "hoppet" opp igjen for hvert nytt historikkpunkt.
+             Avspillingen styres allerede manuelt punkt-for-punkt, så all intern
+             Chart.js-animasjon skal være avslått. */
+          animation: false,
+
           responsive: true,
 
           maintainAspectRatio:
