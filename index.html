@@ -1384,6 +1384,275 @@
         margin-top: 6px;
       }
     }
+
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .season-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--panel, #fff);
+      border: 1px solid var(--border, #d8d8d8);
+      border-radius: 10px;
+      padding: 6px 9px;
+    }
+
+    .season-select-label {
+      font-size: 12px;
+      color: #666;
+      font-weight: bold;
+    }
+
+    .season-select {
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    body.dark-mode .season-select-wrap {
+      background: #171717;
+      border-color: #444;
+    }
+
+    body.dark-mode .season-select-label {
+      color: #aaa;
+    }
+
+    body.dark-mode .season-select {
+      color: #f5f5f5;
+      background: #171717;
+    }
+
+    .profile-panel,
+    .history-panel {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 18px;
+    }
+
+    body.dark-mode .profile-panel,
+    body.dark-mode .history-panel {
+      background: #171717;
+      border-color: #3a3a3a;
+    }
+
+    .profile-main {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+      margin-top: 18px;
+    }
+
+    .profile-portrait {
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ddd;
+      display: block;
+    }
+
+    body.dark-mode .profile-portrait {
+      border-color: #555;
+    }
+
+    .profile-name {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .profile-season-line {
+      color: #666;
+      margin-bottom: 14px;
+    }
+
+    body.dark-mode .profile-season-line {
+      color: #aaa;
+    }
+
+    .profile-stats-grid,
+    .record-grid,
+    .season-history-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .profile-stat,
+    .record-card,
+    .season-history-card {
+      background: #f7f7f7;
+      border: 1px solid #e2e2e2;
+      border-radius: 10px;
+      padding: 13px;
+    }
+
+    body.dark-mode .profile-stat,
+    body.dark-mode .record-card,
+    body.dark-mode .season-history-card {
+      background: #222;
+      border-color: #3f3f3f;
+    }
+
+    .profile-stat-label,
+    .record-label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    body.dark-mode .profile-stat-label,
+    body.dark-mode .record-label {
+      color: #aaa;
+    }
+
+    .profile-stat-value,
+    .record-value {
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .profile-highlight {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .profile-highlight-card {
+      border-left: 4px solid #999;
+      background: #fafafa;
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    body.dark-mode .profile-highlight-card {
+      background: #202020;
+    }
+
+    .history-winner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .history-winner img {
+      width: 68px;
+      height: 68px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #caa64b;
+    }
+
+    .history-year {
+      font-size: 13px;
+      color: #666;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    body.dark-mode .history-year {
+      color: #aaa;
+    }
+
+    .history-champion {
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .history-podium-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 7px;
+    }
+
+    .history-podium-line img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .history-margin {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+      font-size: 13px;
+      color: #666;
+    }
+
+    body.dark-mode .history-margin {
+      border-color: #444;
+      color: #aaa;
+    }
+
+    .history-note {
+      font-size: 13px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    body.dark-mode .history-note {
+      color: #aaa;
+    }
+
+    @media (max-width: 1100px) {
+      .profile-stats-grid,
+      .record-grid,
+      .season-history-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .brand-header {
+        align-items: flex-start;
+      }
+
+      .header-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .season-select-wrap {
+        flex: 1;
+        justify-content: space-between;
+      }
+
+      .profile-main {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-portrait {
+        width: 105px;
+        height: 105px;
+      }
+
+      .profile-stats-grid,
+      .record-grid,
+      .season-history-grid,
+      .profile-highlight {
+        grid-template-columns: 1fr;
+      }
+    }
+
   </style>
 </head>
 
@@ -1400,13 +1669,20 @@
       <p class="subtitle">Live Championship Dashboard</p>
     </div>
 
-    <button
-      type="button"
-      class="theme-toggle"
-      id="themeToggle"
-      aria-label="Bytt mellom lys og mørk visning">
-      🌙
-    </button>
+    <div class="header-actions">
+      <div class="season-select-wrap">
+        <span class="season-select-label">Sesong</span>
+        <select id="seasonSelect" class="season-select" aria-label="Velg FF-sesong"></select>
+      </div>
+
+      <button
+        type="button"
+        class="theme-toggle"
+        id="themeToggle"
+        aria-label="Bytt mellom lys og mørk visning">
+        🌙
+      </button>
+    </div>
   </div>
 
   <div id="loading" class="status-box">
@@ -1430,16 +1706,34 @@
   <div id="historySection"></div>
   <div id="simulatorSection"></div>
   <div id="estimatesSection"></div>
+  <div id="participantSection"></div>
+  <div id="historicalSection"></div>
   <div id="controlSection"></div>
 
 
 <script>
 
-const historyUrl =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=48037430&single=true&output=csv";
+const seasonConfig = {
+  2024: {
+    status: "Final",
+    dashboardDataUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR60zg2b__5BXO6OV7Tbfpofa87lRScvxan32FnlJKbFvLyrjxVOOiyDnhk2vbjHspBpvrLYpt4eqsp/pub?gid=1311778898&single=true&output=csv",
+    historyUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR60zg2b__5BXO6OV7Tbfpofa87lRScvxan32FnlJKbFvLyrjxVOOiyDnhk2vbjHspBpvrLYpt4eqsp/pub?gid=48037430&single=true&output=csv"
+  },
+  2025: {
+    status: "Final",
+    dashboardDataUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSmRuTrQXuP-x5UA87mkJhbz8Wixwz_KLtccQrsln2ozjQ_I5MqgHKbRS7jCYnY3rwp_PXHWI5dmIu/pub?gid=1311778898&single=true&output=csv",
+    historyUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTSmRuTrQXuP-x5UA87mkJhbz8Wixwz_KLtccQrsln2ozjQ_I5MqgHKbRS7jCYnY3rwp_PXHWI5dmIu/pub?gid=48037430&single=true&output=csv"
+  },
+  2026: {
+    status: "Live",
+    dashboardDataUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=1311778898&single=true&output=csv",
+    historyUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=48037430&single=true&output=csv"
+  }
+};
 
-const dashboardDataUrl =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQMD50jmOkPa0hLGblFat2ojNw_xl02KpmNSkaS-On_fnuNYUzVXUgoXbid1-pI-gleYDFOL9q3K7v5/pub?gid=1311778898&single=true&output=csv";
+let allSeasonData = {};
+let activeSeasonYear = 2026;
+let selectedProfileParticipant = null;
 
 
 let scoreChart = null;
@@ -5780,6 +6074,7 @@ function updateThemeTrendPlaybackFrame() {
   themeTrendChart.update("none");
 
   updateThemeTrendPlaybackButtons();
+  renderThemeTrendAnalysis(themes);
 }
 
 
@@ -7353,6 +7648,999 @@ function showThemeResults(
 }
 
 
+function buildSeasonData(
+  year,
+  historyRaw,
+  dashboardRaw
+) {
+
+  const participants =
+    detectParticipants(
+      dashboardRaw
+    );
+
+  const competitionRows =
+    getCompetitionRows(
+      dashboardRaw,
+      participants
+    );
+
+  if (!competitionRows.length) {
+    throw new Error(
+      `Fant ingen gyldige konkurransetemaer for FF${year}.`
+    );
+  }
+
+  const historyRows =
+    getValidHistoryRows(
+      historyRaw,
+      competitionRows
+    );
+
+  if (!historyRows.length) {
+    throw new Error(
+      `Fant ingen komplette historikkrader for FF${year}.`
+    );
+  }
+
+  const startRow =
+    historyRows[0];
+
+  const latestRow =
+    historyRows[
+      historyRows.length - 1
+    ];
+
+  const result =
+    calculateCompetition(
+      competitionRows,
+      participants,
+      startRow,
+      latestRow
+    );
+
+  return {
+    year,
+    status:
+      seasonConfig[year].status,
+    simulatorStatus:
+      detectSimulatorStatus(
+        dashboardRaw
+      ),
+    dashboardRaw,
+    historyRaw,
+    participants,
+    competitionRows,
+    historyRows,
+    startRow,
+    latestRow,
+    result
+  };
+}
+
+
+function seasonOptionLabel(year) {
+  const data =
+    allSeasonData[year];
+
+  const status =
+    data
+      ? data.status
+      : seasonConfig[year].status;
+
+  return `FF${year} · ${status}`;
+}
+
+
+function renderSeasonSelector() {
+
+  const select =
+    document.getElementById(
+      "seasonSelect"
+    );
+
+  if (!select) {
+    return;
+  }
+
+  const years =
+    Object.keys(allSeasonData)
+      .map(Number)
+      .sort((a, b) => b - a);
+
+  select.innerHTML =
+    years.map(
+      year =>
+        `<option value="${year}">${seasonOptionLabel(year)}</option>`
+    ).join("");
+
+  select.value =
+    String(activeSeasonYear);
+
+  select.onchange =
+    () => {
+      activateSeason(
+        Number(select.value)
+      );
+    };
+}
+
+
+function allKnownParticipants() {
+
+  const names =
+    new Set();
+
+  Object.values(allSeasonData)
+    .forEach(
+      season => {
+        season.participants
+          .forEach(
+            person =>
+              names.add(person)
+          );
+      }
+    );
+
+  return Array.from(names)
+    .sort((a, b) =>
+      a.localeCompare(
+        b,
+        "nb"
+      )
+    );
+}
+
+
+function finalSeasonData() {
+  return Object.values(allSeasonData)
+    .filter(
+      season =>
+        String(season.status)
+          .toLowerCase() ===
+        "final"
+    )
+    .sort(
+      (a, b) =>
+        a.year - b.year
+    );
+}
+
+
+function themePodiumRowsForSeason(
+  season
+) {
+
+  return season.result.themeResults
+    .map(
+      themeRow => {
+
+        const ranking =
+          season.participants
+            .map(
+              person => ({
+                person,
+                distance:
+                  themeRow
+                    .personResults[person]
+                    .absoluteDistance,
+                weightedDistance:
+                  themeRow
+                    .personResults[person]
+                    .weightedDistance,
+                prediction:
+                  themeRow
+                    .personResults[person]
+                    .prediction
+              })
+            )
+            .sort(
+              (a, b) =>
+                a.distance - b.distance
+            );
+
+        return {
+          theme:
+            themeRow.theme,
+          actualChange:
+            themeRow.actualChange,
+          ranking
+        };
+      }
+    );
+}
+
+
+function participantCareerStats(
+  person
+) {
+
+  let championshipWins = 0;
+  let championshipPodiums = 0;
+  let themeWins = 0;
+  let themePodiums = 0;
+  let bestEstimate = null;
+  let worstEstimate = null;
+
+  finalSeasonData()
+    .forEach(
+      season => {
+
+        const championshipIndex =
+          season.result.leaderboard
+            .findIndex(
+              row =>
+                row.person === person
+            );
+
+        if (championshipIndex === 0) {
+          championshipWins += 1;
+        }
+
+        if (
+          championshipIndex >= 0 &&
+          championshipIndex <= 2
+        ) {
+          championshipPodiums += 1;
+        }
+
+        themePodiumRowsForSeason(
+          season
+        ).forEach(
+          theme => {
+
+            const rank =
+              theme.ranking.findIndex(
+                row =>
+                  row.person === person
+              );
+
+            if (rank === 0) {
+              themeWins += 1;
+            }
+
+            if (
+              rank >= 0 &&
+              rank <= 2
+            ) {
+              themePodiums += 1;
+            }
+
+            const entry =
+              theme.ranking.find(
+                row =>
+                  row.person === person
+              );
+
+            if (!entry) {
+              return;
+            }
+
+            const item = {
+              year:
+                season.year,
+              theme:
+                theme.theme,
+              distance:
+                entry.distance,
+              prediction:
+                entry.prediction,
+              actualChange:
+                theme.actualChange
+            };
+
+            if (
+              !bestEstimate ||
+              item.distance <
+                bestEstimate.distance
+            ) {
+              bestEstimate = item;
+            }
+
+            if (
+              !worstEstimate ||
+              item.distance >
+                worstEstimate.distance
+            ) {
+              worstEstimate = item;
+            }
+          }
+        );
+      }
+    );
+
+  return {
+    championshipWins,
+    championshipPodiums,
+    themeWins,
+    themePodiums,
+    bestEstimate,
+    worstEstimate
+  };
+}
+
+
+function selectedSeasonParticipantInfo(
+  person
+) {
+
+  const season =
+    allSeasonData[
+      activeSeasonYear
+    ];
+
+  const leaderboardIndex =
+    season.result.leaderboard
+      .findIndex(
+        row =>
+          row.person === person
+      );
+
+  if (leaderboardIndex < 0) {
+    return null;
+  }
+
+  const leaderboardRow =
+    season.result.leaderboard[
+      leaderboardIndex
+    ];
+
+  const estimates =
+    season.result.themeResults
+      .map(
+        themeRow => ({
+          theme:
+            themeRow.theme,
+          distance:
+            themeRow
+              .personResults[person]
+              .absoluteDistance,
+          prediction:
+            themeRow
+              .personResults[person]
+              .prediction,
+          actualChange:
+            themeRow.actualChange
+        })
+      )
+      .sort(
+        (a, b) =>
+          a.distance - b.distance
+      );
+
+  return {
+    rank:
+      leaderboardIndex + 1,
+    score:
+      leaderboardRow.score,
+    bestEstimate:
+      estimates[0],
+    worstEstimate:
+      estimates[
+        estimates.length - 1
+      ]
+  };
+}
+
+
+function estimateSummaryText(item) {
+
+  if (!item) {
+    return "–";
+  }
+
+  return `${item.theme}, FF${item.year} · ${formatPercent(item.distance)} unna`;
+}
+
+
+function renderParticipantProfile() {
+
+  const container =
+    document.getElementById(
+      "participantSection"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  const people =
+    allKnownParticipants();
+
+  if (!people.length) {
+    container.innerHTML = "";
+    return;
+  }
+
+  if (
+    !selectedProfileParticipant ||
+    !people.includes(
+      selectedProfileParticipant
+    )
+  ) {
+    selectedProfileParticipant =
+      currentOfficialResult
+        .leaderboard[0]
+        .person;
+  }
+
+  const person =
+    selectedProfileParticipant;
+
+  const current =
+    selectedSeasonParticipantInfo(
+      person
+    );
+
+  const career =
+    participantCareerStats(
+      person
+    );
+
+  let buttons = "";
+
+  people.forEach(
+    name => {
+      buttons += `
+        <button
+          type="button"
+          class="filter-button ${name === person ? "active" : ""}"
+          data-profile-person="${name}">
+          ${name}
+        </button>
+      `;
+    }
+  );
+
+  const currentHtml =
+    current
+      ? `
+        <div class="profile-stats-grid">
+          <div class="profile-stat">
+            <div class="profile-stat-label">Plassering FF${activeSeasonYear}</div>
+            <div class="profile-stat-value">#${current.rank}</div>
+          </div>
+          <div class="profile-stat">
+            <div class="profile-stat-label">Score FF${activeSeasonYear}</div>
+            <div class="profile-stat-value">${formatPercent(current.score)}</div>
+          </div>
+          <div class="profile-stat">
+            <div class="profile-stat-label">Beste estimat i FF${activeSeasonYear}</div>
+            <div class="profile-stat-value">${current.bestEstimate.theme}</div>
+            <div class="small">${formatPercent(current.bestEstimate.distance)} unna</div>
+          </div>
+        </div>
+      `
+      : `
+        <p class="muted">
+          ${person} deltok ikke i FF${activeSeasonYear}.
+        </p>
+      `;
+
+  container.innerHTML = `
+    <h2>👤 Deltaker</h2>
+    <p>
+      Velg en deltaker for årets status og noen få historiske kuriositeter.
+    </p>
+
+    <div class="profile-panel">
+      <div class="filter-row" id="participantProfileButtons">
+        ${buttons}
+      </div>
+
+      <div class="profile-main">
+        <div>
+          <img
+            class="profile-portrait"
+            src="${participantImagePath(person)}"
+            alt="Avatar for ${person}"
+            onerror="this.style.display='none';">
+        </div>
+
+        <div>
+          <div class="profile-name">${person}</div>
+          <div class="profile-season-line">
+            Valgt sesong: FF${activeSeasonYear} · ${allSeasonData[activeSeasonYear].status}
+          </div>
+
+          ${currentHtml}
+
+          <h3 style="margin-top:22px;">Historikk</h3>
+
+          <div class="profile-stats-grid">
+            <div class="profile-stat">
+              <div class="profile-stat-label">🏆 Totalseire</div>
+              <div class="profile-stat-value">${career.championshipWins}</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-label">🥇🥈🥉 Pallplasser totalt</div>
+              <div class="profile-stat-value">${career.championshipPodiums}</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-label">🎯 Temaseire</div>
+              <div class="profile-stat-value">${career.themeWins}</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-label">🏅 Tema-pallplasser</div>
+              <div class="profile-stat-value">${career.themePodiums}</div>
+            </div>
+          </div>
+
+          <div class="profile-highlight">
+            <div class="profile-highlight-card">
+              <strong>🎯 Beste estimat noensinne</strong>
+              <div style="margin-top:5px;">
+                ${estimateSummaryText(career.bestEstimate)}
+              </div>
+            </div>
+            <div class="profile-highlight-card">
+              <strong>💥 Største bom</strong>
+              <div style="margin-top:5px;">
+                ${estimateSummaryText(career.worstEstimate)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  container
+    .querySelectorAll(
+      "[data-profile-person]"
+    )
+    .forEach(
+      button => {
+        button.addEventListener(
+          "click",
+          () => {
+            selectedProfileParticipant =
+              button.dataset.profilePerson;
+            renderParticipantProfile();
+          }
+        );
+      }
+    );
+}
+
+
+function historicalRecords() {
+
+  let largestChampionshipMargin = null;
+  let largestThemeMargin = null;
+  let smallestThemeMargin = null;
+  let bestHit = null;
+  let biggestMiss = null;
+
+  finalSeasonData()
+    .forEach(
+      season => {
+
+        const board =
+          season.result.leaderboard;
+
+        if (board.length >= 2) {
+          const margin =
+            board[1].score -
+            board[0].score;
+
+          const item = {
+            year:
+              season.year,
+            person:
+              board[0].person,
+            runnerUp:
+              board[1].person,
+            margin
+          };
+
+          if (
+            !largestChampionshipMargin ||
+            margin >
+              largestChampionshipMargin.margin
+          ) {
+            largestChampionshipMargin = item;
+          }
+        }
+
+        themePodiumRowsForSeason(
+          season
+        ).forEach(
+          theme => {
+
+            if (
+              theme.ranking.length >= 2
+            ) {
+              const margin =
+                theme.ranking[1].distance -
+                theme.ranking[0].distance;
+
+              const item = {
+                year:
+                  season.year,
+                theme:
+                  theme.theme,
+                winner:
+                  theme.ranking[0].person,
+                runnerUp:
+                  theme.ranking[1].person,
+                margin
+              };
+
+              if (
+                !largestThemeMargin ||
+                margin >
+                  largestThemeMargin.margin
+              ) {
+                largestThemeMargin = item;
+              }
+
+              if (
+                !smallestThemeMargin ||
+                margin <
+                  smallestThemeMargin.margin
+              ) {
+                smallestThemeMargin = item;
+              }
+            }
+
+            theme.ranking
+              .forEach(
+                entry => {
+                  const item = {
+                    year:
+                      season.year,
+                    theme:
+                      theme.theme,
+                    person:
+                      entry.person,
+                    distance:
+                      entry.distance
+                  };
+
+                  if (
+                    !bestHit ||
+                    item.distance <
+                      bestHit.distance
+                  ) {
+                    bestHit = item;
+                  }
+
+                  if (
+                    !biggestMiss ||
+                    item.distance >
+                      biggestMiss.distance
+                  ) {
+                    biggestMiss = item;
+                  }
+                }
+              );
+          }
+        );
+      }
+    );
+
+  return {
+    largestChampionshipMargin,
+    largestThemeMargin,
+    smallestThemeMargin,
+    bestHit,
+    biggestMiss
+  };
+}
+
+
+function renderHistoricalSection() {
+
+  const container =
+    document.getElementById(
+      "historicalSection"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  const finals =
+    finalSeasonData()
+      .sort(
+        (a, b) =>
+          b.year - a.year
+      );
+
+  if (!finals.length) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const records =
+    historicalRecords();
+
+  let cards = "";
+
+  finals.forEach(
+    season => {
+
+      const board =
+        season.result.leaderboard;
+
+      const first = board[0];
+      const second = board[1];
+      const third = board[2];
+
+      const margin =
+        second
+          ? second.score - first.score
+          : 0;
+
+      cards += `
+        <div class="season-history-card">
+          <div class="history-winner">
+            <img src="${participantImagePath(first.person)}" alt="${first.person}">
+            <div>
+              <div class="history-year">FF${season.year}</div>
+              <div class="history-champion">🏆 ${first.person}</div>
+              <div class="small">Champion · ${formatPercent(first.score)}</div>
+            </div>
+          </div>
+
+          ${second ? `
+            <div class="history-podium-line">
+              ${avatarHtml(second.person, "avatar-sm")}
+              <span>🥈 <strong>${second.person}</strong></span>
+            </div>
+          ` : ""}
+
+          ${third ? `
+            <div class="history-podium-line">
+              ${avatarHtml(third.person, "avatar-sm")}
+              <span>🥉 <strong>${third.person}</strong></span>
+            </div>
+          ` : ""}
+
+          <div class="history-margin">
+            Seiersmargin: <strong>${formatPercent(margin)}</strong>
+          </div>
+        </div>
+      `;
+    }
+  );
+
+  const champ =
+    records.largestChampionshipMargin;
+  const largeTheme =
+    records.largestThemeMargin;
+  const smallTheme =
+    records.smallestThemeMargin;
+  const best =
+    records.bestHit;
+  const worst =
+    records.biggestMiss;
+
+  container.innerHTML = `
+    <h2>🏛️ Historisk</h2>
+    <p>
+      Tidligere vinnere og noen få rekorder fra ferdigspilte FF-sesonger.
+    </p>
+
+    <div class="history-panel">
+      <div class="season-history-grid">
+        ${cards}
+      </div>
+
+      <h3 style="margin-top:24px;">FF-rekorder</h3>
+
+      <div class="record-grid">
+        <div class="record-card">
+          <div class="record-label">🏆 Største seiersmargin totalt</div>
+          <div class="record-value">${champ ? `${champ.person}, FF${champ.year}` : "–"}</div>
+          <div class="small">${champ ? `${formatPercent(champ.margin)} foran ${champ.runnerUp}` : ""}</div>
+        </div>
+
+        <div class="record-card">
+          <div class="record-label">🚀 Største temaseiersmargin</div>
+          <div class="record-value">${largeTheme ? `${largeTheme.winner} · ${largeTheme.theme}` : "–"}</div>
+          <div class="small">${largeTheme ? `FF${largeTheme.year} · ${formatPercent(largeTheme.margin)}` : ""}</div>
+        </div>
+
+        <div class="record-card">
+          <div class="record-label">🔬 Minste temaseiersmargin</div>
+          <div class="record-value">${smallTheme ? `${smallTheme.winner} · ${smallTheme.theme}` : "–"}</div>
+          <div class="small">${smallTheme ? `FF${smallTheme.year} · ${formatPercent(smallTheme.margin)}` : ""}</div>
+        </div>
+
+        <div class="record-card">
+          <div class="record-label">🎯 Beste enkelt-treff</div>
+          <div class="record-value">${best ? `${best.person} · ${best.theme}` : "–"}</div>
+          <div class="small">${best ? `FF${best.year} · ${formatPercent(best.distance)} unna` : ""}</div>
+        </div>
+
+        <div class="record-card">
+          <div class="record-label">💥 Største bom</div>
+          <div class="record-value">${worst ? `${worst.person} · ${worst.theme}` : "–"}</div>
+          <div class="small">${worst ? `FF${worst.year} · ${formatPercent(worst.distance)} unna` : ""}</div>
+        </div>
+      </div>
+
+      <p class="history-note">
+        Historiske rekorder beregnes kun fra sesonger merket Final. FF${activeSeasonYear} påvirker derfor ikke rekordene dersom sesongen fortsatt er Live.
+      </p>
+    </div>
+  `;
+}
+
+
+function activateSeason(year) {
+
+  const season =
+    allSeasonData[year];
+
+  if (!season) {
+    return;
+  }
+
+  stopThemeTrendAnimation();
+
+  activeSeasonYear = year;
+
+  currentParticipants =
+    season.participants;
+
+  currentThemeResults =
+    season.result.themeResults;
+
+  currentCompetitionRows =
+    season.competitionRows;
+
+  currentHistoryRows =
+    season.historyRows;
+
+  currentStartRow =
+    season.startRow;
+
+  currentLatestRow =
+    season.latestRow;
+
+  currentOfficialResult =
+    season.result;
+
+  currentSimulatorStatus =
+    season.simulatorStatus;
+
+  selectedProfileParticipant =
+    season.result.leaderboard[0]
+      ? season.result.leaderboard[0].person
+      : null;
+
+  const subtitle =
+    document.querySelector(
+      ".subtitle"
+    );
+
+  if (subtitle) {
+    subtitle.textContent =
+      `${season.status} Championship Dashboard · FF${year}`;
+  }
+
+  showSummaryCards(
+    season.result.leaderboard,
+    season.latestRow,
+    season.competitionRows,
+    season.participants
+  );
+
+  showLeaderboard(
+    season.result.leaderboard
+  );
+
+  createChartSection(
+    season.participants,
+    season.result.themeResults
+  );
+
+  showThemeResults(
+    season.result.themeResults
+  );
+
+  createHistorySection();
+  createSimulatorSection();
+  showEstimates();
+  renderParticipantProfile();
+  renderHistoricalSection();
+
+  showControlInfo(
+    season.participants,
+    season.competitionRows,
+    season.startRow,
+    season.latestRow
+  );
+
+  renderSeasonSelector();
+
+  document.getElementById(
+    "loading"
+  ).innerHTML = `
+    <span class="ok">
+      ✓ FF${year} lastet. ${season.status === "Live" ? "Status beregnet per" : "Sluttstatus per"} ${season.latestRow["Dato"]}.
+    </span>
+  `;
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+async function loadAllSeasonData() {
+
+  const entries =
+    Object.entries(
+      seasonConfig
+    );
+
+  const results =
+    await Promise.allSettled(
+      entries.map(
+        async ([year, config]) => {
+          const [historyRaw, dashboardRaw] =
+            await Promise.all([
+              loadCsv(config.historyUrl),
+              loadCsv(config.dashboardDataUrl)
+            ]);
+
+          return buildSeasonData(
+            Number(year),
+            historyRaw,
+            dashboardRaw
+          );
+        }
+      )
+    );
+
+  const errors = [];
+
+  results.forEach(
+    (result, index) => {
+      const year =
+        Number(entries[index][0]);
+
+      if (result.status === "fulfilled") {
+        allSeasonData[year] =
+          result.value;
+      } else {
+        errors.push(
+          `FF${year}: ${result.reason.message}`
+        );
+        console.error(
+          `Kunne ikke laste FF${year}`,
+          result.reason
+        );
+      }
+    }
+  );
+
+  if (
+    !allSeasonData[2026]
+  ) {
+    throw new Error(
+      "FF2026 kunne ikke lastes. " +
+      errors.join(" · ")
+    );
+  }
+
+  renderSeasonSelector();
+  activateSeason(2026);
+
+  if (errors.length) {
+    console.warn(
+      "Noen historiske sesonger kunne ikke lastes:",
+      errors
+    );
+  }
+}
+
+
 function showControlInfo(
   participants,
   competitionRows,
@@ -7370,7 +8658,7 @@ function showControlInfo(
 
     <p class="small">
 
-      Dashboardet har automatisk
+      FF${activeSeasonYear} (${allSeasonData[activeSeasonYear] ? allSeasonData[activeSeasonYear].status : ""}) har automatisk
       funnet
 
       <strong>
@@ -7411,206 +8699,22 @@ async function loadData() {
 
   try {
 
-    const [
-      historyRaw,
-      dashboardRaw
-    ] =
-      await Promise.all([
+    await loadAllSeasonData();
 
-        loadCsv(
-          historyUrl
-        ),
-
-        loadCsv(
-          dashboardDataUrl
-        )
-      ]);
-
-
-    currentSimulatorStatus =
-      detectSimulatorStatus(
-        dashboardRaw
-      );
-
-
-    const participants =
-      detectParticipants(
-        dashboardRaw
-      );
-
-
-    const competitionRows =
-      getCompetitionRows(
-
-        dashboardRaw,
-        participants
-      );
-
-
-    if (
-      !competitionRows.length
-    ) {
-
-      throw new Error(
-        "Fant ingen gyldige konkurransetemaer."
-      );
-    }
-
-
-    const historyRows =
-      getValidHistoryRows(
-
-        historyRaw,
-        competitionRows
-      );
-
-
-    if (
-      !historyRows.length
-    ) {
-
-      throw new Error(
-        "Fant ingen komplette historikkrader."
-      );
-    }
-
-
-    const startRow =
-      historyRows[0];
-
-
-    const latestRow =
-      historyRows[
-        historyRows.length -
-        1
-      ];
-
-
-    const result =
-      calculateCompetition(
-
-        competitionRows,
-        participants,
-        startRow,
-        latestRow
-      );
-
-
-    currentParticipants =
-      participants;
-
-    currentThemeResults =
-      result.themeResults;
-
-    currentCompetitionRows =
-      competitionRows;
-
-    currentHistoryRows =
-      historyRows;
-
-    currentStartRow =
-      startRow;
-
-    currentLatestRow =
-      latestRow;
-
-    currentOfficialResult =
-      result;
-
-
-    showSummaryCards(
-
-      result.leaderboard,
-      latestRow,
-      competitionRows,
-      participants
+    console.log(
+      "Sesonger lastet:",
+      Object.keys(allSeasonData)
     );
 
+  } catch (error) {
 
-    showLeaderboard(
-      result.leaderboard
-    );
-
-
-    createChartSection(
-
-      participants,
-      result.themeResults
-    );
-
-
-    showThemeResults(
-      result.themeResults
-    );
-
-
-    createHistorySection();
-
-
-    createSimulatorSection();
-
-
-    showEstimates();
-
-
-    showControlInfo(
-
-      participants,
-      competitionRows,
-      startRow,
-      latestRow
-    );
-
+    console.error(error);
 
     document.getElementById(
       "loading"
     ).innerHTML = `
-
-      <span class="ok">
-
-        ✓ Data lastet.
-        Status beregnet per
-        ${latestRow["Dato"]}.
-
-      </span>
-    `;
-
-
-    console.log(
-      "Historikkpunkter:",
-      historyRows.length
-    );
-
-
-    console.log(
-      "Leaderboard:",
-      result.leaderboard
-    );
-
-
-    console.log(
-      "SimulatorStatus:",
-      currentSimulatorStatus
-    );
-
-  }
-
-  catch (error) {
-
-    console.error(
-      error
-    );
-
-
-    document.getElementById(
-      "loading"
-    ).innerHTML = `
-
       <span class="error">
-
-        Feil:
-        ${error.message}
-
+        Feil: ${error.message}
       </span>
     `;
   }
