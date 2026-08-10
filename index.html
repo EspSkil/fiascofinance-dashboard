@@ -149,8 +149,10 @@
 
     #leaderboardSection,
     #chartSection,
+    #themeSection,
     #historySection,
-    #simulatorSection {
+    #simulatorSection,
+    #estimatesSection {
       scroll-margin-top: 72px;
     }
 
@@ -682,6 +684,301 @@
     }
 
     /* Nettbrett */
+
+    .theme-toggle {
+      margin-left: auto;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+      background: #fff;
+      cursor: pointer;
+      font-size: 19px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .rank-card-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .rank-card .avatar-md {
+      width: 52px;
+      height: 52px;
+    }
+
+    .rank-gap {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .lock-banner {
+      margin: 14px 0 18px;
+      padding: 14px 16px;
+      border: 1px solid #d8b45a;
+      background: #fff8df;
+      border-radius: 10px;
+      line-height: 1.45;
+    }
+
+    .lock-banner strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .sim-card input:disabled,
+    .reset-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .theme-subsection {
+      margin-top: 30px;
+      padding-top: 4px;
+    }
+
+    .theme-subsection h3 {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .theme-trend-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 12px 0;
+    }
+
+    .theme-trend-controls select {
+      border: 1px solid #aaa;
+      background: white;
+      color: #222;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: inherit;
+    }
+
+    #themeTrendChart {
+      width: 100% !important;
+      height: 460px !important;
+    }
+
+    .medal-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .medal-summary-card {
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 10px;
+      padding: 11px 12px;
+    }
+
+    .medal-summary-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .medal-summary-count {
+      color: #555;
+      font-size: 13px;
+    }
+
+    .estimates-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .estimate-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .estimate-card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .estimate-card-title {
+      font-weight: bold;
+      font-size: 17px;
+    }
+
+    .estimate-status {
+      font-size: 13px;
+      color: #666;
+      text-align: right;
+    }
+
+    .estimate-row {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 8px;
+      border-top: 1px solid #eee;
+      border-radius: 7px;
+    }
+
+    .estimate-row.closest {
+      background: #f3f8ee;
+      font-weight: bold;
+    }
+
+    .estimate-value {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .estimate-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .theme-podium-mobile {
+      display: none;
+    }
+
+    body.dark-mode {
+      background: #11151a;
+      color: #e8edf2;
+    }
+
+    body.dark-mode .subtitle,
+    body.dark-mode .small,
+    body.dark-mode .muted,
+    body.dark-mode .card-label,
+    body.dark-mode .card-small,
+    body.dark-mode .rank-gap,
+    body.dark-mode .sim-weight,
+    body.dark-mode .sim-value-label,
+    body.dark-mode .sim-unit,
+    body.dark-mode .chart-note,
+    body.dark-mode .theme-mobile-type,
+    body.dark-mode .theme-mobile-label,
+    body.dark-mode .estimate-status,
+    body.dark-mode .estimate-meta,
+    body.dark-mode .medal-summary-count {
+      color: #aeb7c2;
+    }
+
+    body.dark-mode .card,
+    body.dark-mode .chart-panel,
+    body.dark-mode .sim-panel,
+    body.dark-mode .sim-card,
+    body.dark-mode .theme-mobile-card,
+    body.dark-mode .estimate-card,
+    body.dark-mode .medal-summary-card,
+    body.dark-mode .theme-podium-mobile-card {
+      background: #181e25;
+      border-color: #303945;
+    }
+
+    body.dark-mode .analysis-box {
+      background: #171d24;
+      border-color: #303945;
+    }
+
+    body.dark-mode .status-box {
+      background: #1b222a;
+    }
+
+    body.dark-mode table {
+      background: #181e25;
+    }
+
+    body.dark-mode th {
+      background: #222a33;
+    }
+
+    body.dark-mode th,
+    body.dark-mode td {
+      border-color: #303945;
+    }
+
+    body.dark-mode .rank-1 td,
+    body.dark-mode .estimate-row.closest {
+      background: #203022;
+    }
+
+    body.dark-mode .filter-button,
+    body.dark-mode .mode-button,
+    body.dark-mode .reset-button,
+    body.dark-mode .theme-toggle,
+    body.dark-mode .theme-trend-controls select {
+      background: #1b222a;
+      color: #e8edf2;
+      border-color: #46515e;
+    }
+
+    body.dark-mode .filter-button.active,
+    body.dark-mode .mode-button.active {
+      background: #e8edf2;
+      color: #11151a;
+      border-color: #e8edf2;
+    }
+
+    body.dark-mode .sim-value-box,
+    body.dark-mode .theme-mobile-stat {
+      background: #222a33;
+    }
+
+    body.dark-mode .scenario-changed {
+      background: #352f1d;
+    }
+
+    body.dark-mode .lock-banner {
+      background: #302918;
+      border-color: #8f762f;
+    }
+
+    body.dark-mode .estimate-row {
+      border-color: #303945;
+    }
+
+    body.dark-mode .quick-nav {
+      background: rgba(17,21,26,0.94);
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    body.dark-mode .quick-nav a {
+      color: #e8edf2;
+      background: rgba(27,34,42,0.97);
+      border-color: #3b4652;
+    }
+
+    body.dark-mode .avatar {
+      background: #2a323c;
+      border-color: #46515e;
+    }
+
+    body.dark-mode .avatar-fallback {
+      color: #dbe2e8;
+    }
+
     @media (max-width: 1100px) {
       body {
         max-width: 100%;
@@ -982,6 +1279,69 @@
       }
     }
     }
+
+    @media (max-width: 1100px) {
+      #themeTrendChart {
+        height: 440px !important;
+      }
+
+      .medal-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 800px) {
+      .theme-toggle {
+        width: 38px;
+        height: 38px;
+      }
+
+      .rank-card .avatar-md {
+        width: 44px;
+        height: 44px;
+      }
+
+      #themeTrendChart {
+        height: 430px !important;
+      }
+
+      .estimates-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .medal-summary {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .podium-table {
+        display: none;
+      }
+
+      .theme-podium-mobile {
+        display: grid;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .theme-podium-mobile-card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 12px;
+      }
+
+      .theme-podium-mobile-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .theme-podium-mobile-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 6px;
+      }
+    }
   </style>
 </head>
 
@@ -997,6 +1357,14 @@
       <h1>Fiasco Finance</h1>
       <p class="subtitle">Live Championship Dashboard</p>
     </div>
+
+    <button
+      type="button"
+      class="theme-toggle"
+      id="themeToggle"
+      aria-label="Bytt mellom lys og mørk visning">
+      🌙
+    </button>
   </div>
 
   <div id="loading" class="status-box">
@@ -1016,9 +1384,10 @@
   <div id="summaryCards"></div>
   <div id="leaderboardSection"></div>
   <div id="chartSection"></div>
+  <div id="themeSection"></div>
   <div id="historySection"></div>
   <div id="simulatorSection"></div>
-  <div id="themeSection"></div>
+  <div id="estimatesSection"></div>
   <div id="controlSection"></div>
 
 
@@ -1034,6 +1403,7 @@ const dashboardDataUrl =
 let scoreChart = null;
 let historyChart = null;
 let simChart = null;
+let themeTrendChart = null;
 
 let currentParticipants = [];
 let currentThemeResults = [];
@@ -1053,6 +1423,12 @@ let historyMode = "rank";
 let simChartMode = "sim";
 
 let simulationChanges = {};
+let currentSimulatorStatus = "OPEN";
+
+let selectedTrendThemes = new Set();
+let themeTrendVisiblePoints = null;
+let themeTrendTimer = null;
+let themeTrendIsPlaying = false;
 
 
 const chartColors = [
@@ -1139,6 +1515,224 @@ function clamp(value, min, max) {
 }
 
 
+function detectSimulatorStatus(dashboardRaw) {
+
+  if (!dashboardRaw.length) {
+    return "OPEN";
+  }
+
+  const keys =
+    Object.keys(
+      dashboardRaw[0]
+    );
+
+  const normalized =
+    keys.map(
+      key =>
+        String(key)
+          .trim()
+          .toUpperCase()
+    );
+
+  const index =
+    normalized.indexOf(
+      "SIMULATORSTATUS"
+    );
+
+  if (
+    index >= 0 &&
+    index + 1 <
+    normalized.length
+  ) {
+
+    const candidate =
+      normalized[
+        index + 1
+      ];
+
+    if (
+      candidate === "OPEN" ||
+      candidate === "CLOSED"
+    ) {
+      return candidate;
+    }
+  }
+
+  for (
+    const row of dashboardRaw
+  ) {
+
+    const value =
+      row["SimulatorStatus"];
+
+    if (value) {
+
+      const candidate =
+        String(value)
+          .trim()
+          .toUpperCase();
+
+      if (
+        candidate === "OPEN" ||
+        candidate === "CLOSED"
+      ) {
+        return candidate;
+      }
+    }
+  }
+
+  return "OPEN";
+}
+
+
+function isDarkMode() {
+  return document.body.classList.contains("dark-mode");
+}
+
+
+function applyTheme(mode) {
+
+  const dark =
+    mode === "dark";
+
+  document.body.classList.toggle(
+    "dark-mode",
+    dark
+  );
+
+  const toggle =
+    document.getElementById(
+      "themeToggle"
+    );
+
+  if (toggle) {
+    toggle.textContent =
+      dark
+        ? "☀️"
+        : "🌙";
+  }
+
+  try {
+    localStorage.setItem(
+      "ff-theme",
+      dark
+        ? "dark"
+        : "light"
+    );
+  } catch (error) {
+    // Ignorer lagringsfeil.
+  }
+
+  if (
+    typeof Chart !==
+    "undefined"
+  ) {
+
+    Chart.defaults.color =
+      dark
+        ? "#cbd3dc"
+        : "#666";
+
+    Chart.defaults.borderColor =
+      dark
+        ? "#38424d"
+        : "#ddd";
+
+    if (
+      currentParticipants.length
+    ) {
+
+      const scoreCanvas =
+        document.getElementById(
+          "scoreChart"
+        );
+
+      if (scoreCanvas) {
+        renderStackedChart();
+      }
+
+      const historyCanvas =
+        document.getElementById(
+          "historyChart"
+        );
+
+      if (historyCanvas) {
+        renderHistoryChart();
+      }
+
+      const simCanvas =
+        document.getElementById(
+          "simChart"
+        );
+
+      if (simCanvas) {
+        renderSimulatorChart();
+      }
+
+      const trendCanvas =
+        document.getElementById(
+          "themeTrendChart"
+        );
+
+      if (trendCanvas) {
+        renderThemeTrendChart();
+      }
+    }
+  }
+}
+
+
+function initializeTheme() {
+
+  let mode = null;
+
+  try {
+    mode =
+      localStorage.getItem(
+        "ff-theme"
+      );
+  } catch (error) {
+    mode = null;
+  }
+
+  if (
+    mode !== "light" &&
+    mode !== "dark"
+  ) {
+
+    mode =
+      window.matchMedia &&
+      window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches
+        ? "dark"
+        : "light";
+  }
+
+  applyTheme(mode);
+
+  const toggle =
+    document.getElementById(
+      "themeToggle"
+    );
+
+  if (toggle) {
+
+    toggle.addEventListener(
+      "click",
+      () => {
+
+        applyTheme(
+          isDarkMode()
+            ? "light"
+            : "dark"
+        );
+      }
+    );
+  }
+}
+
+
 function detectParticipants(dashboardRaw) {
 
   const competitionRow =
@@ -1154,19 +1748,32 @@ function detectParticipants(dashboardRaw) {
     );
   }
 
-  const fixedColumns =
-    new Set([
-      "TEMA",
-      "Vekt",
-      "Type"
-    ]);
+  const keys =
+    Object.keys(
+      competitionRow
+    );
 
-  return Object.keys(competitionRow)
-    .filter(key =>
-      key &&
-      !key.startsWith("_") &&
-      !fixedColumns.has(key) &&
-      competitionRow[key] !== undefined
+  const typeIndex =
+    keys.indexOf(
+      "Type"
+    );
+
+  if (typeIndex < 0) {
+    throw new Error(
+      "Fant ikke Type-kolonnen i DashboardData."
+    );
+  }
+
+  return keys
+    .slice(
+      typeIndex + 1
+    )
+    .filter(
+      key =>
+        key &&
+        !key.startsWith("_") &&
+        competitionRow[key] !== undefined &&
+        competitionRow[key] !== ""
     );
 }
 
@@ -2106,28 +2713,82 @@ function showSummaryCards(
       </div>
 
 
-      <div class="card">
+      <div class="card rank-card">
 
         <div class="card-label">
-          ⚔️ Avstand #1–#2
+          🥈 2. plass
         </div>
 
-        <div class="card-value">
-          ${
-            second
-              ? formatPercent(gapSecond)
-              : "-"
-          }
+        ${
+          second
+            ? `
+              <div class="rank-card-content">
+                ${avatarHtml(
+                  second.person,
+                  "avatar-md"
+                )}
+
+                <div>
+                  <div class="card-value">
+                    ${second.person}
+                  </div>
+
+                  <div class="card-small">
+                    Score ${formatPercent(
+                      second.score
+                    )}
+                  </div>
+
+                  <div class="rank-gap">
+                    ${formatPercent(
+                      gapSecond
+                    )} bak
+                  </div>
+                </div>
+              </div>
+            `
+            : `<div class="card-value">-</div>`
+        }
+
+      </div>
+
+
+      <div class="card rank-card">
+
+        <div class="card-label">
+          🥉 3. plass
         </div>
 
-        <div class="card-small">
-          ${
-            second
-              ? second.person +
-                " på andreplass"
-              : "Kun én deltaker"
-          }
-        </div>
+        ${
+          third
+            ? `
+              <div class="rank-card-content">
+                ${avatarHtml(
+                  third.person,
+                  "avatar-md"
+                )}
+
+                <div>
+                  <div class="card-value">
+                    ${third.person}
+                  </div>
+
+                  <div class="card-small">
+                    Score ${formatPercent(
+                      third.score
+                    )}
+                  </div>
+
+                  <div class="rank-gap">
+                    ${formatPercent(
+                      gapThird
+                    )} bak
+                  </div>
+                </div>
+              </div>
+            `
+            : `<div class="card-value">-</div>`
+        }
 
       </div>
 
@@ -2135,33 +2796,7 @@ function showSummaryCards(
       <div class="card">
 
         <div class="card-label">
-          🥉 Avstand #1–#3
-        </div>
-
-        <div class="card-value">
-          ${
-            third
-              ? formatPercent(gapThird)
-              : "-"
-          }
-        </div>
-
-        <div class="card-small">
-          ${
-            third
-              ? third.person +
-                " på tredjeplass"
-              : "Ikke nok deltakere"
-          }
-        </div>
-
-      </div>
-
-
-      <div class="card">
-
-        <div class="card-label">
-          💡 Hvorfor leder #1?
+          💡 Hvorfor leder ${leader.person}?
         </div>
 
         <div class="card-insight">
@@ -2708,7 +3343,9 @@ const stackTotalPlugin = {
       "center";
 
     ctx.fillStyle =
-      "#222";
+      isDarkMode()
+        ? "#e8edf2"
+        : "#222";
 
 
     chart.data.labels
@@ -3711,6 +4348,18 @@ function createSimulatorSection() {
         </div>
       </div>
 
+      ${
+        currentSimulatorStatus === "CLOSED"
+          ? `
+            <div class="lock-banner">
+              <strong>🔒 Scenarioverkstedet er midlertidig stengt</strong>
+              Årets sluttresultater holdes hemmelige frem til finalen.
+              Siste publiserte status vises fortsatt i dashboardet.
+            </div>
+          `
+          : ""
+      }
+
       <div class="sim-summary">
 
         <div>
@@ -3803,6 +4452,13 @@ function createSimulatorSection() {
 
     </div>
   `;
+
+
+  document.getElementById(
+    "resetSimulation"
+  ).disabled =
+    currentSimulatorStatus ===
+    "CLOSED";
 
 
   document.getElementById(
@@ -4179,6 +4835,22 @@ function renderSimulatorControls() {
       );
 
 
+      if (
+        currentSimulatorStatus ===
+        "CLOSED"
+      ) {
+
+        card
+          .querySelectorAll(
+            "input"
+          )
+          .forEach(
+            input =>
+              input.disabled = true
+          );
+      }
+
+
       const slider =
         card.querySelector(
           `#slider-${safeId(
@@ -4197,6 +4869,13 @@ function renderSimulatorControls() {
 
       const applyChange =
         value => {
+
+          if (
+            currentSimulatorStatus ===
+            "CLOSED"
+          ) {
+            return;
+          }
 
           simulationChanges[
             themeRow.theme
@@ -4691,6 +5370,1435 @@ function updateSimulationOutputs() {
 }
 
 
+
+function themeHistoryPoints(
+  themeRow
+) {
+
+  const competitionRow =
+    currentCompetitionRows.find(
+      row =>
+        row["TEMA"] ===
+        themeRow.theme
+    );
+
+  return currentHistoryRows.map(
+    row => ({
+
+      date:
+        row["Dato"],
+
+      change:
+        calculateActualChange(
+          competitionRow,
+          currentStartRow,
+          row
+        ),
+
+      raw:
+        parseNumber(
+          row[
+            themeRow.theme
+          ]
+        )
+    })
+  );
+}
+
+
+function closestParticipantToChange(
+  themeRow,
+  change
+) {
+
+  return currentParticipants
+    .map(
+      person => ({
+
+        person,
+
+        distance:
+          Math.abs(
+            themeRow
+              .personResults[
+                person
+              ]
+              .prediction -
+            change
+          )
+      })
+    )
+    .sort(
+      (a, b) =>
+        a.distance -
+        b.distance
+    )[0];
+}
+
+
+function renderTrendFilterButtons() {
+
+  const container =
+    document.getElementById(
+      "themeTrendFilters"
+    );
+
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML =
+    "";
+
+
+  container.appendChild(
+
+    createFilterButton(
+
+      "Alle",
+
+      false,
+
+      () => {
+
+        stopThemeTrendAnimation();
+
+        selectedTrendThemes =
+          new Set(
+            currentThemeResults.map(
+              row =>
+                row.theme
+            )
+          );
+
+        themeTrendVisiblePoints =
+          null;
+
+        renderTrendFilterButtons();
+        renderThemeTrendChart();
+      },
+
+      true
+    )
+  );
+
+
+  container.appendChild(
+
+    createFilterButton(
+
+      "Ingen",
+
+      false,
+
+      () => {
+
+        stopThemeTrendAnimation();
+
+        selectedTrendThemes =
+          new Set();
+
+        themeTrendVisiblePoints =
+          null;
+
+        renderTrendFilterButtons();
+        renderThemeTrendChart();
+      },
+
+      true
+    )
+  );
+
+
+  currentThemeResults.forEach(
+    row => {
+
+      container.appendChild(
+
+        createFilterButton(
+
+          row.theme,
+
+          selectedTrendThemes
+            .has(row.theme),
+
+          () => {
+
+            stopThemeTrendAnimation();
+
+            if (
+              selectedTrendThemes
+                .has(row.theme)
+            ) {
+
+              selectedTrendThemes
+                .delete(row.theme);
+
+            } else {
+
+              selectedTrendThemes
+                .add(row.theme);
+            }
+
+            themeTrendVisiblePoints =
+              null;
+
+            renderTrendFilterButtons();
+            renderThemeTrendChart();
+          }
+        )
+      );
+    }
+  );
+}
+
+
+function stopThemeTrendAnimation() {
+
+  if (themeTrendTimer) {
+    clearInterval(
+      themeTrendTimer
+    );
+  }
+
+  themeTrendTimer =
+    null;
+
+  themeTrendIsPlaying =
+    false;
+}
+
+
+function themeTrendSpeedMs() {
+
+  const speed =
+    document.getElementById(
+      "themeTrendSpeed"
+    );
+
+  const mode =
+    speed
+      ? speed.value
+      : "normal";
+
+  const totalMs =
+    mode === "slow"
+      ? 9000
+      : mode === "fast"
+        ? 3500
+        : 6000;
+
+  return Math.max(
+    120,
+    Math.round(
+      totalMs /
+      Math.max(
+        1,
+        currentHistoryRows.length -
+        1
+      )
+    )
+  );
+}
+
+
+function startThemeTrendAnimation(
+  restart = false
+) {
+
+  const themes =
+    currentThemeResults.filter(
+      row =>
+        selectedTrendThemes
+          .has(row.theme)
+    );
+
+  if (
+    themes.length !== 1
+  ) {
+    return;
+  }
+
+  stopThemeTrendAnimation();
+
+  if (
+    restart ||
+    !themeTrendVisiblePoints ||
+    themeTrendVisiblePoints >=
+      currentHistoryRows.length
+  ) {
+
+    themeTrendVisiblePoints =
+      1;
+  }
+
+  themeTrendIsPlaying =
+    true;
+
+  renderThemeTrendChart();
+
+
+  themeTrendTimer =
+    setInterval(
+      () => {
+
+        themeTrendVisiblePoints +=
+          1;
+
+        if (
+          themeTrendVisiblePoints >=
+          currentHistoryRows.length
+        ) {
+
+          themeTrendVisiblePoints =
+            currentHistoryRows.length;
+
+          stopThemeTrendAnimation();
+        }
+
+        renderThemeTrendChart();
+
+      },
+      themeTrendSpeedMs()
+    );
+}
+
+
+function renderThemeTrendAnalysis(
+  themes
+) {
+
+  const box =
+    document.getElementById(
+      "themeTrendAnalysis"
+    );
+
+  if (!box) {
+    return;
+  }
+
+
+  if (!themes.length) {
+
+    box.innerHTML = `
+      <div class="analysis-box">
+        <div class="analysis-content">
+          <div class="analysis-title">
+            💬 Kommentar
+          </div>
+          <p class="analysis-text">
+            Velg minst ett tema for å se utviklingen.
+          </p>
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  if (
+    themes.length === 1 &&
+    themeTrendIsPlaying
+  ) {
+
+    box.innerHTML = `
+      <div class="analysis-box">
+        <div class="analysis-content">
+          <div class="analysis-title">
+            🎬 Avspilling pågår
+          </div>
+          <p class="analysis-text">
+            Kommentaren og hvem som er nærmest avsløres når utviklingen er ferdig.
+          </p>
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  if (
+    themes.length === 1 &&
+    themeTrendVisiblePoints !== null &&
+    themeTrendVisiblePoints <
+      currentHistoryRows.length
+  ) {
+
+    box.innerHTML = `
+      <div class="analysis-box">
+        <div class="analysis-content">
+          <div class="analysis-title">
+            ⏸ Avspilling pauset
+          </div>
+          <p class="analysis-text">
+            Fortsett avspillingen for å få hele kommentaren.
+          </p>
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  if (themes.length === 1) {
+
+    const themeRow =
+      themes[0];
+
+    const points =
+      themeHistoryPoints(
+        themeRow
+      );
+
+    const changes =
+      points.map(
+        point =>
+          point.change
+      );
+
+    const maxChange =
+      Math.max(
+        ...changes
+      );
+
+    const minChange =
+      Math.min(
+        ...changes
+      );
+
+    const maxIndex =
+      changes.indexOf(
+        maxChange
+      );
+
+    const minIndex =
+      changes.indexOf(
+        minChange
+      );
+
+    const latest =
+      changes[
+        changes.length -
+        1
+      ];
+
+    const closestNow =
+      closestParticipantToChange(
+        themeRow,
+        latest
+      );
+
+    const closestAtPeak =
+      closestParticipantToChange(
+        themeRow,
+        maxChange
+      );
+
+
+    let largestMove =
+      {
+        size: 0,
+        from: 0,
+        to: 0,
+        index: 0
+      };
+
+    for (
+      let i = 1;
+      i < changes.length;
+      i++
+    ) {
+
+      const move =
+        changes[i] -
+        changes[i - 1];
+
+      if (
+        Math.abs(move) >
+        Math.abs(
+          largestMove.size
+        )
+      ) {
+
+        largestMove = {
+          size: move,
+          from:
+            changes[i - 1],
+          to:
+            changes[i],
+          index: i
+        };
+      }
+    }
+
+
+    let movementText =
+      `${themeRow.theme} står nå i ${formatPercent(latest)} siden konkurransestart. ` +
+      `Høyeste registrerte nivå var ${formatPercent(maxChange)} ` +
+      `(${points[maxIndex].date}), mens laveste var ${formatPercent(minChange)} ` +
+      `(${points[minIndex].date}).`;
+
+    if (
+      Math.abs(
+        largestMove.size
+      ) >
+      0.0001
+    ) {
+
+      movementText +=
+        ` Den største endringen mellom to registrerte statuspunkter var ` +
+        `${formatPercent(Math.abs(largestMove.size))} ` +
+        `${largestMove.size >= 0 ? "opp" : "ned"} frem til ${points[largestMove.index].date}.`;
+    }
+
+
+    let estimateText =
+      `${closestNow.person} er nærmest dagens nivå, ` +
+      `${formatPercent(closestNow.distance)} unna sitt estimat.`;
+
+    if (
+      closestAtPeak.person !==
+      closestNow.person
+    ) {
+
+      estimateText +=
+        ` Rundt årets høyeste registrerte nivå var ${closestAtPeak.person} nærmest.`;
+    }
+
+
+    box.innerHTML = `
+      <div class="analysis-box">
+
+        ${avatarHtml(
+          closestNow.person,
+          "avatar-md"
+        )}
+
+        <div class="analysis-content">
+
+          <div class="analysis-title">
+            💬 Kommentar til ${themeRow.theme}
+          </div>
+
+          <p class="analysis-text">
+            ${movementText}
+          </p>
+
+          <p class="analysis-text">
+            ${estimateText}
+          </p>
+
+        </div>
+
+      </div>
+    `;
+
+    return;
+  }
+
+
+  const stats =
+    themes.map(
+      themeRow => {
+
+        const points =
+          themeHistoryPoints(
+            themeRow
+          );
+
+        const values =
+          points.map(
+            point =>
+              point.change
+          );
+
+        return {
+          theme:
+            themeRow.theme,
+          latest:
+            values[
+              values.length -
+              1
+            ],
+          range:
+            Math.max(
+              ...values
+            ) -
+            Math.min(
+              ...values
+            )
+        };
+      }
+    );
+
+
+  const strongest =
+    [...stats].sort(
+      (a, b) =>
+        b.latest -
+        a.latest
+    )[0];
+
+  const weakest =
+    [...stats].sort(
+      (a, b) =>
+        a.latest -
+        b.latest
+    )[0];
+
+  const volatile =
+    [...stats].sort(
+      (a, b) =>
+        b.range -
+        a.range
+    )[0];
+
+
+  box.innerHTML = `
+    <div class="analysis-box">
+      <div class="analysis-content">
+
+        <div class="analysis-title">
+          💬 Kommentar til valgte temaer
+        </div>
+
+        <p class="analysis-text">
+          ${strongest.theme} har sterkest utvikling blant de valgte temaene
+          med ${formatPercent(strongest.latest)}, mens ${weakest.theme}
+          ligger lavest med ${formatPercent(weakest.latest)}.
+          ${volatile.theme} har hatt størst spenn mellom høyeste og laveste
+          registrerte nivå, ${formatPercent(volatile.range)}.
+        </p>
+
+      </div>
+    </div>
+  `;
+}
+
+
+function renderThemeTrendChart() {
+
+  const canvas =
+    document.getElementById(
+      "themeTrendChart"
+    );
+
+  if (!canvas) {
+    return;
+  }
+
+
+  const themes =
+    currentThemeResults.filter(
+      row =>
+        selectedTrendThemes
+          .has(row.theme)
+    );
+
+
+  const controls =
+    document.getElementById(
+      "themeTrendPlayback"
+    );
+
+  if (controls) {
+
+    controls.style.display =
+      themes.length === 1
+        ? "flex"
+        : "none";
+  }
+
+
+  const selectionInfo =
+    document.getElementById(
+      "themeTrendSelectionInfo"
+    );
+
+  if (selectionInfo) {
+
+    selectionInfo.textContent =
+      `Visning: ${themes.length} av ${currentThemeResults.length} temaer. ` +
+      (
+        themes.length === 1
+          ? "Deltakernes estimater vises som stiplede mållinjer."
+          : "Velg ett tema for å vise deltakernes estimater og avspillingsmodus."
+      );
+  }
+
+
+  if (themeTrendChart) {
+    themeTrendChart.destroy();
+  }
+
+
+  const visibleCount =
+    themes.length === 1 &&
+    themeTrendVisiblePoints !== null
+      ? Math.max(
+          1,
+          Math.min(
+            themeTrendVisiblePoints,
+            currentHistoryRows.length
+          )
+        )
+      : currentHistoryRows.length;
+
+
+  const labels =
+    currentHistoryRows
+      .slice(
+        0,
+        visibleCount
+      )
+      .map(
+        row =>
+          row["Dato"]
+      );
+
+
+  const datasets = [];
+
+
+  themes.forEach(
+    themeRow => {
+
+      const points =
+        themeHistoryPoints(
+          themeRow
+        )
+        .slice(
+          0,
+          visibleCount
+        );
+
+      datasets.push({
+
+        label:
+          themeRow.theme,
+
+        data:
+          points.map(
+            point =>
+              point.change *
+              100
+          ),
+
+        borderColor:
+          themeColor(
+            themeRow.theme
+          ),
+
+        backgroundColor:
+          themeColor(
+            themeRow.theme
+          ),
+
+        borderWidth:
+          themes.length === 1
+            ? 3
+            : 2,
+
+        pointRadius:
+          themes.length === 1
+            ? 2
+            : 1,
+
+        pointHoverRadius: 5,
+
+        tension: 0.15,
+
+        fill: false,
+
+        kind: "actual",
+        themeRow,
+        rawPoints: points
+      });
+    }
+  );
+
+
+  if (themes.length === 1) {
+
+    const themeRow =
+      themes[0];
+
+    currentParticipants.forEach(
+      person => {
+
+        const prediction =
+          themeRow
+            .personResults[
+              person
+            ]
+            .prediction *
+          100;
+
+        datasets.push({
+
+          label:
+            `${person} ${formatPercent(
+              themeRow
+                .personResults[
+                  person
+                ]
+                .prediction,
+              1
+            )}`,
+
+          data:
+            labels.map(
+              () =>
+                prediction
+            ),
+
+          borderColor:
+            participantColor(
+              person
+            ),
+
+          backgroundColor:
+            participantColor(
+              person
+            ),
+
+          borderWidth: 1.3,
+
+          borderDash: [
+            6,
+            5
+          ],
+
+          pointRadius: 0,
+
+          tension: 0,
+
+          fill: false,
+
+          kind: "estimate",
+          person,
+          themeRow
+        });
+      }
+    );
+  }
+
+
+  themeTrendChart =
+    new Chart(
+      canvas,
+      {
+        type: "line",
+
+        data: {
+          labels,
+          datasets
+        },
+
+        options: {
+
+          responsive: true,
+
+          maintainAspectRatio:
+            false,
+
+          interaction: {
+            mode: "index",
+            intersect: false
+          },
+
+          scales: {
+
+            x: {
+              title: {
+                display: true,
+                text: "Dato"
+              },
+              ticks: {
+                maxTicksLimit: 12
+              }
+            },
+
+            y: {
+              title: {
+                display: true,
+                text:
+                  "Utvikling fra start"
+              },
+              ticks: {
+                callback:
+                  value =>
+                    value + "%"
+              }
+            }
+          },
+
+          plugins: {
+
+            legend: {
+              position: "bottom"
+            },
+
+            tooltip: {
+
+              callbacks: {
+
+                label:
+                  context => {
+
+                    const dataset =
+                      context.dataset;
+
+                    if (
+                      dataset.kind ===
+                      "estimate"
+                    ) {
+
+                      return `${dataset.person}: ${formatPercentPoints(context.parsed.y)}`;
+                    }
+
+                    const rawPoint =
+                      dataset.rawPoints[
+                        context.dataIndex
+                      ];
+
+                    const isPrice =
+                      String(
+                        dataset
+                          .themeRow
+                          .type
+                      )
+                      .trim()
+                      .toLowerCase() ===
+                      "pris";
+
+                    return (
+                      `${dataset.label}: ${formatPercentPoints(context.parsed.y)}` +
+                      (
+                        isPrice &&
+                        Number.isFinite(
+                          rawPoint.raw
+                        )
+                          ? ` · verdi ${formatNumber(rawPoint.raw, 2)}`
+                          : ""
+                      )
+                    );
+                  }
+              }
+            }
+          }
+        }
+      }
+    );
+
+
+  updateThemeTrendPlaybackButtons();
+  renderThemeTrendAnalysis(
+    themes
+  );
+}
+
+
+function updateThemeTrendPlaybackButtons() {
+
+  const play =
+    document.getElementById(
+      "themeTrendPlay"
+    );
+
+  if (play) {
+    play.textContent =
+      themeTrendIsPlaying
+        ? "▶ Spiller…"
+        : (
+            themeTrendVisiblePoints !== null &&
+            themeTrendVisiblePoints <
+              currentHistoryRows.length
+              ? "▶ Fortsett"
+              : "▶ Spill av utvikling"
+          );
+  }
+}
+
+
+function buildThemePodiums() {
+
+  return currentThemeResults.map(
+    themeRow => {
+
+      const ranking =
+        currentParticipants
+          .map(
+            person => ({
+
+              person,
+
+              distance:
+                themeRow
+                  .personResults[
+                    person
+                  ]
+                  .absoluteDistance
+            })
+          )
+          .sort(
+            (a, b) =>
+              a.distance -
+              b.distance
+          );
+
+      return {
+        theme:
+          themeRow.theme,
+        ranking
+      };
+    }
+  );
+}
+
+
+function renderThemePodium() {
+
+  const desktop =
+    document.getElementById(
+      "themePodiumDesktop"
+    );
+
+  const mobile =
+    document.getElementById(
+      "themePodiumMobile"
+    );
+
+  const summary =
+    document.getElementById(
+      "themeMedalSummary"
+    );
+
+  if (
+    !desktop ||
+    !mobile ||
+    !summary
+  ) {
+    return;
+  }
+
+
+  const podiums =
+    buildThemePodiums();
+
+  let table = `
+    <div class="table-wrap podium-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Tema</th>
+            <th>🥇 1. plass</th>
+            <th>🥈 2. plass</th>
+            <th>🥉 3. plass</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  podiums.forEach(
+    item => {
+
+      table += `
+        <tr>
+          <td><strong>${item.theme}</strong></td>
+          ${
+            [0, 1, 2]
+              .map(
+                index => {
+
+                  const entry =
+                    item.ranking[
+                      index
+                    ];
+
+                  return `
+                    <td>
+                      <span class="participant-cell">
+                        ${avatarHtml(
+                          entry.person,
+                          "avatar-sm"
+                        )}
+                        <span>
+                          ${entry.person}
+                          <span class="small">
+                            · ${formatPercent(entry.distance)}
+                          </span>
+                        </span>
+                      </span>
+                    </td>
+                  `;
+                }
+              )
+              .join("")
+          }
+        </tr>
+      `;
+    }
+  );
+
+  table += `
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  desktop.innerHTML =
+    table;
+
+
+  mobile.innerHTML =
+    podiums.map(
+      item => `
+        <div class="theme-podium-mobile-card">
+
+          <div class="theme-podium-mobile-title">
+            ${item.theme}
+          </div>
+
+          ${
+            ["🥇", "🥈", "🥉"]
+              .map(
+                (medal, index) => {
+
+                  const entry =
+                    item.ranking[
+                      index
+                    ];
+
+                  return `
+                    <div class="theme-podium-mobile-row">
+                      <span>${medal}</span>
+                      ${avatarHtml(
+                        entry.person,
+                        "avatar-sm"
+                      )}
+                      <strong>${entry.person}</strong>
+                      <span class="small">
+                        ${formatPercent(entry.distance)} unna
+                      </span>
+                    </div>
+                  `;
+                }
+              )
+              .join("")
+          }
+
+        </div>
+      `
+    )
+    .join("");
+
+
+  const counts =
+    Object.fromEntries(
+      currentParticipants.map(
+        person => [
+          person,
+          [0, 0, 0]
+        ]
+      )
+    );
+
+
+  podiums.forEach(
+    item => {
+
+      [0, 1, 2].forEach(
+        index => {
+
+          counts[
+            item
+              .ranking[
+                index
+              ]
+              .person
+          ][index] += 1;
+        }
+      );
+    }
+  );
+
+
+  summary.innerHTML =
+    currentParticipants
+      .map(
+        person => `
+          <div class="medal-summary-card">
+
+            <div class="medal-summary-name">
+              ${avatarHtml(
+                person,
+                "avatar-sm"
+              )}
+              ${person}
+            </div>
+
+            <div class="medal-summary-count">
+              🥇 ${counts[person][0]}
+              &nbsp; 🥈 ${counts[person][1]}
+              &nbsp; 🥉 ${counts[person][2]}
+            </div>
+
+          </div>
+        `
+      )
+      .join("");
+}
+
+
+function median(
+  values
+) {
+
+  const sorted =
+    [...values]
+      .sort(
+        (a, b) =>
+          a - b
+      );
+
+  const middle =
+    Math.floor(
+      sorted.length / 2
+    );
+
+  if (
+    sorted.length %
+    2
+  ) {
+
+    return sorted[
+      middle
+    ];
+  }
+
+  return (
+    sorted[
+      middle - 1
+    ] +
+    sorted[
+      middle
+    ]
+  ) / 2;
+}
+
+
+function showEstimates() {
+
+  let html = `
+    <h2>
+      🎯 Estimatene
+    </h2>
+
+    <p>
+      Alle deltakernes opprinnelige estimater, sortert fra lavest til høyest.
+      🎯 markerer hvem som ligger nærmest siste publiserte status.
+    </p>
+
+    <div class="estimates-grid">
+  `;
+
+
+  currentThemeResults.forEach(
+    themeRow => {
+
+      const estimates =
+        currentParticipants
+          .map(
+            person => ({
+
+              person,
+
+              prediction:
+                themeRow
+                  .personResults[
+                    person
+                  ]
+                  .prediction,
+
+              distance:
+                themeRow
+                  .personResults[
+                    person
+                  ]
+                  .absoluteDistance
+            })
+          )
+          .sort(
+            (a, b) =>
+              a.prediction -
+              b.prediction
+          );
+
+
+      const predictions =
+        estimates.map(
+          row =>
+            row.prediction
+        );
+
+      const closest =
+        [...estimates]
+          .sort(
+            (a, b) =>
+              a.distance -
+              b.distance
+          )[0];
+
+
+      const isPrice =
+        String(
+          themeRow.type
+        )
+        .trim()
+        .toLowerCase() ===
+        "pris";
+
+      const startValue =
+        parseNumber(
+          currentStartRow[
+            themeRow.theme
+          ]
+        );
+
+
+      html += `
+        <div class="estimate-card">
+
+          <div class="estimate-card-head">
+
+            <div>
+              <div class="estimate-card-title">
+                ${themeRow.theme}
+              </div>
+              <div class="small">
+                ${themeRow.type} · vekt ${formatNumber(themeRow.weight, 1)}×
+              </div>
+            </div>
+
+            <div class="estimate-status">
+              Siste status<br>
+              <strong>${formatPercent(themeRow.actualChange)}</strong>
+            </div>
+
+          </div>
+      `;
+
+
+      estimates.forEach(
+        row => {
+
+          const implied =
+            isPrice &&
+            Number.isFinite(
+              startValue
+            )
+              ? startValue *
+                (
+                  1 +
+                  row.prediction
+                )
+              : null;
+
+          html += `
+            <div class="estimate-row ${
+              row.person ===
+              closest.person
+                ? "closest"
+                : ""
+            }">
+
+              <div>
+                ${
+                  row.person ===
+                  closest.person
+                    ? "🎯"
+                    : ""
+                }
+              </div>
+
+              <div class="participant-cell">
+                ${avatarHtml(
+                  row.person,
+                  "avatar-sm"
+                )}
+                <span>${row.person}</span>
+              </div>
+
+              <div class="estimate-value">
+                ${formatPercent(
+                  row.prediction
+                )}
+                ${
+                  implied !== null
+                    ? `<div class="small">≈ ${formatNumber(implied, 2)}</div>`
+                    : ""
+                }
+              </div>
+
+            </div>
+          `;
+        }
+      );
+
+
+      html += `
+          <div class="estimate-meta">
+            <span>
+              Spenn:
+              <strong>
+                ${formatPercent(
+                  Math.min(
+                    ...predictions
+                  )
+                )}
+                –
+                ${formatPercent(
+                  Math.max(
+                    ...predictions
+                  )
+                )}
+              </strong>
+            </span>
+
+            <span>
+              Median:
+              <strong>
+                ${formatPercent(
+                  median(
+                    predictions
+                  )
+                )}
+              </strong>
+            </span>
+          </div>
+
+        </div>
+      `;
+    }
+  );
+
+
+  html += `
+    </div>
+  `;
+
+
+  document.getElementById(
+    "estimatesSection"
+  ).innerHTML =
+    html;
+}
+
+
 function showThemeResults(
   themeResults
 ) {
@@ -4820,12 +6928,177 @@ function showThemeResults(
 
   html += `
     </div>
+
+
+    <div class="theme-subsection">
+
+      <h3>
+        📈 Temautvikling
+      </h3>
+
+      <p class="muted">
+        Utvikling fra 0 % ved konkurransestart.
+        Velg ett tema for å vise deltakernes estimater og presentasjonsmodus.
+      </p>
+
+      <div class="filter-block">
+        <div class="filter-title">
+          Temaer
+        </div>
+
+        <div
+          class="filter-row"
+          id="themeTrendFilters">
+        </div>
+      </div>
+
+      <div
+        class="theme-trend-controls"
+        id="themeTrendPlayback"
+        style="display:none;">
+
+        <button
+          type="button"
+          class="mode-button"
+          id="themeTrendPlay">
+          ▶ Spill av utvikling
+        </button>
+
+        <button
+          type="button"
+          class="mode-button"
+          id="themeTrendPause">
+          ⏸ Pause
+        </button>
+
+        <button
+          type="button"
+          class="mode-button"
+          id="themeTrendRestart">
+          ↺ Start på nytt
+        </button>
+
+        <label class="small" for="themeTrendSpeed">
+          Tempo:
+        </label>
+
+        <select id="themeTrendSpeed">
+          <option value="slow">Rolig</option>
+          <option value="normal" selected>Normal</option>
+          <option value="fast">Rask</option>
+        </select>
+
+      </div>
+
+      <p
+        class="chart-note"
+        id="themeTrendSelectionInfo">
+      </p>
+
+      <div class="chart-wrap">
+        <canvas id="themeTrendChart"></canvas>
+      </div>
+
+      <div id="themeTrendAnalysis"></div>
+
+    </div>
+
+
+    <div class="theme-subsection">
+
+      <h3>
+        🏅 Tema-pallen
+      </h3>
+
+      <p class="muted">
+        Dagens 1., 2. og 3. plass i hvert tema,
+        basert på siste publiserte status.
+      </p>
+
+      <div id="themePodiumDesktop"></div>
+      <div
+        class="theme-podium-mobile"
+        id="themePodiumMobile">
+      </div>
+
+      <h3 style="margin-top:22px;">
+        Temamedaljer hittil
+      </h3>
+
+      <div
+        class="medal-summary"
+        id="themeMedalSummary">
+      </div>
+
+    </div>
   `;
 
 
   document.getElementById(
     "themeSection"
   ).innerHTML = html;
+
+
+  selectedTrendThemes =
+    new Set(
+      currentThemeResults.map(
+        row =>
+          row.theme
+      )
+    );
+
+  themeTrendVisiblePoints =
+    null;
+
+  renderTrendFilterButtons();
+  renderThemeTrendChart();
+  renderThemePodium();
+
+
+  const play =
+    document.getElementById(
+      "themeTrendPlay"
+    );
+
+  if (play) {
+
+    play.onclick =
+      () =>
+        startThemeTrendAnimation(
+          false
+        );
+  }
+
+
+  const pause =
+    document.getElementById(
+      "themeTrendPause"
+    );
+
+  if (pause) {
+
+    pause.onclick =
+      () => {
+
+        stopThemeTrendAnimation();
+        renderThemeTrendChart();
+      };
+  }
+
+
+  const restart =
+    document.getElementById(
+      "themeTrendRestart"
+    );
+
+  if (restart) {
+
+    restart.onclick =
+      () =>
+        startThemeTrendAnimation(
+          true
+        );
+  }
 }
 
 
@@ -4901,6 +7174,12 @@ async function loadData() {
           dashboardDataUrl
         )
       ]);
+
+
+    currentSimulatorStatus =
+      detectSimulatorStatus(
+        dashboardRaw
+      );
 
 
     const participants =
@@ -5009,15 +7288,18 @@ async function loadData() {
     );
 
 
+    showThemeResults(
+      result.themeResults
+    );
+
+
     createHistorySection();
 
 
     createSimulatorSection();
 
 
-    showThemeResults(
-      result.themeResults
-    );
+    showEstimates();
 
 
     showControlInfo(
@@ -5054,6 +7336,12 @@ async function loadData() {
       result.leaderboard
     );
 
+
+    console.log(
+      "SimulatorStatus:",
+      currentSimulatorStatus
+    );
+
   }
 
   catch (error) {
@@ -5078,6 +7366,7 @@ async function loadData() {
 }
 
 
+initializeTheme();
 loadData();
 
 </script>
