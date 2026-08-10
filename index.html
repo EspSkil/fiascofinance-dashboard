@@ -2344,6 +2344,11 @@ function participantSlug(person) {
 }
 
 
+function participantImagePath(person) {
+  return `assets/participants/${participantSlug(person)}.jpg`;
+}
+
+
 function participantInitials(person) {
 
   return String(person)
