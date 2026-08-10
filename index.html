@@ -1921,6 +1921,12 @@
     }
 
 
+
+    /* v7.6: when hosted by one.com with external sticky navigation */
+    body.ff-external-nav .quick-nav {
+      display: none !important;
+    }
+
   </style>
 </head>
 
@@ -9036,6 +9042,85 @@ async function loadData() {
   }
 }
 
+
+
+// ------------------------------------------------------------
+// one.com / iframe navigation bridge
+//
+// Direct GitHub use:
+//   The dashboard's own sticky menu works exactly as before.
+//
+// Embedded use:
+//   The one.com parent page can announce that it provides an external
+//   sticky menu. The dashboard then hides its internal menu and returns
+//   exact section positions when the parent asks where to scroll.
+// ------------------------------------------------------------
+(function setupParentNavigationBridge() {
+  const allowedTargets = new Set([
+    "leaderboardSection",
+    "chartSection",
+    "themeSection",
+    "historySection",
+    "simulatorSection",
+    "participantSection",
+    "estimatesSection"
+  ]);
+
+  function sendCurrentHeightSoon() {
+    // The auto-height observer below will normally catch this, but these
+    // delayed layout nudges make the transition to external navigation robust.
+    window.dispatchEvent(new Event("resize"));
+    setTimeout(() => window.dispatchEvent(new Event("resize")), 50);
+    setTimeout(() => window.dispatchEvent(new Event("resize")), 250);
+  }
+
+  window.addEventListener("message", function(event) {
+    // Only accept control messages from the window that actually embeds us.
+    if (!window.parent || event.source !== window.parent) return;
+    if (!event.data || typeof event.data !== "object") return;
+
+    if (event.data.type === "fiascofinance-parent-ready") {
+      document.body.classList.add("ff-external-nav");
+      sendCurrentHeightSoon();
+
+      window.parent.postMessage(
+        {
+          type: "fiascofinance-parent-ack",
+          externalNavigation: true
+        },
+        "*"
+      );
+      return;
+    }
+
+    if (event.data.type === "fiascofinance-get-nav-target") {
+      const target = String(event.data.target || "");
+      if (!allowedTargets.has(target)) return;
+
+      const element = document.getElementById(target);
+      if (!element) return;
+
+      // offsetTop relative to the dashboard document. This is what the
+      // parent needs to combine with the iframe's position on fiascofinance.no.
+      const top = Math.max(
+        0,
+        Math.round(
+          element.getBoundingClientRect().top +
+          window.scrollY
+        )
+      );
+
+      window.parent.postMessage(
+        {
+          type: "fiascofinance-nav-target",
+          target: target,
+          top: top
+        },
+        "*"
+      );
+    }
+  });
+})();
 
 // ------------------------------------------------------------
 // one.com / iframe auto-height support
