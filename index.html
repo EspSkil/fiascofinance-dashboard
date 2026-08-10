@@ -8975,6 +8975,95 @@ async function loadData() {
 }
 
 
+// ------------------------------------------------------------
+// one.com / iframe auto-height support
+// Sends the dashboard's current document height to the parent page.
+// The parent can then resize the iframe so the visitor gets one
+// continuous scrollbar instead of scrolling inside the dashboard.
+// ------------------------------------------------------------
+(function setupParentAutoHeight() {
+  let lastHeight = 0;
+  let rafId = null;
+
+  function getDocumentHeight() {
+    const body = document.body;
+    const root = document.documentElement;
+
+    return Math.ceil(Math.max(
+      body ? body.scrollHeight : 0,
+      body ? body.offsetHeight : 0,
+      root ? root.scrollHeight : 0,
+      root ? root.offsetHeight : 0,
+      root ? root.clientHeight : 0
+    ));
+  }
+
+  function sendHeight(force = false) {
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+    }
+
+    rafId = requestAnimationFrame(() => {
+      rafId = null;
+      const height = getDocumentHeight();
+
+      if (!force && Math.abs(height - lastHeight) < 2) {
+        return;
+      }
+
+      lastHeight = height;
+
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage(
+          {
+            type: "fiascofinance-dashboard-height",
+            height: height
+          },
+          "*"
+        );
+      }
+    });
+  }
+
+  // Initial measurements: once immediately and again after fonts/images/layout settle.
+  sendHeight(true);
+  window.addEventListener("load", () => {
+    sendHeight(true);
+    setTimeout(() => sendHeight(true), 250);
+    setTimeout(() => sendHeight(true), 1000);
+  });
+
+  // Browser/device width changes can alter wrapping and therefore total height.
+  window.addEventListener("resize", () => sendHeight(true));
+
+  // Watch the complete document for real layout-size changes.
+  if ("ResizeObserver" in window) {
+    const resizeObserver = new ResizeObserver(() => sendHeight());
+    resizeObserver.observe(document.documentElement);
+    if (document.body) resizeObserver.observe(document.body);
+  }
+
+  // Dynamic dashboard rendering, season switches, charts and profile changes
+  // can change height without a window resize.
+  if ("MutationObserver" in window) {
+    const mutationObserver = new MutationObserver(() => sendHeight());
+    mutationObserver.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: true
+    });
+  }
+
+  // Safety net for delayed chart/image rendering.
+  let checks = 0;
+  const timer = setInterval(() => {
+    sendHeight();
+    checks += 1;
+    if (checks >= 20) clearInterval(timer);
+  }, 500);
+})();
+
 initializeTheme();
 loadData();
 
