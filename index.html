@@ -271,6 +271,23 @@
       overflow-x: auto;
     }
 
+    /* Participantnavn og avatarer skal starte på samme venstrekant i tabellene. */
+    #liveLeaderboardTable th:nth-child(2),
+    #liveLeaderboardTable td:nth-child(2),
+    #simLeaderboard th:nth-child(2),
+    #simLeaderboard td:nth-child(2),
+    .podium-table th:nth-child(n+2),
+    .podium-table td:nth-child(n+2) {
+      text-align: left;
+    }
+
+    #liveLeaderboardTable .participant-cell,
+    #simLeaderboard .participant-cell,
+    .podium-table .participant-cell {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
     .chart-panel,
     .sim-panel {
       background: white;
@@ -3486,6 +3503,10 @@ function renderStackedChart() {
 
         options: {
 
+          /* Chart.js skal ikke animere akser eller estimatlinjer på nytt for
+             hvert datapunkt. Bare selve temakurven får flere verdier. */
+          animation: false,
+
           responsive: true,
 
           maintainAspectRatio:
@@ -6207,6 +6228,39 @@ function renderThemeTrendChart() {
   }
 
 
+  /* Presentasjonsmodus: både akser og estimatlinjer skal være helt faste.
+     Beregn derfor Y-området fra HELE temahistorikken + alle estimater, ikke bare
+     fra punktene som hittil er synlige i avspillingen. */
+  const allTrendValues = [];
+
+  themes.forEach(themeRow => {
+    themeHistoryPoints(themeRow).forEach(point => {
+      if (Number.isFinite(point.change)) {
+        allTrendValues.push(point.change * 100);
+      }
+    });
+  });
+
+  if (themes.length === 1) {
+    const themeRow = themes[0];
+    currentParticipants.forEach(person => {
+      const prediction = themeRow.personResults[person].prediction * 100;
+      if (Number.isFinite(prediction)) {
+        allTrendValues.push(prediction);
+      }
+    });
+  }
+
+  allTrendValues.push(0);
+
+  const trendMin = Math.min(...allTrendValues);
+  const trendMax = Math.max(...allTrendValues);
+  const trendSpan = Math.max(1, trendMax - trendMin);
+  const trendPadding = Math.max(2, trendSpan * 0.08);
+  const fixedTrendYMin = Math.floor((trendMin - trendPadding) / 5) * 5;
+  const fixedTrendYMax = Math.ceil((trendMax + trendPadding) / 5) * 5;
+
+
   themeTrendChart =
     new Chart(
       canvas,
@@ -6243,6 +6297,8 @@ function renderThemeTrendChart() {
             },
 
             y: {
+              min: fixedTrendYMin,
+              max: fixedTrendYMax,
               title: {
                 display: true,
                 text:
