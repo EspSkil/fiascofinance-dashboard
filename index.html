@@ -979,6 +979,31 @@
       color: #dbe2e8;
     }
 
+    /* Mobil-leaderboards bruker kort med eksplisitt hvit bakgrunn i mobil-CSS.
+       Overstyr dette i dark mode slik at tekst og bakgrunn alltid matcher. */
+    @media (max-width: 800px) {
+      body.dark-mode #liveLeaderboardTable tr,
+      body.dark-mode #simLeaderboard tr {
+        background: #181e25;
+        border-color: #303945;
+        color: #e8edf2;
+      }
+
+      body.dark-mode #liveLeaderboardTable td,
+      body.dark-mode #simLeaderboard td {
+        color: #e8edf2;
+      }
+
+      body.dark-mode #simLeaderboard td:nth-child(3)::before {
+        color: #aeb7c2;
+      }
+
+      body.dark-mode #liveLeaderboardTable tr.rank-1,
+      body.dark-mode #simLeaderboard tr.rank-1 {
+        background: #203022;
+      }
+    }
+
     @media (max-width: 1100px) {
       body {
         max-width: 100%;
@@ -6048,12 +6073,10 @@ function renderThemeTrendChart() {
       : currentHistoryRows.length;
 
 
+  /* X-aksen skal være statisk under avspilling. Hele perioden vises fra start,
+     mens selve temakurven gradvis fylles inn med nye datapunkter. */
   const labels =
     currentHistoryRows
-      .slice(
-        0,
-        visibleCount
-      )
       .map(
         row =>
           row["Dato"]
@@ -6069,10 +6092,6 @@ function renderThemeTrendChart() {
       const points =
         themeHistoryPoints(
           themeRow
-        )
-        .slice(
-          0,
-          visibleCount
         );
 
       datasets.push({
@@ -6082,9 +6101,10 @@ function renderThemeTrendChart() {
 
         data:
           points.map(
-            point =>
-              point.change *
-              100
+            (point, index) =>
+              index < visibleCount
+                ? point.change * 100
+                : null
           ),
 
         borderColor:
