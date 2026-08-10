@@ -1927,6 +1927,12 @@
       display: none !important;
     }
 
+
+.ff-section-top-btn{margin-left:auto;flex:0 0 auto;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:999px;padding:6px 10px;font:inherit;font-size:12px;font-weight:700;line-height:1;cursor:pointer;white-space:nowrap}
+.ff-section-heading-row{display:flex;align-items:center;gap:10px}
+.ff-section-heading-row>:first-child{min-width:0}
+@media(max-width:700px){.ff-section-top-btn{padding:6px 9px;font-size:11px}}
+
   </style>
 </head>
 
@@ -9043,6 +9049,47 @@ async function loadData() {
 }
 
 
+
+
+// v7.7: compact back-to-top buttons on major sections
+(function setupSectionTopButtons(){
+  const ids=["leaderboardSection","chartSection","themeSection","themeTrendSection","themePodiumSection","historySection","simulatorSection","estimatesSection","participantSection","historicalSection"];
+
+  function goTop(){
+    if(window.parent && window.parent!==window){
+      window.parent.postMessage({type:"fiascofinance-scroll-top"},"*");
+    }else{
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+  }
+
+  function add(section){
+    if(!section || section.querySelector(".ff-section-top-btn")) return;
+    const heading=section.querySelector("h2,h3,.section-title,.section-heading");
+    if(!heading) return;
+    let row=heading.parentElement;
+    if(!row || row===section || row.children.length>4){
+      row=document.createElement("div");
+      row.className="ff-section-heading-row";
+      heading.parentNode.insertBefore(row,heading);
+      row.appendChild(heading);
+    }else{
+      row.classList.add("ff-section-heading-row");
+    }
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="ff-section-top-btn";
+    b.textContent="↑ Topp";
+    b.setAttribute("aria-label","Til toppen");
+    b.addEventListener("click",goTop);
+    row.appendChild(b);
+  }
+
+  function enhance(){ids.forEach(id=>add(document.getElementById(id)));}
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",enhance,{once:true});
+  else enhance();
+  new MutationObserver(enhance).observe(document.documentElement,{childList:true,subtree:true});
+})();
 
 // ------------------------------------------------------------
 // one.com / iframe navigation bridge
