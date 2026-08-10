@@ -1471,6 +1471,7 @@ let selectedTrendThemes = new Set();
 let themeTrendVisiblePoints = null;
 let themeTrendTimer = null;
 let themeTrendIsPlaying = false;
+let themeTrendSimulationMode = false;
 
 
 const chartColors = [
@@ -5516,6 +5517,8 @@ function renderTrendFilterButtons() {
 
         stopThemeTrendAnimation();
 
+        themeTrendSimulationMode = false;
+
         selectedTrendThemes =
           new Set(
             currentThemeResults.map(
@@ -5552,13 +5555,50 @@ function renderTrendFilterButtons() {
           new Set();
 
         themeTrendVisiblePoints =
-          null;
+          themeTrendSimulationMode
+            ? 0
+            : null;
 
         renderTrendFilterButtons();
         renderThemeTrendChart();
       },
 
       true
+    )
+  );
+
+
+  container.appendChild(
+
+    createFilterButton(
+
+      "🎬 Simulering",
+
+      themeTrendSimulationMode,
+
+      () => {
+
+        stopThemeTrendAnimation();
+
+        themeTrendSimulationMode =
+          !themeTrendSimulationMode;
+
+        /*
+          I presentasjonsmodus skal ingen faktisk utvikling røpes før
+          brukeren trykker Spill av. Dersom flere temaer allerede er valgt,
+          rydder vi derfor utvalget og lar brukeren velge ett tema på nytt.
+        */
+        if (themeTrendSimulationMode) {
+          selectedTrendThemes =
+            new Set();
+          themeTrendVisiblePoints = 0;
+        } else {
+          themeTrendVisiblePoints = null;
+        }
+
+        renderTrendFilterButtons();
+        renderThemeTrendChart();
+      }
     )
   );
 
@@ -5579,22 +5619,42 @@ function renderTrendFilterButtons() {
 
             stopThemeTrendAnimation();
 
-            if (
-              selectedTrendThemes
-                .has(row.theme)
-            ) {
+            if (themeTrendSimulationMode) {
 
-              selectedTrendThemes
-                .delete(row.theme);
+              /* Presentasjonsmodus viser kun ett tema om gangen. */
+              if (
+                selectedTrendThemes
+                  .has(row.theme)
+              ) {
+                selectedTrendThemes =
+                  new Set();
+              } else {
+                selectedTrendThemes =
+                  new Set([row.theme]);
+              }
+
+              /* 0 betyr: faste akser + estimatlinjer, men ingen fasitkurve. */
+              themeTrendVisiblePoints = 0;
 
             } else {
 
-              selectedTrendThemes
-                .add(row.theme);
-            }
+              if (
+                selectedTrendThemes
+                  .has(row.theme)
+              ) {
 
-            themeTrendVisiblePoints =
-              null;
+                selectedTrendThemes
+                  .delete(row.theme);
+
+              } else {
+
+                selectedTrendThemes
+                  .add(row.theme);
+              }
+
+              themeTrendVisiblePoints =
+                null;
+            }
 
             renderTrendFilterButtons();
             renderThemeTrendChart();
@@ -5655,6 +5715,74 @@ function themeTrendSpeedMs() {
 }
 
 
+
+function updateThemeTrendPlaybackFrame() {
+
+  if (!themeTrendChart) {
+    return;
+  }
+
+  const themes =
+    currentThemeResults.filter(
+      row =>
+        selectedTrendThemes
+          .has(row.theme)
+    );
+
+  if (themes.length !== 1) {
+    return;
+  }
+
+  const themeRow = themes[0];
+
+  const points =
+    themeHistoryPoints(
+      themeRow
+    );
+
+  const visibleCount =
+    Math.max(
+      0,
+      Math.min(
+        themeTrendVisiblePoints ?? 0,
+        points.length
+      )
+    );
+
+  /*
+    Viktig for presentasjonsmodus:
+    Chart-instansen beholdes uendret gjennom hele avspillingen.
+    Akser, labels og deltakernes estimatlinjer tegnes derfor bare én gang.
+    På hvert steg oppdateres KUN datasettet for den faktiske temakurven.
+  */
+  const actualDataset =
+    themeTrendChart.data.datasets.find(
+      dataset =>
+        dataset.kind === "actual"
+    );
+
+  if (!actualDataset) {
+    return;
+  }
+
+  actualDataset.data =
+    points.map(
+      (point, index) =>
+        index < visibleCount
+          ? point.change * 100
+          : null
+    );
+
+  /*
+    "none" er avgjørende her: ingen Chart.js-animasjon skal trigges når
+    neste datapunkt legges til. Dermed kan estimatlinjene ikke hoppe fra 0.
+  */
+  themeTrendChart.update("none");
+
+  updateThemeTrendPlaybackButtons();
+}
+
+
 function startThemeTrendAnimation(
   restart = false
 ) {
@@ -5709,7 +5837,7 @@ function startThemeTrendAnimation(
           stopThemeTrendAnimation();
         }
 
-        renderThemeTrendChart();
+        updateThemeTrendPlaybackFrame();
 
       },
       themeTrendSpeedMs()
@@ -5741,6 +5869,29 @@ function renderThemeTrendAnalysis(
           </div>
           <p class="analysis-text">
             Velg minst ett tema for å se utviklingen.
+          </p>
+        </div>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  if (
+    themeTrendSimulationMode &&
+    themes.length === 1 &&
+    themeTrendVisiblePoints === 0
+  ) {
+
+    box.innerHTML = `
+      <div class="analysis-box">
+        <div class="analysis-content">
+          <div class="analysis-title">
+            🎬 Klar for simulering
+          </div>
+          <p class="analysis-text">
+            Estimatene ligger klare. Trykk Spill av utvikling for å avsløre årets faktiske utvikling.
           </p>
         </div>
       </div>
@@ -6074,12 +6225,20 @@ function renderThemeTrendChart() {
   if (selectionInfo) {
 
     selectionInfo.textContent =
-      `Visning: ${themes.length} av ${currentThemeResults.length} temaer. ` +
-      (
-        themes.length === 1
-          ? "Deltakernes estimater vises som stiplede mållinjer."
-          : "Velg ett tema for å vise deltakernes estimater og avspillingsmodus."
-      );
+      themeTrendSimulationMode
+        ? (
+            themes.length === 1
+              ? `🎬 Simulering: ${themes[0].theme}. Estimatlinjene er faste; fasitkurven avsløres først ved avspilling.`
+              : "🎬 Simulering er aktiv. Velg ett tema for å gjøre presentasjonen klar."
+          )
+        : (
+            `Visning: ${themes.length} av ${currentThemeResults.length} temaer. ` +
+            (
+              themes.length === 1
+                ? "Deltakernes estimater vises som stiplede mållinjer."
+                : "Velg ett tema for å vise deltakernes estimater og avspillingsmodus."
+            )
+          );
   }
 
 
@@ -6092,7 +6251,7 @@ function renderThemeTrendChart() {
     themes.length === 1 &&
     themeTrendVisiblePoints !== null
       ? Math.max(
-          1,
+          0,
           Math.min(
             themeTrendVisiblePoints,
             currentHistoryRows.length
@@ -6281,6 +6440,12 @@ function renderThemeTrendChart() {
 
         options: {
 
+          /*
+            Avspillingen styres manuelt. Chart.js skal aldri animere hele
+            grafen eller de faste estimatlinjene mellom datapunktene.
+          */
+          animation: false,
+
           responsive: true,
 
           maintainAspectRatio:
@@ -6398,6 +6563,7 @@ function updateThemeTrendPlaybackButtons() {
         ? "▶ Spiller…"
         : (
             themeTrendVisiblePoints !== null &&
+            themeTrendVisiblePoints > 0 &&
             themeTrendVisiblePoints <
               currentHistoryRows.length
               ? "▶ Fortsett"
@@ -7121,6 +7287,8 @@ function showThemeResults(
     "themeSection"
   ).innerHTML = html;
 
+
+  themeTrendSimulationMode = false;
 
   selectedTrendThemes =
     new Set(
