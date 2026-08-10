@@ -9056,7 +9056,9 @@ async function loadData() {
   const ids=["leaderboardSection","chartSection","themeSection","themeTrendSection","themePodiumSection","historySection","simulatorSection","estimatesSection","participantSection","historicalSection"];
 
   function goTop(){
-    if(window.parent && window.parent!==window){
+    if(typeof window.ffScrollDashboardTop==="function"){
+      window.ffScrollDashboardTop();
+    }else if(window.parent && window.parent!==window){
       window.parent.postMessage({type:"fiascofinance-scroll-top"},"*");
     }else{
       window.scrollTo({top:0,behavior:"smooth"});
@@ -9092,81 +9094,177 @@ async function loadData() {
 })();
 
 // ------------------------------------------------------------
-// one.com / iframe navigation bridge
+// v7.8: robust one.com / iframe navigation bridge
 //
-// Direct GitHub use:
-//   The dashboard's own sticky menu works exactly as before.
-//
-// Embedded use:
-//   The one.com parent page can announce that it provides an external
-//   sticky menu. The dashboard then hides its internal menu and returns
-//   exact section positions when the parent asks where to scroll.
+// Key change:
+// - The dashboard proactively sends a complete map of section positions
+//   to the parent page after load and whenever layout changes.
+// - The parent no longer needs a request/response round-trip for every click.
+// - The old request-based method is still supported as a fallback.
+// - "↑ Topp" sends an explicit scroll-to-dashboard-top command.
 // ------------------------------------------------------------
-(function setupParentNavigationBridge() {
-  const allowedTargets = new Set([
-    "leaderboardSection",
-    "chartSection",
-    "themeSection",
-    "historySection",
-    "simulatorSection",
-    "participantSection",
-    "estimatesSection"
-  ]);
+(function setupRobustParentNavigationBridge() {
+  const navTargets = {
+    leaderboardSection: "Live",
+    chartSection: "Analyse",
+    themeSection: "Tema",
+    historySection: "Race",
+    simulatorSection: "Hva hvis?",
+    participantSection: "Deltaker",
+    estimatesSection: "Estimat"
+  };
 
-  function sendCurrentHeightSoon() {
-    // The auto-height observer below will normally catch this, but these
-    // delayed layout nudges make the transition to external navigation robust.
+  let externalNavigationEnabled = false;
+  let lastMapJson = "";
+  let mapRaf = null;
+
+  function getTargetTop(id) {
+    const el = document.getElementById(id);
+    if (!el) return null;
+
+    return Math.max(
+      0,
+      Math.round(el.getBoundingClientRect().top + window.scrollY)
+    );
+  }
+
+  function buildNavigationMap() {
+    const targets = {};
+
+    Object.keys(navTargets).forEach((id) => {
+      const top = getTargetTop(id);
+      if (Number.isFinite(top)) {
+        targets[id] = top;
+      }
+    });
+
+    return targets;
+  }
+
+  function sendNavigationMap(force = false) {
+    if (!window.parent || window.parent === window) return;
+
+    if (mapRaf) cancelAnimationFrame(mapRaf);
+
+    mapRaf = requestAnimationFrame(() => {
+      mapRaf = null;
+
+      const targets = buildNavigationMap();
+      const json = JSON.stringify(targets);
+
+      if (!force && json === lastMapJson) return;
+      lastMapJson = json;
+
+      window.parent.postMessage(
+        {
+          type: "fiascofinance-navigation-map",
+          targets: targets
+        },
+        "*"
+      );
+    });
+  }
+
+  function enableExternalNavigation() {
+    externalNavigationEnabled = true;
+    document.body.classList.add("ff-external-nav");
+
+    // Layout can change when the internal quick-nav is hidden.
+    setTimeout(() => sendNavigationMap(true), 0);
+    setTimeout(() => sendNavigationMap(true), 100);
+    setTimeout(() => sendNavigationMap(true), 350);
     window.dispatchEvent(new Event("resize"));
-    setTimeout(() => window.dispatchEvent(new Event("resize")), 50);
-    setTimeout(() => window.dispatchEvent(new Event("resize")), 250);
+
+    window.parent.postMessage(
+      {
+        type: "fiascofinance-parent-ack",
+        externalNavigation: true
+      },
+      "*"
+    );
+  }
+
+  function sendOneTarget(target) {
+    if (!Object.prototype.hasOwnProperty.call(navTargets, target)) return;
+
+    const top = getTargetTop(target);
+    if (!Number.isFinite(top)) return;
+
+    window.parent.postMessage(
+      {
+        type: "fiascofinance-nav-target",
+        target: target,
+        top: top
+      },
+      "*"
+    );
   }
 
   window.addEventListener("message", function(event) {
-    // Only accept control messages from the window that actually embeds us.
     if (!window.parent || event.source !== window.parent) return;
     if (!event.data || typeof event.data !== "object") return;
 
     if (event.data.type === "fiascofinance-parent-ready") {
-      document.body.classList.add("ff-external-nav");
-      sendCurrentHeightSoon();
-
-      window.parent.postMessage(
-        {
-          type: "fiascofinance-parent-ack",
-          externalNavigation: true
-        },
-        "*"
-      );
+      enableExternalNavigation();
       return;
     }
 
+    // Backward-compatible fallback for the earlier one.com embed code.
     if (event.data.type === "fiascofinance-get-nav-target") {
-      const target = String(event.data.target || "");
-      if (!allowedTargets.has(target)) return;
+      sendOneTarget(String(event.data.target || ""));
+      return;
+    }
 
-      const element = document.getElementById(target);
-      if (!element) return;
-
-      // offsetTop relative to the dashboard document. This is what the
-      // parent needs to combine with the iframe's position on fiascofinance.no.
-      const top = Math.max(
-        0,
-        Math.round(
-          element.getBoundingClientRect().top +
-          window.scrollY
-        )
-      );
-
-      window.parent.postMessage(
-        {
-          type: "fiascofinance-nav-target",
-          target: target,
-          top: top
-        },
-        "*"
-      );
+    if (event.data.type === "fiascofinance-request-navigation-map") {
+      sendNavigationMap(true);
     }
   });
+
+  // Publish the map proactively as soon as the dashboard is usable.
+  function initialPublish() {
+    sendNavigationMap(true);
+    setTimeout(() => sendNavigationMap(true), 150);
+    setTimeout(() => sendNavigationMap(true), 600);
+    setTimeout(() => sendNavigationMap(true), 1500);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initialPublish, { once: true });
+  } else {
+    initialPublish();
+  }
+
+  window.addEventListener("load", initialPublish);
+  window.addEventListener("resize", () => sendNavigationMap(true));
+
+  // Season switches, charts, participant cards etc. can move section positions.
+  if ("ResizeObserver" in window) {
+    const ro = new ResizeObserver(() => sendNavigationMap());
+    ro.observe(document.documentElement);
+    if (document.body) ro.observe(document.body);
+  }
+
+  if ("MutationObserver" in window) {
+    const mo = new MutationObserver(() => sendNavigationMap());
+    mo.observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: true
+    });
+  }
+
+  // Small public helper used by the v7.7 "↑ Topp" buttons.
+  window.ffScrollDashboardTop = function() {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage(
+        { type: "fiascofinance-scroll-top" },
+        "*"
+      );
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 })();
 
 // ------------------------------------------------------------
