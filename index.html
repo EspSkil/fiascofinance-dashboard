@@ -148,11 +148,13 @@
     }
 
     #leaderboardSection,
+    #monthSection,
     #chartSection,
     #themeSection,
     #historySection,
     #simulatorSection,
-    #estimatesSection {
+    #estimatesSection,
+    #investorSection {
       scroll-margin-top: 72px;
     }
 
@@ -1933,10 +1935,772 @@
 .ff-section-heading-row>:first-child{min-width:0}
 @media(max-width:700px){.ff-section-top-btn{padding:6px 9px;font-size:11px}}
 
+
+    /* TEST v1: simple FF access gate */
+    body.ff-auth-locked > :not(#ffAccessGate):not(script) {
+      display: none !important;
+    }
+
+    #ffAccessGate {
+      min-height: calc(100vh - 60px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    body:not(.ff-auth-locked) #ffAccessGate {
+      display: none !important;
+    }
+
+    .ff-access-card {
+      width: min(420px, 100%);
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    .ff-access-logo {
+      width: 86px;
+      height: 68px;
+      object-fit: contain;
+      margin-bottom: 10px;
+    }
+
+    .ff-access-card h1 {
+      margin: 6px 0 8px;
+      font-size: 28px;
+    }
+
+    .ff-access-card p {
+      margin: 0 0 18px;
+      color: #666;
+      line-height: 1.45;
+    }
+
+    .ff-access-input {
+      width: 150px;
+      max-width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #bbb;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ff-access-button {
+      display: block;
+      width: 100%;
+      margin-top: 14px;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 10px;
+      background: #222;
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .ff-access-error {
+      min-height: 20px;
+      margin-top: 10px;
+      color: #b00020;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    body.dark-mode .ff-access-card {
+      background: #181e25;
+      border-color: #303945;
+      color: #e8edf2;
+    }
+
+    body.dark-mode .ff-access-card p {
+      color: #aeb7c2;
+    }
+
+    body.dark-mode .ff-access-input {
+      background: #222a33;
+      color: #e8edf2;
+      border-color: #46515e;
+    }
+
+    @media (max-width: 700px) {
+      #ffAccessGate {
+        min-height: calc(100vh - 32px);
+        padding: 16px;
+      }
+
+      .ff-access-card {
+        padding: 24px 20px;
+      }
+
+      .ff-access-card h1 {
+        font-size: 25px;
+      }
+    }
+
+
+    /* TEST v2: monthly report */
+    .month-report-panel {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      padding: 18px;
+      margin-top: 16px;
+    }
+
+    .month-report-period {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .month-period-main {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .month-period-note {
+      color: #666;
+      font-size: 12px;
+    }
+
+    .month-report-top {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .month-card {
+      background: #f7f7f7;
+      border: 1px solid #e2e2e2;
+      border-radius: 12px;
+      padding: 13px;
+      min-width: 0;
+    }
+
+    .month-card-label {
+      color: #666;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .month-person {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .month-person img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex: 0 0 44px;
+      border: 1px solid #ddd;
+    }
+
+    .month-person-name {
+      font-weight: 800;
+      font-size: 18px;
+      line-height: 1.1;
+    }
+
+    .month-main-value {
+      margin-top: 7px;
+      font-weight: 800;
+      font-size: 17px;
+    }
+
+    .month-subline {
+      margin-top: 4px;
+      color: #666;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .month-report-lower {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .month-moves {
+      display: grid;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .month-move-row {
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      padding: 7px 0;
+      border-top: 1px solid #e8e8e8;
+    }
+
+    .month-move-row:first-child {
+      border-top: 0;
+    }
+
+    .month-move-theme {
+      font-weight: 700;
+      min-width: 0;
+    }
+
+    .month-move-value {
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .month-impact-theme {
+      font-size: 18px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .month-summary {
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-left: 4px solid #444;
+      background: #f8f8f8;
+      border-radius: 10px;
+      line-height: 1.5;
+    }
+
+    .month-summary strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    body.dark-mode .month-report-panel {
+      background: #181e25;
+      border-color: #303945;
+    }
+
+    body.dark-mode .month-card {
+      background: #222a33;
+      border-color: #303945;
+    }
+
+    body.dark-mode .month-card-label,
+    body.dark-mode .month-subline,
+    body.dark-mode .month-period-note {
+      color: #aeb7c2;
+    }
+
+    body.dark-mode .month-person img {
+      border-color: #46515e;
+    }
+
+    body.dark-mode .month-move-row {
+      border-color: #303945;
+    }
+
+    body.dark-mode .month-summary {
+      background: #171d24;
+      border-color: #64707d;
+    }
+
+    @media (max-width: 800px) {
+      .month-report-panel {
+        padding: 13px;
+      }
+
+      .month-report-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+      }
+
+      .month-card-leader {
+        grid-column: 1 / -1;
+      }
+
+      .month-person img {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+      }
+
+      .month-person-name {
+        font-size: 17px;
+      }
+
+      .month-main-value {
+        font-size: 16px;
+      }
+
+      .month-report-lower {
+        grid-template-columns: 1fr;
+        gap: 9px;
+      }
+
+      .month-summary {
+        margin-top: 9px;
+        padding: 12px 13px;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .month-report-period {
+        gap: 4px;
+        margin-bottom: 10px;
+      }
+
+      .month-period-note {
+        width: 100%;
+      }
+
+      .month-card {
+        padding: 10px;
+      }
+
+      .month-card-label {
+        margin-bottom: 6px;
+      }
+
+      .month-person {
+        gap: 7px;
+      }
+
+      .month-person img {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+      }
+
+      .month-person-name {
+        font-size: 15px;
+      }
+
+      .month-main-value {
+        margin-top: 5px;
+        font-size: 14px;
+      }
+
+      .month-subline {
+        font-size: 11px;
+      }
+    }
+
+
+    /* TEST v2.1: forward-looking lead pressure box */
+    .month-lead-outlook {
+      margin-top: 10px;
+      padding: 14px 16px;
+      border: 1px solid #e2e2e2;
+      background: #f7f7f7;
+      border-radius: 10px;
+      line-height: 1.5;
+    }
+
+    .month-lead-outlook strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    body.dark-mode .month-lead-outlook {
+      background: #222a33;
+      border-color: #303945;
+    }
+
+    @media (max-width: 800px) {
+      .month-lead-outlook {
+        margin-top: 9px;
+        padding: 12px 13px;
+        font-size: 14px;
+      }
+    }
+
+
+    /* TEST v3: Investor */
+    .investor-panel {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      padding: 18px;
+      margin-top: 16px;
+    }
+
+    .investor-tabs,
+    .investor-person-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 2px;
+    }
+
+    .investor-tabs::-webkit-scrollbar,
+    .investor-person-tabs::-webkit-scrollbar { display: none; }
+
+    .investor-tab,
+    .investor-person-tab {
+      flex: 0 0 auto;
+      border: 1px solid #bbb;
+      background: #fff;
+      color: #222;
+      border-radius: 999px;
+      padding: 8px 13px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .investor-tab.active,
+    .investor-person-tab.active {
+      background: #222;
+      color: #fff;
+      border-color: #222;
+    }
+
+    .investor-note {
+      color: #666;
+      font-size: 13px;
+      line-height: 1.45;
+      margin: 12px 0 14px;
+    }
+
+    .investor-leaderboard {
+      display: grid;
+      gap: 9px;
+    }
+
+    .investor-row {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 11px;
+      background: #f8f8f8;
+    }
+
+    .investor-row.rank-1 {
+      border-color: #c8ad62;
+      background: #fbf8ee;
+    }
+
+    .investor-person {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .investor-person img,
+    .investor-person-tab img {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex: 0 0 34px;
+      border: 1px solid #ddd;
+    }
+
+    .investor-person-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding-left: 7px;
+    }
+
+    .investor-person-tab img {
+      width: 24px;
+      height: 24px;
+      flex-basis: 24px;
+    }
+
+    .investor-name { font-weight: 800; }
+
+    .investor-value {
+      text-align: right;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .investor-return {
+      color: #666;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .investor-detail {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .investor-detail-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 11px;
+      padding: 13px;
+      background: #f8f8f8;
+    }
+
+    .investor-detail-title {
+      font-size: 12px;
+      color: #666;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .investor-detail-main {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .investor-detail-text {
+      margin-top: 4px;
+      color: #666;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .investor-breakdown {
+      margin-top: 18px;
+    }
+
+    .investor-breakdown h3 { margin-bottom: 10px; }
+
+    .investor-long { color: #16820d; font-weight: 800; }
+    .investor-short { color: #b00020; font-weight: 800; }
+    .investor-flat { color: #666; font-weight: 800; }
+
+    body.dark-mode .investor-panel,
+    body.dark-mode .investor-row,
+    body.dark-mode .investor-detail-card {
+      background: #181e25;
+      border-color: #303945;
+    }
+
+    body.dark-mode .investor-row.rank-1 {
+      background: #262719;
+      border-color: #8f762f;
+    }
+
+    body.dark-mode .investor-note,
+    body.dark-mode .investor-return,
+    body.dark-mode .investor-detail-title,
+    body.dark-mode .investor-detail-text {
+      color: #aeb7c2;
+    }
+
+    body.dark-mode .investor-tab,
+    body.dark-mode .investor-person-tab {
+      background: #1b222a;
+      color: #e8edf2;
+      border-color: #46515e;
+    }
+
+    body.dark-mode .investor-tab.active,
+    body.dark-mode .investor-person-tab.active {
+      background: #e8edf2;
+      color: #11151a;
+      border-color: #e8edf2;
+    }
+
+    @media (max-width: 800px) {
+      .investor-panel { padding: 13px; }
+      .investor-detail { grid-template-columns: 1fr; }
+      .investor-row {
+        grid-template-columns: 34px minmax(0, 1fr) auto;
+        padding: 10px;
+      }
+      .investor-person img {
+        width: 30px;
+        height: 30px;
+        flex-basis: 30px;
+      }
+    }
+
+
+    /* TEST v3.1: direct GitHub desktop navigation */
+    @media (min-width: 1101px) {
+      .quick-nav {
+        display: block;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        margin: 8px 0 18px;
+        padding: 3px 0;
+        background: rgba(250,250,250,0.94);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+      }
+
+      body.dark-mode .quick-nav {
+        background: rgba(17,21,26,0.94);
+      }
+    }
+
+
+    .investor-info-button {
+      flex: 0 0 auto;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid #bbb;
+      background: #fff;
+      color: #222;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .investor-info-box {
+      display: none;
+      margin: 10px 0 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #eef1f4;
+      border: 1px solid #d9dee4;
+      color: #4f5964;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .investor-info-box.open { display: block; }
+    .investor-year-summary { margin-top: 14px; }
+
+    body.dark-mode .investor-info-button {
+      background: #1b222a;
+      color: #e8edf2;
+      border-color: #46515e;
+    }
+
+    body.dark-mode .investor-info-box {
+      background: #222a33;
+      border-color: #303945;
+      color: #aeb7c2;
+    }
+
   </style>
 </head>
 
-<body>
+<body class="ff-auth-locked">
+
+  <div id="ffAccessGate" aria-label="FF Championship adgang">
+    <div class="ff-access-card">
+      <img class="ff-access-logo" src="assets/logo.jpg" alt="Fiasco Finance">
+      <h1>🏆 FF Championship</h1>
+      <p>Privat konkurranseside. Skriv inn adgangskoden for å åpne dashboardet.</p>
+
+      <form id="ffAccessForm">
+        <input
+          id="ffAccessCode"
+          class="ff-access-input"
+          type="password"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          maxlength="4"
+          autocomplete="off"
+          aria-label="Adgangskode"
+          autofocus>
+        <button class="ff-access-button" type="submit">Åpne dashboard</button>
+        <div id="ffAccessError" class="ff-access-error" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  (function setupFFAccessGate() {
+    const STORAGE_KEY = "ff-championship-access-code-v2";
+    let currentAccessCode = null;
+    let accessConfigReady = false;
+
+    function notifyLayoutChanged() {
+      window.dispatchEvent(new Event("resize"));
+      setTimeout(() => window.dispatchEvent(new Event("resize")), 100);
+      setTimeout(() => window.dispatchEvent(new Event("resize")), 400);
+    }
+
+    function unlockDashboard(rememberCode = true) {
+      if (rememberCode && currentAccessCode) {
+        try {
+          localStorage.setItem(STORAGE_KEY, currentAccessCode);
+        } catch (e) {}
+      }
+
+      document.body.classList.remove("ff-auth-locked");
+      notifyLayoutChanged();
+    }
+
+    window.configureFFAccess = function(code) {
+      currentAccessCode = String(code || "").trim();
+      accessConfigReady = true;
+
+      if (!currentAccessCode) {
+        try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+        unlockDashboard(false);
+        return;
+      }
+
+      let storedCode = null;
+      try { storedCode = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+
+      if (storedCode === currentAccessCode) {
+        unlockDashboard(false);
+      }
+    };
+
+    window.addEventListener("DOMContentLoaded", function() {
+      const form = document.getElementById("ffAccessForm");
+      const input = document.getElementById("ffAccessCode");
+      const error = document.getElementById("ffAccessError");
+
+      if (!form || !input || !error) return;
+
+      form.addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        if (!accessConfigReady) {
+          error.textContent = "Henter adgangsinnstillinger …";
+          return;
+        }
+
+        if (!currentAccessCode) {
+          error.textContent = "";
+          unlockDashboard(false);
+          return;
+        }
+
+        if (String(input.value || "").trim() === currentAccessCode) {
+          error.textContent = "";
+          unlockDashboard(true);
+        } else {
+          error.textContent = "Feil kode.";
+          input.value = "";
+          input.focus();
+        }
+      });
+    });
+  })();
+  </script>
+
 
   <div class="brand-header">
     <img
@@ -1972,22 +2736,26 @@
   <nav class="quick-nav" aria-label="Hurtignavigasjon">
     <div class="quick-nav-inner">
       <a href="#leaderboardSection">🏆 Live</a>
+      <a href="#monthSection">📅 Måned</a>
       <a href="#chartSection">🔍 Analyse</a>
       <a href="#themeSection">📊 Tema</a>
       <a href="#historySection">📈 Race</a>
       <a href="#simulatorSection">🔮 Hva hvis?</a>
       <a href="#participantSection">👤 Deltaker</a>
       <a href="#estimatesSection">📋 Estimat</a>
+      <a href="#investorSection">💰 Investor</a>
     </div>
   </nav>
 
   <div id="summaryCards"></div>
   <div id="leaderboardSection"></div>
+  <div id="monthSection"></div>
   <div id="chartSection"></div>
   <div id="themeSection"></div>
   <div id="historySection"></div>
   <div id="simulatorSection"></div>
   <div id="estimatesSection"></div>
+  <div id="investorSection"></div>
   <div id="participantSection"></div>
   <div id="historicalSection"></div>
   <div id="controlSection"></div>
@@ -2203,6 +2971,37 @@ function detectSimulatorStatus(dashboardRaw) {
   return "OPEN";
 }
 
+
+
+function detectDashboardControlValue(dashboardRaw, controlName) {
+  const wanted = String(controlName || "").trim().toLowerCase();
+  if (!wanted || !Array.isArray(dashboardRaw)) return "";
+
+  for (const row of dashboardRaw) {
+    const keys = Object.keys(row || {});
+
+    for (let i = 0; i < keys.length; i++) {
+      const value = String(row[keys[i]] ?? "").trim();
+
+      if (value.toLowerCase() === wanted) {
+        const nextKey = keys[i + 1];
+        return nextKey ? String(row[nextKey] ?? "").trim() : "";
+      }
+    }
+
+    for (const key of keys) {
+      if (String(key).trim().toLowerCase() === wanted) {
+        return String(row[key] ?? "").trim();
+      }
+    }
+  }
+
+  return "";
+}
+
+function detectAccessCode(dashboardRaw) {
+  return detectDashboardControlValue(dashboardRaw, "access_code");
+}
 
 function isDarkMode() {
   return document.body.classList.contains("dark-mode");
@@ -7994,6 +8793,10 @@ function buildSeasonData(
       detectSimulatorStatus(
         dashboardRaw
       ),
+    accessCode:
+      detectAccessCode(
+        dashboardRaw
+      ),
     dashboardRaw,
     historyRaw,
     participants,
@@ -8326,7 +9129,7 @@ function selectedSeasonParticipantInfo(
 function estimateDistancePp(value, decimals = 2) {
   return (Number(value) * 100)
     .toFixed(decimals)
-    .replace(".", ",") + " pp";
+    .replace(".", ",") + "%";
 }
 
 
@@ -8572,6 +9375,13 @@ function historicalRecords() {
         ).forEach(
           theme => {
 
+            // FF-rekorder sammenligner temaer på tvers av sesonger.
+            // Styringsrente ekskluderes her fordi skalaen (typisk 0,25 pp)
+            // ikke er sammenlignbar med aksjer, indekser, olje osv.
+            if (!includeInHistoricalEstimateStats(theme.theme)) {
+              return;
+            }
+
             if (
               theme.ranking.length >= 2
             ) {
@@ -8606,10 +9416,6 @@ function historicalRecords() {
               ) {
                 smallestThemeMargin = item;
               }
-            }
-
-            if (!includeInHistoricalEstimateStats(theme.theme)) {
-              return;
             }
 
             theme.ranking
@@ -8791,10 +9597,1159 @@ function renderHistoricalSection() {
       </div>
 
       <p class="history-note">
-        Historiske rekorder beregnes kun fra sesonger merket Final. FF${activeSeasonYear} påvirker derfor ikke rekordene dersom sesongen fortsatt er Live.
+        Historiske rekorder beregnes kun fra sesonger merket Final. Styringsrente er utelatt fra FF-rekordene fordi skalaen ikke er direkte sammenlignbar med de øvrige temaene. FF${activeSeasonYear} påvirker derfor ikke rekordene dersom sesongen fortsatt er Live.
       </p>
     </div>
   `;
+}
+
+
+
+// ------------------------------------------------------------
+// TEST v2: Monthly report
+// Compares the latest history row with the row nearest 30 days earlier.
+// ------------------------------------------------------------
+
+function parseCompetitionDate(value) {
+  const text = String(value || "").trim();
+  if (!text) return null;
+
+  let match = text.match(/^(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})$/);
+  if (match) {
+    const d = new Date(
+      Number(match[3]),
+      Number(match[2]) - 1,
+      Number(match[1])
+    );
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  match = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (match) {
+    const d = new Date(
+      Number(match[1]),
+      Number(match[2]) - 1,
+      Number(match[3])
+    );
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  const fallback = new Date(text);
+  return Number.isNaN(fallback.getTime()) ? null : fallback;
+}
+
+
+function monthlyBaselineRow(historyRows) {
+  if (!historyRows || historyRows.length < 2) {
+    return null;
+  }
+
+  const latestRow = historyRows[historyRows.length - 1];
+  const latestDate = parseCompetitionDate(latestRow["Dato"]);
+
+  if (!latestDate) {
+    return historyRows[Math.max(0, historyRows.length - 5)];
+  }
+
+  const target = new Date(latestDate);
+  target.setDate(target.getDate() - 30);
+
+  let bestRow = null;
+  let bestDistance = Infinity;
+
+  historyRows
+    .slice(0, -1)
+    .forEach(row => {
+      const d = parseCompetitionDate(row["Dato"]);
+      if (!d || d >= latestDate) return;
+
+      const distance = Math.abs(d.getTime() - target.getTime());
+
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestRow = row;
+      }
+    });
+
+  return bestRow || historyRows[Math.max(0, historyRows.length - 2)];
+}
+
+
+function signedPercentValue(value, decimals = 2) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return "–";
+
+  const pct = number * 100;
+  const sign = pct > 0 ? "+" : "";
+
+  return sign +
+    pct.toFixed(decimals).replace(".", ",") +
+    "%";
+}
+
+
+function leaderboardPositionMap(leaderboard) {
+  return Object.fromEntries(
+    leaderboard.map((entry, index) => [
+      entry.person,
+      {
+        rank: index + 1,
+        score: entry.score
+      }
+    ])
+  );
+}
+
+
+function monthlyThemeChanges(
+  competitionRows,
+  participants,
+  startRow,
+  baselineRow,
+  latestRow
+) {
+  const before =
+    calculateCompetition(
+      competitionRows,
+      participants,
+      startRow,
+      baselineRow
+    );
+
+  const after =
+    calculateCompetition(
+      competitionRows,
+      participants,
+      startRow,
+      latestRow
+    );
+
+  const beforeThemes =
+    Object.fromEntries(
+      before.themeResults.map(item => [
+        item.theme,
+        item
+      ])
+    );
+
+  return after.themeResults.map(item => {
+    const previous = beforeThemes[item.theme];
+
+    const delta =
+      item.actualChange -
+      previous.actualChange;
+
+    const participantImpact =
+      participants.map(person => {
+        const beforeContribution =
+          previous.personResults[person].weightedDistance;
+
+        const afterContribution =
+          item.personResults[person].weightedDistance;
+
+        return {
+          person,
+          change:
+            afterContribution -
+            beforeContribution,
+          improvement:
+            beforeContribution -
+            afterContribution
+        };
+      });
+
+    const totalImpact =
+      participantImpact.reduce(
+        (sum, row) =>
+          sum + Math.abs(row.change),
+        0
+      );
+
+    const helped =
+      participantImpact
+        .slice()
+        .sort(
+          (a, b) =>
+            b.improvement -
+            a.improvement
+        )[0];
+
+    const hurt =
+      participantImpact
+        .slice()
+        .sort(
+          (a, b) =>
+            b.change -
+            a.change
+        )[0];
+
+    return {
+      theme: item.theme,
+      delta,
+      absDelta: Math.abs(delta),
+      totalImpact,
+      helped,
+      hurt
+    };
+  });
+}
+
+
+
+function leadOutlookAnalysis() {
+  if (
+    !currentOfficialResult ||
+    !currentOfficialResult.leaderboard ||
+    currentOfficialResult.leaderboard.length < 2
+  ) {
+    return null;
+  }
+
+  const leader =
+    currentOfficialResult.leaderboard[0];
+
+  const challenger =
+    currentOfficialResult.leaderboard[1];
+
+  const currentGap =
+    challenger.score -
+    leader.score;
+
+  const results = [];
+
+  currentOfficialResult.themeResults.forEach(themeResult => {
+    const theme = themeResult.theme;
+    const currentValue = themeResult.actualChange;
+
+    // Probe size is deliberately modest and symmetric.
+    // For percentage-return themes we test ±5 percentage points.
+    // For policy-rate-like themes we test ±0.25 percentage points.
+    const normalizedTheme =
+      String(theme || "").trim().toLowerCase();
+
+    const isRateTheme =
+      normalizedTheme.includes("styringsrente") ||
+      normalizedTheme.includes("rente");
+
+    const probe =
+      isRateTheme
+        ? 0.0025
+        : 0.05;
+
+    [
+      { direction: "up", delta: probe },
+      { direction: "down", delta: -probe }
+    ].forEach(test => {
+      const simulatedLatest = {
+        ...currentLatestRow,
+        [theme]:
+          currentValue +
+          test.delta
+      };
+
+      const simulated =
+        calculateCompetition(
+          currentCompetitionRows,
+          currentParticipants,
+          currentStartRow,
+          simulatedLatest
+        );
+
+      const simMap =
+        Object.fromEntries(
+          simulated.leaderboard.map(row => [
+            row.person,
+            row
+          ])
+        );
+
+      if (
+        !simMap[leader.person] ||
+        !simMap[challenger.person]
+      ) {
+        return;
+      }
+
+      const simulatedGap =
+        simMap[challenger.person].score -
+        simMap[leader.person].score;
+
+      results.push({
+        theme,
+        direction: test.direction,
+        improvement:
+          currentGap -
+          simulatedGap,
+        simulatedGap
+      });
+    });
+  });
+
+  const favorable =
+    results
+      .filter(row => row.improvement > 0.000001)
+      .sort(
+        (a, b) =>
+          b.improvement -
+          a.improvement
+      );
+
+  return {
+    leader: leader.person,
+    challenger: challenger.person,
+    currentGap,
+    favorable
+  };
+}
+
+
+function renderLeadOutlookText() {
+  const analysis =
+    leadOutlookAnalysis();
+
+  if (!analysis) {
+    return "Det er ikke nok data til å vurdere hvilke temaer som kan endre kampen om ledelsen.";
+  }
+
+  const top = [];
+  const usedThemes = new Set();
+
+  for (const item of analysis.favorable) {
+    if (usedThemes.has(item.theme)) {
+      continue;
+    }
+
+    usedThemes.add(item.theme);
+    top.push(item);
+
+    if (top.length >= 2) {
+      break;
+    }
+  }
+
+  if (!top.length) {
+    return `${analysis.challenger} har akkurat nå ingen tydelig enkeltretning i ett tema som raskt reduserer gapet til ${analysis.leader}. Flere temaer må trolig bevege seg samtidig for å endre ledelsen.`;
+  }
+
+  const directionText = item => {
+    const themeLower =
+      String(item.theme || "").trim().toLowerCase();
+
+    if (themeLower.includes("olje")) {
+      return item.direction === "up"
+        ? "oljeprisen stiger"
+        : "oljeprisen faller";
+    }
+
+    if (
+      themeLower.includes("styringsrente") ||
+      themeLower.includes("rente")
+    ) {
+      return item.direction === "up"
+        ? "styringsrenten stiger"
+        : "styringsrenten faller";
+    }
+
+    return item.direction === "up"
+      ? `${item.theme} stiger`
+      : `${item.theme} faller`;
+  };
+
+  if (top.length === 1) {
+    return `${analysis.challenger} har mest å hente på ${analysis.leader} dersom ${directionText(top[0])}. Det er dette temaet som akkurat nå gir størst mulighet til å redusere gapet mellom de to.`;
+  }
+
+  return `${analysis.challenger} har mest å hente på ${analysis.leader} dersom ${directionText(top[0])} og ${directionText(top[1])}. Det er disse temaene hvor videre utvikling i riktig retning sterkest reduserer gapet mellom #1 og #2.`;
+}
+
+
+
+function renderMonthlyReport() {
+  const container =
+    document.getElementById(
+      "monthSection"
+    );
+
+  if (!container) return;
+
+  if (
+    !currentHistoryRows ||
+    currentHistoryRows.length < 2
+  ) {
+    container.innerHTML = `
+      <h2>📅 Månedsrapport</h2>
+      <div class="month-report-panel">
+        <p class="muted">
+          Ikke nok historikk til å lage månedsrapport ennå.
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  const baselineRow =
+    monthlyBaselineRow(
+      currentHistoryRows
+    );
+
+  if (!baselineRow) return;
+
+  const before =
+    calculateCompetition(
+      currentCompetitionRows,
+      currentParticipants,
+      currentStartRow,
+      baselineRow
+    );
+
+  const after =
+    currentOfficialResult;
+
+  const beforeMap =
+    leaderboardPositionMap(
+      before.leaderboard
+    );
+
+  const afterMap =
+    leaderboardPositionMap(
+      after.leaderboard
+    );
+
+  const leader =
+    after.leaderboard[0];
+
+  const second =
+    after.leaderboard[1];
+
+  const currentMargin =
+    leader && second
+      ? second.score - leader.score
+      : 0;
+
+  const leaderBefore =
+    beforeMap[leader.person];
+
+  let leaderTrendText = "";
+
+  if (leaderBefore) {
+    if (leaderBefore.rank === 1) {
+      const previousSecond =
+        before.leaderboard[1];
+
+      const previousMargin =
+        previousSecond
+          ? previousSecond.score -
+            leaderBefore.score
+          : 0;
+
+      const marginChange =
+        currentMargin -
+        previousMargin;
+
+      if (Math.abs(marginChange) < 0.00005) {
+        leaderTrendText =
+          `Ledelsen er omtrent uendret fra ${formatPercent(previousMargin)}.`;
+      } else if (marginChange > 0) {
+        leaderTrendText =
+          `Ledelsen har økt fra ${formatPercent(previousMargin)} til ${formatPercent(currentMargin)}.`;
+      } else {
+        leaderTrendText =
+          `Ledelsen har minket fra ${formatPercent(previousMargin)} til ${formatPercent(currentMargin)}.`;
+      }
+    } else {
+      const oldLeader =
+        before.leaderboard[0];
+
+      const deficit =
+        leaderBefore.score -
+        oldLeader.score;
+
+      leaderTrendText =
+        `Ny leder – ${leader.person} var #${leaderBefore.rank} og ${formatPercent(deficit)} bak lederen ved periodestart.`;
+    }
+  }
+
+  const developments =
+    currentParticipants.map(person => {
+      const oldRow = beforeMap[person];
+      const newRow = afterMap[person];
+
+      return {
+        person,
+        oldRank: oldRow.rank,
+        newRank: newRow.rank,
+        oldScore: oldRow.score,
+        newScore: newRow.score,
+        improvement:
+          oldRow.score -
+          newRow.score
+      };
+    });
+
+  const bestDevelopment =
+    developments
+      .slice()
+      .sort(
+        (a, b) =>
+          b.improvement -
+          a.improvement
+      )[0];
+
+  const weakestDevelopment =
+    developments
+      .slice()
+      .sort(
+        (a, b) =>
+          a.improvement -
+          b.improvement
+      )[0];
+
+  const themeChanges =
+    monthlyThemeChanges(
+      currentCompetitionRows,
+      currentParticipants,
+      currentStartRow,
+      baselineRow,
+      currentLatestRow
+    );
+
+  const biggestMoves =
+    themeChanges
+      .slice()
+      .sort(
+        (a, b) =>
+          b.absDelta -
+          a.absDelta
+      )
+      .slice(0, 3);
+
+  const biggestImpact =
+    themeChanges
+      .slice()
+      .sort(
+        (a, b) =>
+          b.totalImpact -
+          a.totalImpact
+      )[0];
+
+  const rankChangeText = item => {
+    if (item.oldRank === item.newRank) {
+      return `#${item.newRank} · uendret plassering`;
+    }
+
+    return `#${item.oldRank} → #${item.newRank}`;
+  };
+
+  const scoreDevelopmentText = item => {
+    const delta =
+      item.newScore -
+      item.oldScore;
+
+    return signedPercentValue(
+      delta
+    );
+  };
+
+  const impactText =
+    biggestImpact
+      ? (
+          biggestImpact.helped &&
+          biggestImpact.hurt &&
+          biggestImpact.helped.person !==
+            biggestImpact.hurt.person
+        )
+          ? `${biggestImpact.theme} har gitt størst samlet utslag i deltakernes score. ${biggestImpact.helped.person} har hatt størst fordel, mens ${biggestImpact.hurt.person} har blitt mest utfordret av utviklingen.`
+          : `${biggestImpact.theme} har gitt størst samlet utslag i deltakernes score i perioden.`
+      : "–";
+
+  const movementSentence =
+    biggestMoves.length
+      ? `De største temabevegelsene har vært ${biggestMoves.map(
+          item =>
+            `${item.theme} (${signedPercentValue(item.delta)})`
+        ).join(", ")}.`
+      : "";
+
+  const summaryText =
+    `${bestDevelopment.person} har hatt best utvikling i perioden og gått ${rankChangeText(bestDevelopment)}. ` +
+    `${weakestDevelopment.person} har hatt svakest utvikling (${rankChangeText(weakestDevelopment)}). ` +
+    `${leader.person} leder nå med ${formatPercent(currentMargin)}. ` +
+    movementSentence;
+
+  container.innerHTML = `
+    <h2>📅 Månedsrapport</h2>
+
+    <div class="month-report-panel">
+
+      <div class="month-report-period">
+        <div class="month-period-main">
+          ${baselineRow["Dato"]} → ${currentLatestRow["Dato"]}
+        </div>
+        <div class="month-period-note">
+          Sammenligner siste status med historikkpunktet nærmest én måned tidligere.
+        </div>
+      </div>
+
+      <div class="month-report-top">
+
+        <div class="month-card month-card-leader">
+          <div class="month-card-label">🏆 Leder nå</div>
+
+          <div class="month-person">
+            <img
+              src="${participantImagePath(leader.person)}"
+              alt="${leader.person}"
+              onerror="this.style.display='none';">
+
+            <div>
+              <div class="month-person-name">${leader.person}</div>
+              <div class="month-subline">
+                Score ${formatPercent(leader.score)}
+              </div>
+            </div>
+          </div>
+
+          <div class="month-main-value">
+            ${formatPercent(currentMargin)} foran #2
+          </div>
+
+          <div class="month-subline">
+            ${leaderTrendText}
+          </div>
+        </div>
+
+
+        <div class="month-card">
+          <div class="month-card-label">🚀 Best utvikling</div>
+
+          <div class="month-person">
+            <img
+              src="${participantImagePath(bestDevelopment.person)}"
+              alt="${bestDevelopment.person}"
+              onerror="this.style.display='none';">
+
+            <div>
+              <div class="month-person-name">${bestDevelopment.person}</div>
+              <div class="month-subline">
+                ${rankChangeText(bestDevelopment)}
+              </div>
+            </div>
+          </div>
+
+          <div class="month-main-value movement-up">
+            ${scoreDevelopmentText(bestDevelopment)}
+          </div>
+
+          <div class="month-subline">
+            Score ${formatPercent(bestDevelopment.oldScore)}
+            → ${formatPercent(bestDevelopment.newScore)}
+          </div>
+        </div>
+
+
+        <div class="month-card">
+          <div class="month-card-label">📉 Svakest utvikling</div>
+
+          <div class="month-person">
+            <img
+              src="${participantImagePath(weakestDevelopment.person)}"
+              alt="${weakestDevelopment.person}"
+              onerror="this.style.display='none';">
+
+            <div>
+              <div class="month-person-name">${weakestDevelopment.person}</div>
+              <div class="month-subline">
+                ${rankChangeText(weakestDevelopment)}
+              </div>
+            </div>
+          </div>
+
+          <div class="month-main-value movement-down">
+            ${scoreDevelopmentText(weakestDevelopment)}
+          </div>
+
+          <div class="month-subline">
+            Score ${formatPercent(weakestDevelopment.oldScore)}
+            → ${formatPercent(weakestDevelopment.newScore)}
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="month-report-lower">
+
+        <div class="month-card">
+          <div class="month-card-label">
+            🔥 Tre største temabevegelser
+          </div>
+
+          <div class="month-moves">
+            ${biggestMoves.map(
+              (item, index) => `
+                <div class="month-move-row">
+                  <div>${index + 1}.</div>
+                  <div class="month-move-theme">
+                    ${item.theme}
+                  </div>
+                  <div class="month-move-value">
+                    ${signedPercentValue(item.delta)}
+                  </div>
+                </div>
+              `
+            ).join("")}
+          </div>
+        </div>
+
+
+        <div class="month-card">
+          <div class="month-card-label">
+            🎯 Mest utslagsgivende tema
+          </div>
+
+          <div class="month-impact-theme">
+            ${biggestImpact ? biggestImpact.theme : "–"}
+          </div>
+
+          <div class="month-subline">
+            ${impactText}
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="month-summary">
+        <strong>📝 Måneden oppsummert</strong>
+        ${summaryText}
+      </div>
+
+      <div class="month-lead-outlook">
+        <strong>👀 Hva kan snu ledelsen?</strong>
+        ${renderLeadOutlookText()}
+      </div>
+
+    </div>
+  `;
+}
+
+
+
+
+// ------------------------------------------------------------
+// TEST v3: Investor
+// 100 000 kr equally distributed across all themes except Styringsrente.
+// Positive prediction = LONG, negative prediction = SHORT, 0 = flat.
+// No FF weighting, leverage, costs, dividends or market frictions.
+// ------------------------------------------------------------
+
+let activeInvestorPeriod = "year";
+let selectedInvestorParticipant = null;
+
+function investorThemeIncluded(themeName) {
+  const t = String(themeName || "").trim().toLowerCase();
+  return !t.includes("styringsrente");
+}
+
+function investorDirection(prediction) {
+  const n = Number(prediction);
+  if (!Number.isFinite(n) || Math.abs(n) < 1e-12) return 0;
+  return n > 0 ? 1 : -1;
+}
+
+function investorCurrency(value) {
+  return new Intl.NumberFormat("nb-NO", {
+    style: "currency",
+    currency: "NOK",
+    maximumFractionDigits: 0
+  }).format(value);
+}
+
+function investorPercent(value, decimals = 2) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "–";
+  const pct = n * 100;
+  const sign = pct > 0 ? "+" : "";
+  return sign + pct.toFixed(decimals).replace(".", ",") + "%";
+}
+
+function investorPositionHtml(direction) {
+  if (direction > 0) return '<span class="investor-long">🟢 LONG</span>';
+  if (direction < 0) return '<span class="investor-short">🔴 SHORT</span>';
+  return '<span class="investor-flat">⚪ FLAT</span>';
+}
+
+function investorPeriodSetup(period) {
+  if (period === "month") {
+    const baseline = monthlyBaselineRow(currentHistoryRows);
+    return baseline
+      ? { startRow: baseline, endRow: currentLatestRow, label: "1 mnd" }
+      : null;
+  }
+
+  return {
+    startRow: currentStartRow,
+    endRow: currentLatestRow,
+    label: `FF${activeSeasonYear}`
+  };
+}
+
+function investorSingleSeasonResult(season, person, startingCapital = 100000) {
+  if (!season || !season.result || !season.result.themeResults) return null;
+
+  const themes = season.result.themeResults.filter(
+    row => investorThemeIncluded(row.theme)
+  );
+
+  if (!themes.length || !season.participants.includes(person)) return null;
+
+  const allocation = startingCapital / themes.length;
+
+  const details = themes.map(theme => {
+    const prediction =
+      theme.personResults[person]
+        ? theme.personResults[person].prediction
+        : 0;
+
+    const direction = investorDirection(prediction);
+    const actualReturn = Number(theme.actualChange) || 0;
+    const positionReturn = direction * actualReturn;
+    const contribution = allocation * positionReturn;
+    const endValue = allocation + contribution;
+
+    return {
+      year: season.year,
+      theme: theme.theme,
+      prediction,
+      direction,
+      actualReturn,
+      positionReturn,
+      contribution,
+      endValue
+    };
+  });
+
+  const endValue = details.reduce((sum, item) => sum + item.endValue, 0);
+
+  return {
+    startValue: startingCapital,
+    endValue,
+    totalReturn: startingCapital ? endValue / startingCapital - 1 : 0,
+    details
+  };
+}
+
+function investorAllTimeResults() {
+  const years = Object.keys(allSeasonData)
+    .map(Number)
+    .filter(year => year <= activeSeasonYear)
+    .sort((a, b) => a - b);
+
+  if (!years.length) return null;
+
+  const rows = currentParticipants.map(person => {
+    let capital = 100000;
+    const yearly = [];
+    const details = [];
+
+    years.forEach(year => {
+      const season = allSeasonData[year];
+      const result = investorSingleSeasonResult(season, person, capital);
+      if (!result) return;
+
+      yearly.push({
+        year,
+        startValue: capital,
+        annualReturn: result.totalReturn,
+        endValue: result.endValue
+      });
+
+      details.push(...result.details);
+      capital = result.endValue;
+    });
+
+    return {
+      person,
+      endValue: capital,
+      totalReturn: capital / 100000 - 1,
+      details,
+      yearly
+    };
+  }).sort((a, b) => b.endValue - a.endValue);
+
+  return {
+    label: `All-time · FF${years[0]}–FF${years[years.length - 1]}`,
+    rows,
+    years,
+    allTime: true
+  };
+}
+
+function investorResults(period) {
+  if (period === "all") {
+    return investorAllTimeResults();
+  }
+
+  const setup = investorPeriodSetup(period);
+  if (!setup || !currentCompetitionRows || !currentParticipants) return null;
+
+  const periodResult = calculateCompetition(
+    currentCompetitionRows,
+    currentParticipants,
+    setup.startRow,
+    setup.endRow
+  );
+
+  const themes = periodResult.themeResults.filter(
+    row => investorThemeIncluded(row.theme)
+  );
+
+  if (!themes.length) return null;
+
+  const allocation = 100000 / themes.length;
+
+  const rows = currentParticipants.map(person => {
+    const details = themes.map(theme => {
+      const prediction =
+        theme.personResults[person]
+          ? theme.personResults[person].prediction
+          : 0;
+
+      const direction = investorDirection(prediction);
+      const actualReturn = Number(theme.actualChange) || 0;
+      const positionReturn = direction * actualReturn;
+      const contribution = allocation * positionReturn;
+      const endValue = allocation + contribution;
+
+      return {
+        theme: theme.theme,
+        prediction,
+        direction,
+        actualReturn,
+        positionReturn,
+        contribution,
+        endValue
+      };
+    });
+
+    const endValue = details.reduce((sum, item) => sum + item.endValue, 0);
+
+    return {
+      person,
+      endValue,
+      totalReturn: endValue / 100000 - 1,
+      details,
+      yearly: []
+    };
+  }).sort((a, b) => b.endValue - a.endValue);
+
+  return {
+    label: setup.label,
+    allocation,
+    themes,
+    rows,
+    allTime: false
+  };
+}
+
+function renderInvestorSection() {
+  const container = document.getElementById("investorSection");
+  if (!container) return;
+
+  const result = investorResults(activeInvestorPeriod);
+
+  if (!result) {
+    container.innerHTML = `
+      <h2>💰 Investor</h2>
+      <div class="investor-panel">
+        <p class="muted">Ikke nok data til å beregne Investor ennå.</p>
+      </div>
+    `;
+    return;
+  }
+
+  if (
+    !selectedInvestorParticipant ||
+    !result.rows.some(row => row.person === selectedInvestorParticipant)
+  ) {
+    selectedInvestorParticipant = result.rows[0].person;
+  }
+
+  const selected =
+    result.rows.find(row => row.person === selectedInvestorParticipant) ||
+    result.rows[0];
+
+  const best =
+    selected.details.slice().sort((a, b) => b.contribution - a.contribution)[0];
+
+  const worst =
+    selected.details.slice().sort((a, b) => a.contribution - b.contribution)[0];
+
+  const periodTabs = [
+    { key: "month", label: "1 mnd" },
+    { key: "year", label: `FF${activeSeasonYear}` },
+    { key: "all", label: "All-time" }
+  ];
+
+  container.innerHTML = `
+    <h2>💰 Investor</h2>
+
+    <div class="investor-panel">
+      <div class="investor-tabs">
+        ${periodTabs.map(tab => `
+          <button
+            type="button"
+            class="investor-tab ${activeInvestorPeriod === tab.key ? "active" : ""}"
+            data-investor-period="${tab.key}">
+            ${tab.label}
+          </button>
+        `).join("")}
+        <button type="button" class="investor-info-button" id="investorInfoButton" aria-label="Slik beregnes Investor">ⓘ</button>
+      </div>
+
+      <div class="investor-info-box" id="investorInfoBox">
+        <strong>Slik beregnes Investor</strong><br>
+        100 000 kr fordeles likt på årets investerbare temaer. Positivt estimat = LONG og negativt estimat = SHORT.
+        I All-time tas sluttverdien fra ett FF-år med videre til neste år og fordeles likt på nytt. Dermed blir avkastningen akkumulert gjennom FF-historikken.
+      </div>
+
+      <div class="investor-note">
+        Hypotetisk og uhøytidelig: 100 000 kr fordeles likt på alle temaer unntatt Styringsrente.
+        Positivt estimat = LONG, negativt estimat = SHORT. Estimatets størrelse påvirker ikke vekten.
+        Ingen gearing, kostnader, utbytte eller andre markedsfriksjoner.
+      </div>
+
+      <div class="investor-leaderboard">
+        ${result.rows.map((row, index) => `
+          <div class="investor-row ${index === 0 ? "rank-1" : ""}">
+            <div>${index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "#" + (index + 1)}</div>
+
+            <div class="investor-person">
+              <img
+                src="${participantImagePath(row.person)}"
+                alt="${row.person}"
+                onerror="this.style.display='none';">
+              <div>
+                <div class="investor-name">${row.person}</div>
+                <div class="investor-return">${investorPercent(row.totalReturn)}</div>
+              </div>
+            </div>
+
+            <div class="investor-value">${investorCurrency(row.endValue)}</div>
+          </div>
+        `).join("")}
+      </div>
+
+      <div class="investor-breakdown">
+        <h3>Se deltaker</h3>
+        <div class="investor-person-tabs">
+          ${result.rows.map(row => `
+            <button
+              type="button"
+              class="investor-person-tab ${row.person === selected.person ? "active" : ""}"
+              data-investor-person="${row.person}">
+              <img
+                src="${participantImagePath(row.person)}"
+                alt=""
+                onerror="this.style.display='none';">
+              ${row.person}
+            </button>
+          `).join("")}
+        </div>
+
+        <div class="investor-detail">
+          <div class="investor-detail-card">
+            <div class="investor-detail-title">🚀 Største positive bidrag</div>
+            <div class="investor-detail-main">${best ? (best.year ? `FF${best.year} · ` : "") + best.theme : "–"}</div>
+            <div class="investor-detail-text">
+              ${best ? investorPositionHtml(best.direction) + " · " + investorPercent(best.positionReturn) + " · " + investorCurrency(best.contribution) : "–"}
+            </div>
+          </div>
+
+          <div class="investor-detail-card">
+            <div class="investor-detail-title">🧨 Største motvind</div>
+            <div class="investor-detail-main">${worst ? (worst.year ? `FF${worst.year} · ` : "") + worst.theme : "–"}</div>
+            <div class="investor-detail-text">
+              ${worst ? investorPositionHtml(worst.direction) + " · " + investorPercent(worst.positionReturn) + " · " + investorCurrency(worst.contribution) : "–"}
+            </div>
+          </div>
+        </div>
+
+        ${result.allTime ? `
+          <div class="table-wrap investor-year-summary">
+            <table>
+              <thead>
+                <tr>
+                  <th>År</th>
+                  <th>Startkapital</th>
+                  <th>Årsavkastning</th>
+                  <th>Sluttverdi</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${selected.yearly.map(item => `
+                  <tr>
+                    <td>FF${item.year}</td>
+                    <td>${investorCurrency(item.startValue)}</td>
+                    <td>${investorPercent(item.annualReturn)}</td>
+                    <td>${investorCurrency(item.endValue)}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        ` : `
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tema</th>
+                  <th>Posisjon</th>
+                  <th>Faktisk utvikling</th>
+                  <th>Posisjonsavkastning</th>
+                  <th>Bidrag</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${selected.details.map(item => `
+                  <tr>
+                    <td>${item.theme}</td>
+                    <td>${investorPositionHtml(item.direction)}</td>
+                    <td>${investorPercent(item.actualReturn)}</td>
+                    <td>${investorPercent(item.positionReturn)}</td>
+                    <td>${investorCurrency(item.contribution)}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        `}
+      </div>
+    </div>
+  `;
+
+  const infoButton = container.querySelector("#investorInfoButton");
+  const infoBox = container.querySelector("#investorInfoBox");
+
+  if (infoButton && infoBox) {
+    infoButton.addEventListener("click", () => {
+      infoBox.classList.toggle("open");
+    });
+  }
+
+  container.querySelectorAll("[data-investor-period]").forEach(button => {
+    button.addEventListener("click", () => {
+      activeInvestorPeriod = button.dataset.investorPeriod;
+      renderInvestorSection();
+    });
+  });
+
+  container.querySelectorAll("[data-investor-person]").forEach(button => {
+    button.addEventListener("click", () => {
+      selectedInvestorParticipant = button.dataset.investorPerson;
+      renderInvestorSection();
+    });
+  });
 }
 
 
@@ -8810,6 +10765,8 @@ function activateSeason(year) {
   stopThemeTrendAnimation();
 
   activeSeasonYear = year;
+  activeInvestorPeriod = "year";
+  selectedInvestorParticipant = null;
 
   currentParticipants =
     season.participants;
@@ -8861,6 +10818,8 @@ function activateSeason(year) {
     season.result.leaderboard
   );
 
+  renderMonthlyReport();
+
   createChartSection(
     season.participants,
     season.result.themeResults
@@ -8873,6 +10832,7 @@ function activateSeason(year) {
   createHistorySection();
   createSimulatorSection();
   showEstimates();
+  renderInvestorSection();
   renderParticipantProfile();
   renderHistoricalSection();
 
@@ -8954,6 +10914,12 @@ async function loadAllSeasonData() {
     throw new Error(
       "FF2026 kunne ikke lastes. " +
       errors.join(" · ")
+    );
+  }
+
+  if (typeof window.configureFFAccess === "function") {
+    window.configureFFAccess(
+      allSeasonData[2026].accessCode
     );
   }
 
@@ -9053,7 +11019,7 @@ async function loadData() {
 
 // v7.7: compact back-to-top buttons on major sections
 (function setupSectionTopButtons(){
-  const ids=["leaderboardSection","chartSection","themeSection","themeTrendSection","themePodiumSection","historySection","simulatorSection","estimatesSection","participantSection","historicalSection"];
+  const ids=["leaderboardSection","monthSection","chartSection","themeSection","themeTrendSection","themePodiumSection","historySection","simulatorSection","estimatesSection","investorSection","participantSection","historicalSection"];
 
   function goTop(){
     if(typeof window.ffScrollDashboardTop==="function"){
@@ -9106,12 +11072,14 @@ async function loadData() {
 (function setupRobustParentNavigationBridge() {
   const navTargets = {
     leaderboardSection: "Live",
+    monthSection: "Måned",
     chartSection: "Analyse",
     themeSection: "Tema",
     historySection: "Race",
     simulatorSection: "Hva hvis?",
     participantSection: "Deltaker",
-    estimatesSection: "Estimat"
+    estimatesSection: "Estimat",
+    investorSection: "Investor"
   };
 
   let externalNavigationEnabled = false;
