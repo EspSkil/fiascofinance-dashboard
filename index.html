@@ -2624,6 +2624,27 @@
       }
     }
 
+
+    /* v3.1b: robust embedded access gate.
+       Make the gate independent of the iframe's temporary 1200px viewport. */
+    body.ff-auth-locked {
+      height: auto !important;
+      min-height: 0 !important;
+      overflow: hidden !important;
+    }
+
+    body.ff-auth-locked #ffAccessGate {
+      box-sizing: border-box;
+      width: 100%;
+      height: auto !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: 18px 16px 24px !important;
+      display: flex !important;
+      align-items: flex-start !important;
+      justify-content: center !important;
+    }
+
   </style>
 </head>
 
@@ -2657,6 +2678,23 @@
     const STORAGE_KEY = "ff-championship-access-code-v2";
     let currentAccessCode = null;
     let accessConfigReady = false;
+
+    function sendLockedGateHeight() {
+      const gate = document.getElementById("ffAccessGate");
+      if (!gate || !document.body.classList.contains("ff-auth-locked")) return;
+
+      const height = Math.ceil(gate.getBoundingClientRect().height + 8);
+
+      if (window.parent && window.parent !== window && height > 0) {
+        window.parent.postMessage(
+          {
+            type: "fiascofinance-dashboard-height",
+            height: height
+          },
+          "*"
+        );
+      }
+    }
 
     function notifyLayoutChanged() {
       window.dispatchEvent(new Event("resize"));
@@ -2699,6 +2737,11 @@
       const error = document.getElementById("ffAccessError");
 
       if (!form || !input || !error) return;
+
+      sendLockedGateHeight();
+      setTimeout(sendLockedGateHeight, 100);
+      setTimeout(sendLockedGateHeight, 500);
+      setTimeout(sendLockedGateHeight, 1200);
 
       form.addEventListener("submit", function(event) {
         event.preventDefault();
