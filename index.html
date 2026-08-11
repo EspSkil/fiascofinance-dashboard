@@ -10554,31 +10554,6 @@ function investorAllTimeResults() {
   };
 }
 
-
-function investorOpeningCapitalForYear(person, year) {
-  const priorYears = Object.keys(allSeasonData)
-    .map(Number)
-    .filter(y => y < year)
-    .sort((a, b) => a - b);
-
-  let capital = 100000;
-
-  priorYears.forEach(priorYear => {
-    const season = allSeasonData[priorYear];
-    const result = investorSingleSeasonResult(
-      season,
-      person,
-      capital
-    );
-
-    if (result) {
-      capital = result.endValue;
-    }
-  });
-
-  return capital;
-}
-
 function investorResults(period) {
   if (period === "all") {
     return investorAllTimeResults();
@@ -10600,21 +10575,9 @@ function investorResults(period) {
 
   if (!themes.length) return null;
 
+  const allocation = 100000 / themes.length;
+
   const rows = currentParticipants.map(person => {
-    // 1 mnd is a fresh hypothetical 100 000 kr portfolio.
-    // FF-year uses the actual carried capital from previous FF years.
-    const startingCapital =
-      period === "year"
-        ? investorOpeningCapitalForYear(
-            person,
-            activeSeasonYear
-          )
-        : 100000;
-
-    const allocation =
-      startingCapital /
-      themes.length;
-
     const details = themes.map(theme => {
       const prediction =
         theme.personResults[person]
@@ -10638,21 +10601,12 @@ function investorResults(period) {
       };
     });
 
-    const endValue = details.reduce(
-      (sum, item) =>
-        sum + item.endValue,
-      0
-    );
+    const endValue = details.reduce((sum, item) => sum + item.endValue, 0);
 
     return {
       person,
-      startValue: startingCapital,
-      allocation,
       endValue,
-      totalReturn:
-        startingCapital
-          ? endValue / startingCapital - 1
-          : 0,
+      totalReturn: endValue / 100000 - 1,
       details,
       yearly: []
     };
@@ -10660,6 +10614,7 @@ function investorResults(period) {
 
   return {
     label: setup.label,
+    allocation,
     themes,
     rows,
     allTime: false
@@ -10723,13 +10678,12 @@ function renderInvestorSection() {
 
       <div class="investor-info-box" id="investorInfoBox">
         <strong>Slik beregnes Investor</strong><br>
-        Første FF-år starter med 100 000 kr. Kapitalen fordeles likt på årets investerbare temaer, alltid uten Styringsrente.
-        Positivt estimat = LONG og negativt estimat = SHORT. Sluttverdien fra ett FF-år tas med videre til neste år og fordeles likt på nytt.
-        Fanen for valgt FF-år bruker derfor faktisk inngående kapital fra tidligere år, mens 1 mnd er en separat hypotetisk portefølje på 100 000 kr.
+        100 000 kr fordeles likt på årets investerbare temaer. Positivt estimat = LONG og negativt estimat = SHORT.
+        I All-time tas sluttverdien fra ett FF-år med videre til neste år og fordeles likt på nytt. Dermed blir avkastningen akkumulert gjennom FF-historikken.
       </div>
 
       <div class="investor-note">
-        Hypotetisk og uhøytidelig: kapitalen fordeles likt på alle investerbare temaer, men Styringsrente er alltid utelatt.
+        Hypotetisk og uhøytidelig: 100 000 kr fordeles likt på alle temaer unntatt Styringsrente.
         Positivt estimat = LONG, negativt estimat = SHORT. Estimatets størrelse påvirker ikke vekten.
         Ingen gearing, kostnader, utbytte eller andre markedsfriksjoner.
       </div>
@@ -10771,14 +10725,6 @@ function renderInvestorSection() {
             </button>
           `).join("")}
         </div>
-
-        ${activeInvestorPeriod === "year" ? `
-          <div class="investor-note" style="margin-top:14px;">
-            Inngående kapital FF${activeSeasonYear}: <strong>${investorCurrency(selected.startValue)}</strong>
-            · ${result.themes.length} investerbare temaer
-            · <strong>${investorCurrency(selected.allocation)}</strong> per tema
-          </div>
-        ` : ""}
 
         <div class="investor-detail">
           <div class="investor-detail-card">
